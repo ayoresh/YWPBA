@@ -5,6 +5,7 @@ import java.util.Random;
 public class RandomNum {
 
 
+
     public int eventCardAmount = 30;
     /**
      * This method will roll a six-sided die and return a number.
@@ -24,6 +25,7 @@ public class RandomNum {
         int cardNum = (int) ((Math.random() * eventCardAmount) + 1);
         return  cardNum;
     }
+
 
 
 }

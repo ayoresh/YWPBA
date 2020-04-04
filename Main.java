@@ -5,20 +5,9 @@ public class Main {
 
     public static void main(String[] args){
 
-        RandomNum obj = new RandomNum();
+        Introduction beginGame = new Introduction();
 
-        System.out.println("To test the dice roller, roll now.");
-        System.out.println(obj.diceRoll());
-
-
-        System.out.println("Testing the card number generator...");
-        System.out.println(obj.randomCard());
-
-
-
-
-
-
+        beginGame.introductionText();
 
     }
 
