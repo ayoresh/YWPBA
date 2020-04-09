@@ -24,6 +24,7 @@ public class DayOne {
     public void dayOne(){
 
         JOptionPane.showMessageDialog(null, "Here is where the story for day one begins.");
+        JOptionPane.showMessageDialog(null, "To show creating the new object worked, here is player one's name: " + playerOne.getPlayerOneName());
 
     }
 
