@@ -7,10 +7,16 @@ public class RandomNum {
 
 
     public int eventCardAmount = 30;
-    /**
-     * This method will roll a six-sided die and return a number.
-     * @return
-     */
+
+
+    public int coinFlip(){
+        int coinFlip = (int) (Math.random() * 2) + 1;
+        return coinFlip;
+    }
+    public int fourSidedDie(){
+        int diceroll = (int) (Math.random() * 4) + 1;
+        return  diceroll;
+    }
     public int diceRoll(){
         int diceRoll = (int)(Math.random() * 6) + 1;
         return diceRoll;
