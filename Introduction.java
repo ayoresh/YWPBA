@@ -75,7 +75,7 @@ public class Introduction {
         } else if (initialEvent2 == 2){
             initialeventtext2 = "They were a local priest had given dozens Communion";
         } else if (initialEvent2 == 3){
-            initialeventtext2 = "They worked in a retirement home that housed hundred of immunocompromised patients";
+            initialeventtext2 = "They worked in a retirement home that housed hundreds of immunocompromised patients";
         } else if (initialEvent2 == 4){
             initialeventtext2 = "They worked at a local airport where they could transmit it to people travelling all over the globe";
         }
@@ -85,17 +85,18 @@ public class Introduction {
         if (introtext == 1) {
             JOptionPane.showMessageDialog(null, "As of yesterday, life had gone on pretty much as usual. \nSome people had started wearing masks or gloves" +
                     ", hand sanitizer also seemed to be in high demand, but few were alarmed by the news of the rapidly spreading virus, COVID-19. \nThat was until " + initialeventtext + "." +
-                    "Now people were scared. People flocked to grocery stores and pharmacies to stock up on essentials, even if they had to fight for them. \nIt seemed like those" +
+                    " Now people were scared. People flocked to grocery stores and pharmacies to stock up on essentials, even if they had to fight for them. \nIt seemed like those" +
                     " stocking up were either ahead of the curve... or setting a worrying trend.");
         }
 
         else if (introtext == 2){
             JOptionPane.showMessageDialog(null, "Your family was distantly worried about the spread of COVID-19, but so far it had been half a world away. " +
-                    "\nExcept for cruise ships, And major metropolitan hospitals. And a few nursing homes. Soon enough there was an infected visitor in your city. \nWorse yet: " + initialeventtext2 +
+                    "\nExcept for cruise ships. And major metropolitan hospitals. And a few nursing homes. Soon enough there was an infected visitor in your city. \nWorse yet: " + initialeventtext2 +
                     ". Soon after, " + initialeventtext + ". \nThe pandemic had arrived on your doorstep.");
         }
 
-
+        GameBoard startBoard = new GameBoard();
+        startBoard.initialInfectionAndSetStores();
 
         DayOne dayOne = new DayOne(playerOne.getPlayerOneName(), playerTwo.getPlayerTwoName(), playerThree.getPlayerThreeName(), playerFour.getPlayerFourName());
         dayOne.dayOne();

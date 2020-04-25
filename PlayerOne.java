@@ -86,4 +86,14 @@ public class PlayerOne {
     public void setInfected(boolean infected) {
         this.infected = infected;
     }
+
+    public void setMoney(int money){this.money = money;}
+    public void setX(int x){
+    this.x = x;}
+    public void setY(int y){
+        this.y = y;
+    }
+    public void setHealth(int health){
+        this.health = health;
+    }
 }

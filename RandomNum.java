@@ -21,6 +21,10 @@ public class RandomNum {
         int diceRoll = (int)(Math.random() * 6) + 1;
         return diceRoll;
     }
+    public int outOfTen(){
+        int outOfTenRoll = (int)(Math.random() * 9) + 1;
+        return outOfTenRoll;
+    }
 
     /**
      * This method will choose a number between 1 and the amount of event cards in the game.

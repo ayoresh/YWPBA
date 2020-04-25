@@ -23,10 +23,74 @@ public class DayOne {
 
     public void dayOne(){
 
-        GameBoard board = new GameBoard();
+
+        int p1h = 0, p2h = 0, p3h = 0, p4h = 0;
+
+        RandomNum rando = new RandomNum();
+        GameBoard game = new GameBoard();
+
+        //Set home bases and tells each player where their home base is
+        do{
+            int x = rando.outOfTen();
+            int y = rando.outOfTen();
+            if(game.getGameboard(x,y) == 0){
+                playerOne.setX(x);
+                playerOne.setY(y);
+                JOptionPane.showMessageDialog(null, playerOne.getPlayerOneName() + ", you will begin at (" + x + ", " + y + ").");
+                game.setGameboard(x, y, 12);
+                p1h = 1;
+            }
+        }while(p1h == 0);
+        do{
+            int x = rando.outOfTen();
+            int y = rando.outOfTen();
+            if(game.getGameboard(x,y) == 0){
+                playerTwo.setX(x);
+                playerTwo.setY(y);
+                JOptionPane.showMessageDialog(null, playerTwo.getPlayerTwoName() + ", you will begin at (" + x + ", " + y + ").");
+                game.setGameboard(x, y, 12);
+                p2h = 1;
+            }
+        }while(p2h == 0);
+        do{
+            int x = rando.outOfTen();
+            int y = rando.outOfTen();
+            if(game.getGameboard(x,y) == 0){
+                playerThree.setX(x);
+                playerThree.setY(y);
+                JOptionPane.showMessageDialog(null, playerThree.getPlayerThreeName() + ", you will begin at (" + x + ", " + y + ").");
+                game.setGameboard(x, y, 12);
+                p3h = 1;
+            }
+        }while(p3h == 0);
+        do{
+            int x = rando.outOfTen();
+            int y = rando.outOfTen();
+            if(game.getGameboard(x,y) == 0){
+                playerFour.setX(x);
+                playerFour.setY(y);
+                JOptionPane.showMessageDialog(null, playerFour.getPlayerFourName() + ", you will begin at (" + x + ", " + y + ").");
+                game.setGameboard(x, y, 12);
+                p4h = 1;
+            }
+        }while(p4h == 0);
+
 
         JOptionPane.showMessageDialog(null, "Here is where the story for day one begins.");
-        JOptionPane.showMessageDialog(null, "To show creating the new object worked, here is player one's name: " + playerOne.getPlayerOneName());
+
+        for (int playerCounter = 0; playerCounter < 4; playerCounter++){
+
+            int actionsMAx = 4;
+
+            if (playerCounter == 0){
+                JOptionPane.showMessageDialog(null, playerOne.getPlayerOneName() + ", " +
+                        "what action would you like to take?\nEnter 0 to work, ");
+            }
+        }
+
+
+
+
         DayTwo daytwo = new DayTwo(playerOne.getPlayerOneName(), playerOne.getHealth(), playerOne.getSupplies(), playerOne.getFood(),
                 playerOne.getSymptoms(), playerOne.getMoney(), playerOne.getX(), playerOne.getY(), playerOne.getInfected(),
                 playerTwo.getPlayerTwoName(), playerTwo.getHealth(), playerTwo.getSupplies(), playerTwo.getFood(),
