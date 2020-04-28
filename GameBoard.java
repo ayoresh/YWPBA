@@ -18,6 +18,7 @@ public class GameBoard {
      * 10 = inhabited uninfected supply store
      * 11 = inhabited infected supply store
      * 12 = home square
+     * 13 = quarantined space
      */
 
     int[][] gameboard = new int[10][10];
@@ -30,6 +31,9 @@ public class GameBoard {
         gameboard[x][y] = z;
     }
 
+    public void quarantineArea(int x, int y){
+        gameboard[x][y] = 13;
+    }
 
     public void initialInfectionAndSetStores(){
         RandomNum randonum = new RandomNum();
