@@ -6,12 +6,16 @@ public class RandomNum {
 
 
 
-    public int eventCardAmount = 30;
+    public int eventCardAmount = 13;
 
 
     public int coinFlip(){
         int coinFlip = (int) (Math.random() * 2) + 1;
         return coinFlip;
+    }
+    public int thirtyThree(){
+        int thirty3 = (int)(Math.random() * 3) + 1;
+        return thirty3;
     }
     public int fourSidedDie(){
         int diceroll = (int) (Math.random() * 4) + 1;

@@ -4,6 +4,8 @@ import javax.swing.*;
 
 public class GameBoard {
 
+    RandomNum rando = new RandomNum();
+
     /**
      * 0 = uninfected spot
      * 1 = infected spot
@@ -17,7 +19,6 @@ public class GameBoard {
      * 9 = infected supply store
      * 10 = inhabited uninfected supply store
      * 11 = inhabited infected supply store
-     * 12 = home square
      * 13 = quarantined space
      */
 
@@ -33,6 +34,20 @@ public class GameBoard {
 
     public void quarantineArea(int x, int y){
         gameboard[x][y] = 13;
+    }
+
+    public void governmentQuarantine(){
+        for (int x = 0; x < 3; x++){
+            int xQ = rando.outOfTen();
+            int yQ = rando.outOfTen();
+            int getBoard = getGameboard(xQ,yQ);
+            while(getBoard == 13){
+                xQ=rando.outOfTen();
+                yQ = rando.outOfTen();
+                getBoard = getGameboard(xQ,yQ);
+            }
+            setGameboard(xQ ,yQ ,13);
+        }
     }
 
     public void initialInfectionAndSetStores(){
