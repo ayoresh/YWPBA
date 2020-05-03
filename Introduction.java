@@ -58,6 +58,11 @@ public class Introduction {
         }
 
 
+
+        JOptionPane.showMessageDialog(null, playerOne.getPlayerOneName() + " and " + playerTwo.getPlayerTwoName() + "" +
+                " are emotionally connected. If either perish during this game, neither will win.");
+        JOptionPane.showMessageDialog(null, playerThree.getPlayerThreeName() + " and  " + playerFour.getPlayerFourName() + "" +
+                " are emotionally connected. If either perish during this game, neither will win.");
         int initialEvent = rando.fourSidedDie();
         int initialEvent2 = rando.fourSidedDie();
         String initialeventtext = "", initialeventtext2 = "";
@@ -96,9 +101,13 @@ public class Introduction {
         }
 
         GameBoard startBoard = new GameBoard();
+        startBoard.setGameboard(2,2,13);
+        startBoard.setGameboard(7,2,13);
+        startBoard.setGameboard(2,7,13);
+        startBoard.setGameboard(7,7,13);
         startBoard.initialInfectionAndSetStores();
 
-        DayOne dayOne = new DayOne(playerOne.getPlayerOneName(), playerTwo.getPlayerTwoName(), playerThree.getPlayerThreeName(), playerFour.getPlayerFourName());
+        DayOne dayOne = new DayOne(playerOne.getPlayerOneName(), playerTwo.getPlayerTwoName(), playerThree.getPlayerThreeName(), playerFour.getPlayerFourName(), startBoard.getGameboardArray());
         dayOne.dayOne();
 
     }

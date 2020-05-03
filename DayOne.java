@@ -4,6 +4,7 @@
  */
 
 import javax.swing.JOptionPane;
+import java.awt.*;
 
 public class DayOne {
 
@@ -17,449 +18,102 @@ public class DayOne {
     Events eventTime = new Events();
 
 
-    DayOne(String playerOneName, String playerTwoName, String playerThreeName, String playerFourName){
+    DayOne(String playerOneName, String playerTwoName, String playerThreeName, String playerFourName, int[][] gameboard){
         playerOne = new PlayerOne(playerOneName);
         playerTwo = new PlayerTwo(playerTwoName);
         playerThree = new PlayerThree(playerThreeName);
         playerFour = new PlayerFour(playerFourName);
+        game = new GameBoard(gameboard);
 
     }
 
     public void dayOne(){
 
-        //Used to set players' beginning spaces
-        int p1h = 0, p2h = 0, p3h = 0, p4h = 0;
+
         //Exposure counters
         int e1 = 0, e2 = 0, e3 = 0, e4 = 0;
-
-        boolean eventHappened = true;
+        boolean eventHappened = false;
 
 
         //Set home bases and tells each player where their home base is
-        do{
-            int x = rando.outOfTen();
-            int y = rando.outOfTen();
-            if(game.getGameboard(x,y) == 0){
-                playerOne.setX(x);
-                playerOne.setY(y);
-                JOptionPane.showMessageDialog(null, playerOne.getPlayerOneName() + ", you will begin at (" + x + ", " + y + ").");
-                game.setGameboard(x, y, 13);
-                p1h = 1;
-            }
-        }while(p1h == 0);
-        do{
-            int x = rando.outOfTen();
-            int y = rando.outOfTen();
-            if(game.getGameboard(x,y) == 0){
-                playerTwo.setX(x);
-                playerTwo.setY(y);
-                JOptionPane.showMessageDialog(null, playerTwo.getPlayerTwoName() + ", you will begin at (" + x + ", " + y + ").");
-                game.setGameboard(x, y, 13);
-                p2h = 1;
-            }
-        }while(p2h == 0);
-        do{
-            int x = rando.outOfTen();
-            int y = rando.outOfTen();
-            if(game.getGameboard(x,y) == 0){
-                playerThree.setX(x);
-                playerThree.setY(y);
-                JOptionPane.showMessageDialog(null, playerThree.getPlayerThreeName() + ", you will begin at (" + x + ", " + y + ").");
-                game.setGameboard(x, y, 13);
-                p3h = 1;
-            }
-        }while(p3h == 0);
-        do{
-            int x = rando.outOfTen();
-            int y = rando.outOfTen();
-            if(game.getGameboard(x,y) == 0){
-                playerFour.setX(x);
-                playerFour.setY(y);
-                JOptionPane.showMessageDialog(null, playerFour.getPlayerFourName() + ", you will begin at (" + x + ", " + y + ").");
-                game.setGameboard(x, y, 13);
-                p4h = 1;
-            }
-        }while(p4h == 0);
+        playerOne.setX(2);
+        playerOne.setY(2);
+        JOptionPane.showMessageDialog(null, playerOne.getPlayerOneName() + ", your home base is (2,2).");
+        playerTwo.setX(2);
+        playerTwo.setY(7);
+        JOptionPane.showMessageDialog(null, playerTwo.getPlayerTwoName() + ", your home base is at (2,7).");
+        playerThree.setX(7);
+        playerThree.setY(2);
+        JOptionPane.showMessageDialog(null, playerThree.getPlayerThreeName() + ", your home base is at (7,2).");
+        playerFour.setX(7);
+        playerFour.setY(7);
+        JOptionPane.showMessageDialog(null, playerFour.getPlayerFourName() + ", your home base is at (7,7).");
 
 
         JOptionPane.showMessageDialog(null, "Here is where the story for day one begins.");
+        for(int x = 0; x < 5; x++) {
+            for (int playerCounter = 0; playerCounter < 4; playerCounter++) {
 
-        for (int playerCounter = 0; playerCounter < 4; playerCounter++){
+                int  actionPoints1 = 0, actionPoints2 = 0, actionPoints3 = 0, actionPoints4 = 0, actionPointsMax = 4;
 
-            int turnsMax = 5, turns1 = 1, turns2 = 1, turns3 = 1, turns4 = 1, actionPoints1 = 0,
-                                        actionPoints2 = 0, actionPoints3 = 0, actionPoints4 = 0, actionPointsMax = 4;
-
-            if (playerCounter == 0 && playerOne.getHealth() != 0){
-                int playerLocale = game.getGameboard(playerOne.getX(), playerOne.getY());
-                System.out.println(playerLocale);
-                String actionText = "which action would you like to take? Enter:\n0: work\n1: gift supplies or food to another player\n2: create quarantine area",
-                        shopping = "\n3: shop for supplies or food";
-
-                //Infected space?
-                if (playerLocale == 3 || playerLocale == 7 || playerLocale == 11){
-                    JOptionPane.showMessageDialog(null, "YOU HAVE ENTERED AN INFECTED SPACE. Exposure goes up one level.");
-                    e1++;
-                }
-
-                do {
-                    actionPoints1 = 0;
-                    while (actionPoints1 < actionPointsMax) {
-                        //Check if player at a store
-                        if (playerLocale == 6 || playerLocale == 7 || playerLocale == 9 || playerLocale == 10) {
-                            actionText += shopping;
-                        }
-                        int action = Integer.parseInt(JOptionPane.showInputDialog(playerOne.getPlayerOneName() + ", " +
-                                actionText + "\nAction Points Used: " + actionPoints1));
-
-
-                        //Player shops at food store
-                        if (action == 3 && playerLocale == 6) {
-                            if(actionPoints1 + 4 <= actionPointsMax) {
-                                int itemsBought = actionobj.foodShopping();
-                                int itemsBoughtChecker = playerOne.getMoney() - (itemsBought * 2);
-                                while (itemsBoughtChecker < 0) {
-                                    JOptionPane.showMessageDialog(null, "You have attempted to buy more food than you can afford." +
-                                            " Please buy an amount of food that you can afford.");
-                                    itemsBought = actionobj.foodShopping();
-                                    itemsBoughtChecker = playerOne.getMoney() - (itemsBought * 2);
-                                }
-                                playerOne.setFood(playerOne.getFood() + itemsBought);
-                                playerOne.setMoney(playerOne.getMoney() - (itemsBought * 2));
-                                actionPoints1 += 4;
-                            }
-                            else{
-                                JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
-                                        "Please choose another action.");
-                            }
-                        }
-
-                        //Player shops at supply store
-                        else if (action == 3 && playerLocale == 10) {
-                            if(actionPoints1 + 4 <= actionPointsMax){
-                            int itemsBought = actionobj.supplyShopping();
-                            int itemsBoughtChecker = playerOne.getMoney() - (itemsBought * 2);
-                            while(itemsBoughtChecker < 0){
-                                JOptionPane.showMessageDialog(null, "You have attempted to buy more supplies than you can afford. " +
-                                        "Please buy an amount of supplies you can afford.");
-                                itemsBought = actionobj.supplyShopping();
-                                itemsBoughtChecker = playerOne.getMoney() - (itemsBought * 2);
-                            }
-                            playerOne.setSupplies(playerOne.getSupplies() + itemsBought);
-                            playerOne.setMoney(playerOne.getMoney() - (2 * itemsBought));
-                            actionPoints1 += 4;
-                            }
-                            else{
-                                JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
-                                        "Please choose another action.");
-                            }
-
-                        }
-
-                        //Player attempts to shop, but is not on a space that contains a store
-                        else if (action == 3 && playerLocale != 6 && playerLocale != 10) {
-                            JOptionPane.showMessageDialog(null, "You are not on a space that you may buy supplies at." +
-                                    "\nPlease enter a valid action.");
-                        }
-
-                        //Player works
-                        else if (action == 0) {
-                            if(actionPoints1 + 4 <= actionPointsMax){
-                            int moneyEarned = 4;
-                            playerOne.setMoney(playerOne.getMoney() + moneyEarned);
-                            e1++;
-                            JOptionPane.showMessageDialog(null, "You have decided to work. You earned $" + moneyEarned + "."
-                                    + "\nYou now have $" + playerOne.getMoney() + ". You gained one exposure.");
-                            actionPoints1 += 4;
-                            }
-                            else{
-                                JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
-                                        "Please choose another action.");
-                            }
-                        }
-
-                        //Player gifts items to another player
-                        else if (action == 1) {
-                            int gift = Integer.parseInt(JOptionPane.showInputDialog("What gift would you like to send? Enter: \n1: food\n2: supplies"));
-                            while (gift != 1 && gift != 2) {
-                                gift = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. What gift would you like to send? Enter: \n1: food\n2: supplies"));
-                            }
-                            //food
-                            if (gift == 1) {
-                                int whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Which player would you like to send food to?" +
-                                        "Enter:+\n2: " + playerTwo.getPlayerTwoName() + "\n3: " + playerThree.getPlayerThreeName() + "\n4: " + playerFour.getPlayerFourName()));
-                                while (whichPlayer < 2 || whichPlayer > 4) {
-                                    whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Which player would you like to send food to?" +
-                                            "Enter:+\n2: " + playerTwo.getPlayerTwoName() + "\n3: " + playerThree.getPlayerThreeName() + "\n4: " + playerFour.getPlayerFourName()));
-                                }
-                                int amountSend = Integer.parseInt(JOptionPane.showInputDialog("How much would you like to send? You currently have " + playerOne.getFood() + " pieces of food."));
-                                while (amountSend < 0 || amountSend > playerOne.getFood()) {
-                                    amountSend = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a number between 0 and the amount of food you currently have, " + playerOne.getFood()
-                                            + "."));
-                                }
-                                if (whichPlayer == 2) {
-                                    playerTwo.setFood(playerTwo.getFood() + amountSend);
-                                } else if (whichPlayer == 3) {
-                                    playerThree.setFood(playerThree.getFood() + amountSend);
-                                } else if (whichPlayer == 4) {
-                                    playerFour.setFood(playerFour.getFood() + amountSend);
-                                }
-                                JOptionPane.showMessageDialog(null, "You sent " + amountSend + " pieces of food.");
-                                playerOne.setFood(playerOne.getFood() - amountSend);
-                            }
-                            //supplies
-                            else if (gift == 2) {
-                                int whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Which player would you like to send supplies to?" +
-                                        "Enter:+\n2: " + playerTwo.getPlayerTwoName() + "\n3: " + playerThree.getPlayerThreeName() + "\n4: " + playerFour.getPlayerFourName()));
-                                while (whichPlayer < 2 || whichPlayer > 4) {
-                                    whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Which player would you like to send supplies to?" +
-                                            "Enter:+\n2: " + playerTwo.getPlayerTwoName() + "\n3: " + playerThree.getPlayerThreeName() + "\n4: " + playerFour.getPlayerFourName()));
-                                }
-                                int amountSend = Integer.parseInt(JOptionPane.showInputDialog("How much would you like to send? You currently have " + playerOne.getSupplies() + " supplies."));
-                                while (amountSend < 0 || amountSend > playerOne.getSupplies()) {
-                                    amountSend = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a number between 0 and the amount of supplies you currently have, " + playerOne.getSupplies()
-                                            + "."));
-                                }
-                                if (whichPlayer == 2) {
-                                    playerTwo.setSupplies(playerTwo.getSupplies() + amountSend);
-                                } else if (whichPlayer == 3) {
-                                    playerThree.setSupplies(playerThree.getSupplies() + amountSend);
-                                } else if (whichPlayer == 4) {
-                                    playerFour.setSupplies(playerFour.getSupplies() + amountSend);
-                                }
-                                playerOne.setSupplies(playerOne.getSupplies() - amountSend);
-
-                            }
-                            actionPoints1++;
-                        }
-                        //quarantine area
-                        else if (action == 2) {
-                            game.quarantineArea(playerOne.getX(), playerOne.getY());
-                            JOptionPane.showMessageDialog(null, "Space (" + playerOne.getX() + "," + playerOne.getY() + ") is now quarantined and cannot become infected.");
-
-                        }
-
-                    }
-
-                    turns1++;
-                } while (turns1 < turnsMax);
-            }
-            if (playerCounter == 1 && playerTwo.getHealth() != 0) {
-                int playerLocale = game.getGameboard(playerTwo.getX(), playerTwo.getY());
-                System.out.println(playerLocale);
-                String actionText = "which action would you like to take? Enter:\n0: work\n1: gift supplies or food to another player\n2: create quarantine area",
-                        shopping = "\n3: shop for supplies or food";
-
-                //Infected space?
-                if (playerLocale == 3 || playerLocale == 7 || playerLocale == 11) {
-                    JOptionPane.showMessageDialog(null, "YOU HAVE ENTERED AN INFECTED SPACE. Exposure goes up one level.");
-                    e2++;
-                }
-
-
-                do {
-                    actionPoints2 = 0;
-                    while(actionPoints2 < actionPointsMax) {
-                        //Check if player at a store
-                        if (playerLocale == 6 || playerLocale == 7 || playerLocale == 9 || playerLocale == 10) {
-                            actionText += shopping;
-                        }
-                        int action = Integer.parseInt(JOptionPane.showInputDialog(playerTwo.getPlayerTwoName() + ", " +
-                                actionText + "\nAction Points Used: " + actionPoints2));
-
-
-                        //Player shops at food store
-                        if (action == 3 && playerLocale == 6) {
-                            if(actionPoints2 + 4 <= actionPointsMax){
-                            int itemsBought = actionobj.foodShopping();
-                            int itemsBoughtChecker = playerTwo.getMoney() - (itemsBought * 2);
-                            while (itemsBoughtChecker < 0) {
-                                JOptionPane.showMessageDialog(null, "You have attempted to buy more food than you can afford." +
-                                        " Please buy an amount of food that you can afford.");
-                                itemsBought = actionobj.foodShopping();
-                                itemsBoughtChecker = playerTwo.getMoney() - (itemsBought * 2);
-                            }
-                            playerTwo.setFood(playerTwo.getFood() + itemsBought);
-                            playerTwo.setMoney(playerTwo.getMoney() - (itemsBought * 2));
-                            actionPoints2 += 4;
-                            }
-                            else{
-                                JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
-                                        "Please choose another action.");
-                            }
-                        }
-
-                        //Player shops at supply store
-                        else if (action == 3 && playerLocale == 10) {
-                            if(actionPoints2 + 4 < actionPointsMax){
-                            int itemsBought = actionobj.supplyShopping();
-                            int itemsBoughtChecker = playerTwo.getMoney() - (itemsBought * 2);
-                            while (itemsBoughtChecker < 0) {
-                                JOptionPane.showMessageDialog(null, "You have attempted to buy more supplies than you can afford. " +
-                                        "Please buy an amount of supplies you can afford.");
-                                itemsBought = actionobj.supplyShopping();
-                                itemsBoughtChecker = playerTwo.getMoney() - (itemsBought * 2);
-                            }
-                            playerTwo.setSupplies(playerTwo.getSupplies() + itemsBought);
-                            playerTwo.setMoney(playerTwo.getMoney() - (2 * itemsBought));
-                            actionPoints2 += 4;
-                            }
-                            else{
-                                JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
-                                        "Please choose another action.");
-                            }
-
-                        }
-
-                        //Player attempts to shop, but is not on a space that contains a store
-                        else if (action == 3 && playerLocale != 6 && playerLocale != 10) {
-                            JOptionPane.showMessageDialog(null, "You are not on a space that you may buy supplies at." +
-                                    "\nPlease enter a valid action.");
-                        }
-
-                        //Player works
-                        else if (action == 0) {
-                            if(actionPoints2 + 4 <= actionPointsMax){
-                            int moneyEarned = 4;
-                            playerTwo.setMoney(playerTwo.getMoney() + moneyEarned);
-                            e2++;
-                            JOptionPane.showMessageDialog(null, "You have decided to work. You earned $" + moneyEarned + "."
-                                    + "\nYou now have $" + playerTwo.getMoney() + ". You gained one exposure.");
-                            actionPoints2 += 4;
-                            }
-                            else{
-                                JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
-                                        "Please choose another action.");
-                            }
-                        }
-
-                        //Player gifts items to another player
-                        else if (action == 1) {
-                            int gift = Integer.parseInt(JOptionPane.showInputDialog("What gift would you like to send? Enter: \n1: food\n2: supplies"));
-                            while (gift != 1 && gift != 2) {
-                                gift = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. What gift would you like to send? Enter: \n1: food\n2: supplies"));
-                            }
-                            //food
-                            if (gift == 1) {
-                                int whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Which player would you like to send food to?" +
-                                        "Enter:+\n2: " + playerOne.getPlayerOneName() + "\n3: " + playerThree.getPlayerThreeName() + "\n4: " + playerFour.getPlayerFourName()));
-                                while (whichPlayer < 2 || whichPlayer > 4) {
-                                    whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Which player would you like to send food to?" +
-                                            "Enter:+\n2: " + playerOne.getPlayerOneName() + "\n3: " + playerThree.getPlayerThreeName() + "\n4: " + playerFour.getPlayerFourName()));
-                                }
-                                int amountSend = Integer.parseInt(JOptionPane.showInputDialog("How much would you like to send? You currently have " + playerTwo.getFood() + " pieces of food."));
-                                while (amountSend < 0 || amountSend > playerTwo.getFood()) {
-                                    amountSend = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a number between 0 and the amount of food you currently have, " + playerTwo.getFood()
-                                            + "."));
-                                }
-                                if (whichPlayer == 2) {
-                                    playerOne.setFood(playerOne.getFood() + amountSend);
-                                } else if (whichPlayer == 3) {
-                                    playerThree.setFood(playerThree.getFood() + amountSend);
-                                } else if (whichPlayer == 4) {
-                                    playerFour.setFood(playerFour.getFood() + amountSend);
-                                }
-                                JOptionPane.showMessageDialog(null, "You sent " + amountSend + " pieces of food.");
-                                playerTwo.setFood(playerTwo.getFood() - amountSend);
-                            }
-
-                            //supplies
-                            else if (gift == 2) {
-                                int whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Which player would you like to send supplies to?" +
-                                        "Enter:+\n2: " + playerOne.getPlayerOneName() + "\n3: " + playerThree.getPlayerThreeName() + "\n4: " + playerFour.getPlayerFourName()));
-                                while (whichPlayer < 2 || whichPlayer > 4) {
-                                    whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Which player would you like to send supplies to?" +
-                                            "Enter:+\n2: " + playerOne.getPlayerOneName() + "\n3: " + playerThree.getPlayerThreeName() + "\n4: " + playerFour.getPlayerFourName()));
-                                }
-                                int amountSend = Integer.parseInt(JOptionPane.showInputDialog("How much would you like to send? You currently have " + playerTwo.getSupplies() + " supplies."));
-                                while (amountSend < 0 || amountSend > playerTwo.getSupplies()) {
-                                    amountSend = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a number between 0 and the amount of supplies you currently have, " + playerTwo.getSupplies()
-                                            + "."));
-                                }
-                                if (whichPlayer == 2) {
-                                    playerOne.setSupplies(playerTwo.getSupplies() + amountSend);
-                                } else if (whichPlayer == 3) {
-                                    playerThree.setSupplies(playerThree.getSupplies() + amountSend);
-                                } else if (whichPlayer == 4) {
-                                    playerFour.setSupplies(playerFour.getSupplies() + amountSend);
-                                }
-                                playerTwo.setSupplies(playerTwo.getSupplies() - amountSend);
-                            }
-                            actionPoints2++;
-                        }
-
-                        //quarantine area
-                        else if (action == 2) {
-                            game.quarantineArea(playerTwo.getX(), playerTwo.getY());
-                            JOptionPane.showMessageDialog(null, "Space (" + playerTwo.getX() + "," + playerTwo.getY() + ") is now quarantined and cannot become infected.");
-                        }
-                    }
-                    turns2++;
-
-                } while (turns2 < turnsMax);
-            }
-
-
-
-                if (playerCounter == 2 && playerThree.getHealth() != 0) {
-                    int playerLocale = game.getGameboard(playerThree.getX(), playerThree.getY());
+                if (playerCounter == 0 && playerOne.getHealth() != 0) {
+                    int playerLocale = game.getGameboard(playerOne.getX(), playerOne.getY());
                     System.out.println(playerLocale);
                     String actionText = "which action would you like to take? Enter:\n0: work\n1: gift supplies or food to another player\n2: create quarantine area",
                             shopping = "\n3: shop for supplies or food";
 
                     //Infected space?
-                    if (playerLocale == 3 || playerLocale == 7 || playerLocale == 11) {
+                    if (playerLocale == 1 || playerLocale == 5 || playerLocale == 9) {
                         JOptionPane.showMessageDialog(null, "YOU HAVE ENTERED AN INFECTED SPACE. Exposure goes up one level.");
-                        e3++;
+                        e1++;
                     }
 
-                    do {
-                        actionPoints3 = 0;
-                        while(actionPoints3 < actionPointsMax) {
+
+                        actionPoints1 = 0;
+                        while (actionPoints1 < actionPointsMax) {
                             //Check if player at a store
-                            if (playerLocale == 6 || playerLocale == 7 || playerLocale == 9 || playerLocale == 10) {
+                            if (playerLocale == 4 || playerLocale == 5 || playerLocale == 9 || playerLocale == 8) {
                                 actionText += shopping;
                             }
-                            int action = Integer.parseInt(JOptionPane.showInputDialog(playerThree.getPlayerThreeName() + ", " +
-                                    actionText + "\nAction Points Used: " + actionPoints3));
+                            int action = Integer.parseInt(JOptionPane.showInputDialog(playerOne.getPlayerOneName() + ", " +
+                                    actionText + "\nAction Points Used: " + actionPoints1));
 
 
                             //Player shops at food store
-                            if (action == 3 && playerLocale == 6) {
-                                if(actionPoints3 + 4 <= actionPointsMax){
-                                int itemsBought = actionobj.foodShopping();
-                                int itemsBoughtChecker = playerThree.getMoney() - (itemsBought * 2);
-                                while (itemsBoughtChecker < 0) {
-                                    JOptionPane.showMessageDialog(null, "You have attempted to buy more food than you can afford." +
-                                            " Please buy an amount of food that you can afford.");
-                                    itemsBought = actionobj.foodShopping();
-                                    itemsBoughtChecker = playerThree.getMoney() - (itemsBought * 2);
-                                }
-                                playerThree.setFood(playerThree.getFood() + itemsBought);
-                                playerThree.setMoney(playerThree.getMoney() - (itemsBought * 2));
-                                actionPoints3 += 4;
-                                }
-                                else{
+                            if ((action == 3 && playerLocale == 4) || (action == 3 && playerLocale == 5)) {
+                                if (actionPoints1 + 4 <= actionPointsMax) {
+                                    int itemsBought = actionobj.foodShopping();
+                                    int itemsBoughtChecker = playerOne.getMoney() - (itemsBought * 2);
+                                    while (itemsBoughtChecker < 0) {
+                                        JOptionPane.showMessageDialog(null, "You have attempted to buy more food than you can afford." +
+                                                " Please buy an amount of food that you can afford.");
+                                        itemsBought = actionobj.foodShopping();
+                                        itemsBoughtChecker = playerOne.getMoney() - (itemsBought * 2);
+                                    }
+                                    playerOne.setFood(playerOne.getFood() + itemsBought);
+                                    playerOne.setMoney(playerOne.getMoney() - (itemsBought * 2));
+                                    actionPoints1 += 4;
+                                } else {
                                     JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
                                             "Please choose another action.");
                                 }
                             }
 
                             //Player shops at supply store
-                            else if (action == 3 && playerLocale == 10) {
-                                if(actionPoints3 + 4 <= actionPointsMax){
-                                int itemsBought = actionobj.supplyShopping();
-                                int itemsBoughtChecker = playerThree.getMoney() - (itemsBought * 2);
-                                while (itemsBoughtChecker < 0) {
-                                    JOptionPane.showMessageDialog(null, "You have attempted to buy more supplies than you can afford. " +
-                                            "Please buy an amount of supplies you can afford.");
-                                    itemsBought = actionobj.supplyShopping();
-                                    itemsBoughtChecker = playerThree.getMoney() - (itemsBought * 2);
-                                }
-                                playerThree.setSupplies(playerThree.getSupplies() + itemsBought);
-                                playerThree.setMoney(playerThree.getMoney() - (2 * itemsBought));
-                                actionPoints3 += 4;
-                                }
-                                else{
+                            else if ((action == 3 && playerLocale == 8) || (action == 3 && playerLocale == 9)) {
+                                if (actionPoints1 + 4 <= actionPointsMax) {
+                                    int itemsBought = actionobj.supplyShopping();
+                                    int itemsBoughtChecker = playerOne.getMoney() - (itemsBought * 2);
+                                    while (itemsBoughtChecker < 0) {
+                                        JOptionPane.showMessageDialog(null, "You have attempted to buy more supplies than you can afford. " +
+                                                "Please buy an amount of supplies you can afford.");
+                                        itemsBought = actionobj.supplyShopping();
+                                        itemsBoughtChecker = playerOne.getMoney() - (itemsBought * 2);
+                                    }
+                                    playerOne.setSupplies(playerOne.getSupplies() + itemsBought);
+                                    playerOne.setMoney(playerOne.getMoney() - (2 * itemsBought));
+                                    actionPoints1 += 4;
+                                } else {
                                     JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
                                             "Please choose another action.");
                                 }
@@ -474,15 +128,14 @@ public class DayOne {
 
                             //Player works
                             else if (action == 0) {
-                                if(actionPoints3 + 4 < actionPointsMax){
-                                int moneyEarned = 4;
-                                playerThree.setMoney(playerThree.getMoney() + moneyEarned);
-                                e3++;
-                                JOptionPane.showMessageDialog(null, "You have decided to work. You earned $" + moneyEarned + "."
-                                        + "\nYou now have $" + playerThree.getMoney() + ". You gained one exposure.");
-                                actionPoints3 += 4;
-                                }
-                                else{
+                                if (actionPoints1 + 4 <= actionPointsMax) {
+                                    int moneyEarned = 4;
+                                    playerOne.setMoney(playerOne.getMoney() + moneyEarned);
+                                    e1++;
+                                    JOptionPane.showMessageDialog(null, "You have decided to work. You earned $" + moneyEarned + "."
+                                            + "\nYou now have $" + playerOne.getMoney() + ". You gained one exposure.");
+                                    actionPoints1 += 4;
+                                } else {
                                     JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
                                             "Please choose another action.");
                                 }
@@ -490,6 +143,411 @@ public class DayOne {
 
                             //Player gifts items to another player
                             else if (action == 1) {
+                                int gift = Integer.parseInt(JOptionPane.showInputDialog("What gift would you like to send? Enter: \n1: food\n2: supplies"));
+                                int amountSend = 0;
+                                while (gift != 1 && gift != 2) {
+                                    gift = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. What gift would you like to send? Enter: \n1: food\n2: supplies"));
+                                }
+                                //food
+                                if (gift == 1) {
+                                    int whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Which player would you like to send food to?" +
+                                            "Enter:+\n2: " + playerTwo.getPlayerTwoName() + "\n3: " + playerThree.getPlayerThreeName() + "\n4: " + playerFour.getPlayerFourName()));
+                                    while (whichPlayer < 2 || whichPlayer > 4) {
+                                        whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Which player would you like to send food to?" +
+                                                "Enter:+\n2: " + playerTwo.getPlayerTwoName() + "\n3: " + playerThree.getPlayerThreeName() + "\n4: " + playerFour.getPlayerFourName()));
+                                    }
+                                    amountSend = Integer.parseInt(JOptionPane.showInputDialog("How much would you like to send? You currently have " + playerOne.getFood() + " pieces of food."));
+                                    while (amountSend < 0 || amountSend > playerOne.getFood()) {
+                                        amountSend = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a number between 0 and the amount of food you currently have, " + playerOne.getFood()
+                                                + "."));
+                                    }
+                                    if (whichPlayer == 2) {
+                                        playerTwo.setFood(playerTwo.getFood() + amountSend);
+                                        if(amountSend > 0){
+                                            e2++;
+                                        }
+                                    } else if (whichPlayer == 3) {
+                                        playerThree.setFood(playerThree.getFood() + amountSend);
+                                        if(amountSend > 0){
+                                            e3++;
+                                        }
+                                    } else if (whichPlayer == 4) {
+                                        playerFour.setFood(playerFour.getFood() + amountSend);
+                                        if(amountSend > 0){
+                                            e4++;
+                                        }
+                                    }
+                                    JOptionPane.showMessageDialog(null, "You sent " + amountSend + " pieces of food.");
+                                    playerOne.setFood(playerOne.getFood() - amountSend);
+                                }
+                                //supplies
+                                else if (gift == 2) {
+                                    int whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Which player would you like to send supplies to?" +
+                                            "Enter:+\n2: " + playerTwo.getPlayerTwoName() + "\n3: " + playerThree.getPlayerThreeName() + "\n4: " + playerFour.getPlayerFourName()));
+                                    while (whichPlayer < 2 || whichPlayer > 4) {
+                                        whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Which player would you like to send supplies to?" +
+                                                "Enter:+\n2: " + playerTwo.getPlayerTwoName() + "\n3: " + playerThree.getPlayerThreeName() + "\n4: " + playerFour.getPlayerFourName()));
+                                    }
+                                    if(whichPlayer == 2 && (playerTwo.getHealth() == 0)){
+                                            whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("You cannot send supplies to a dead player. Please enter a 3 to send supplies to " + playerThree.getPlayerThreeName() +
+                                                    " or enter a 4 to send supplies to " + playerFour.getPlayerFourName() + "."));
+                                            while (whichPlayer != 3 && whichPlayer != 4){
+                                                whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a 3 or a 4."));
+                                            }
+                                    }
+                                    if(whichPlayer == 3 && (playerThree.getHealth() == 0)){
+                                        whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("You cannot send supplies to a dead player. Please enter a 2 to send supplies to " +
+                                                playerTwo.getPlayerTwoName() + " or a 4 to send supplies to " + playerFour.getPlayerFourName() + "."));
+                                        while(whichPlayer != 2 && whichPlayer != 4){
+                                            whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a 2 or a 4."));
+                                        }
+                                    }
+                                    if(whichPlayer == 4 && (playerFour.getHealth() == 0)){
+                                        whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("You cannot send supplies to a dead player. Please enter a 2 to send supplies to " + playerTwo.getPlayerTwoName() +
+                                                " or a 3 to send supplies to " + playerThree.getPlayerThreeName() + "."));
+                                        while(whichPlayer != 2 && whichPlayer != 3){
+                                            whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a 2 or a 3."));
+                                        }
+                                    }
+                                    amountSend = Integer.parseInt(JOptionPane.showInputDialog("How much would you like to send? You currently have " + playerOne.getSupplies() + " supplies."));
+                                    while (amountSend < 0 || amountSend > playerOne.getSupplies()) {
+                                        amountSend = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a number between 0 and the amount of supplies you currently have, " + playerOne.getSupplies()
+                                                + "."));
+                                    }
+                                    if (whichPlayer == 2) {
+                                        playerTwo.setSupplies(playerTwo.getSupplies() + amountSend);
+                                        if(amountSend > 0){
+                                            e2++;
+                                        }
+                                    } else if (whichPlayer == 3) {
+                                        playerThree.setSupplies(playerThree.getSupplies() + amountSend);
+                                        if(amountSend > 0){
+                                            e3++;
+                                        }
+                                    } else if (whichPlayer == 4) {
+                                        playerFour.setSupplies(playerFour.getSupplies() + amountSend);
+                                        if(amountSend > 0){
+                                            e4++;
+                                        }
+                                    }
+                                    playerOne.setSupplies(playerOne.getSupplies() - amountSend);
+
+                                }
+                                if (amountSend == 0){
+                                    actionPoints1--;
+                                }
+                                actionPoints1++;
+                            }
+                            //quarantine area
+                            else if (action == 2) {
+                                if(actionPoints1 + 4 <= actionPointsMax) {
+                                    int currentPlace = game.getGameboard(playerOne.getX(), playerOne.getY());
+                                    if (currentPlace != 13 && currentPlace != 4 && currentPlace != 5 && currentPlace != 8 && currentPlace !=9) {
+                                        game.quarantineArea(playerOne.getX(), playerOne.getY());
+                                        JOptionPane.showMessageDialog(null, "Space (" + playerOne.getX() + "," + playerOne.getY() + ") is now quarantined and cannot become infected.");
+                                        actionPoints1 += 4;
+                                    }
+                                    else{
+                                        JOptionPane.showMessageDialog(null,"This space is already quarantined, or may be unable to be quarantined.");
+                                    }
+                                }
+                                else{
+                                    JOptionPane.showMessageDialog(null,"You do not have enough points to complete this action. " +
+                                            "Please choose another action.");
+                                }
+                            }
+                        }
+                }
+                if (playerCounter == 1 && playerTwo.getHealth() != 0) {
+                    int playerLocale = game.getGameboard(playerTwo.getX(), playerTwo.getY());
+                    System.out.println(playerLocale);
+                    String actionText = "which action would you like to take? Enter:\n0: work\n1: gift supplies or food to another player\n2: create quarantine area",
+                            shopping = "\n3: shop for supplies or food";
+
+                    //Infected space?
+                    if (playerLocale == 1 || playerLocale == 5 || playerLocale == 9) {
+                        JOptionPane.showMessageDialog(null, "YOU HAVE ENTERED AN INFECTED SPACE. Exposure goes up one level.");
+                        e2++;
+                    }
+                        actionPoints2 = 0;
+                        while (actionPoints2 < actionPointsMax) {
+                            //Check if player at a store
+                            if (playerLocale == 4 || playerLocale == 5 || playerLocale == 9 || playerLocale == 8) {
+                                actionText += shopping;
+                            }
+                            int action = Integer.parseInt(JOptionPane.showInputDialog(playerTwo.getPlayerTwoName() + ", " +
+                                    actionText + "\nAction Points Used: " + actionPoints2));
+
+
+                            //Player shops at food store
+                            if ((action == 3 && playerLocale == 4) || (action == 3 && playerLocale == 5)) {
+                                if (actionPoints2 + 4 <= actionPointsMax) {
+                                    int itemsBought = actionobj.foodShopping();
+                                    int itemsBoughtChecker = playerTwo.getMoney() - (itemsBought * 2);
+                                    while (itemsBoughtChecker < 0) {
+                                        JOptionPane.showMessageDialog(null, "You have attempted to buy more food than you can afford." +
+                                                " Please buy an amount of food that you can afford.");
+                                        itemsBought = actionobj.foodShopping();
+                                        itemsBoughtChecker = playerTwo.getMoney() - (itemsBought * 2);
+                                    }
+                                    playerTwo.setFood(playerTwo.getFood() + itemsBought);
+                                    playerTwo.setMoney(playerTwo.getMoney() - (itemsBought * 2));
+                                    actionPoints2 += 4;
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "You do not have enough action points to complete this action. " +
+                                            "Please choose another action.");
+                                }
+                            }
+
+                            //Player shops at supply store
+                            else if ((action == 3 && playerLocale == 8) || (action == 3 && playerLocale == 9)) {
+                                if (actionPoints2 + 4 < actionPointsMax) {
+                                    int itemsBought = actionobj.supplyShopping();
+                                    int itemsBoughtChecker = playerTwo.getMoney() - (itemsBought * 2);
+                                    while (itemsBoughtChecker < 0) {
+                                        JOptionPane.showMessageDialog(null, "You have attempted to buy more supplies than you can afford. " +
+                                                "Please buy an amount of supplies you can afford.");
+                                        itemsBought = actionobj.supplyShopping();
+                                        itemsBoughtChecker = playerTwo.getMoney() - (itemsBought * 2);
+                                    }
+                                    playerTwo.setSupplies(playerTwo.getSupplies() + itemsBought);
+                                    playerTwo.setMoney(playerTwo.getMoney() - (2 * itemsBought));
+                                    actionPoints2 += 4;
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
+                                            "Please choose another action.");
+                                }
+
+                            }
+
+                            //Player attempts to shop, but is not on a space that contains a store
+                            else if (action == 3 && playerLocale != 6 && playerLocale != 10) {
+                                JOptionPane.showMessageDialog(null, "You are not on a space that you may buy supplies at." +
+                                        "\nPlease enter a valid action.");
+                            }
+
+                            //Player works
+                            else if (action == 0) {
+                                if (actionPoints2 + 4 <= actionPointsMax) {
+                                    int moneyEarned = 4;
+                                    playerTwo.setMoney(playerTwo.getMoney() + moneyEarned);
+                                    e2++;
+                                    JOptionPane.showMessageDialog(null, "You have decided to work. You earned $" + moneyEarned + "."
+                                            + "\nYou now have $" + playerTwo.getMoney() + ". You gained one exposure.");
+                                    actionPoints2 += 4;
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
+                                            "Please choose another action.");
+                                }
+                            }
+
+                            //Player gifts items to another player
+                            else if (action == 1) {
+                                int amountSend = 0;
+                                int gift = Integer.parseInt(JOptionPane.showInputDialog("What gift would you like to send? Enter: \n1: food\n2: supplies"));
+                                while (gift != 1 && gift != 2) {
+                                    gift = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. What gift would you like to send? Enter: \n1: food\n2: supplies"));
+                                }
+                                //food
+                                if (gift == 1) {
+                                    int whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Which player would you like to send food to?" +
+                                            "Enter:+\n2: " + playerOne.getPlayerOneName() + "\n3: " + playerThree.getPlayerThreeName() + "\n4: " + playerFour.getPlayerFourName()));
+                                    while (whichPlayer < 2 || whichPlayer > 4) {
+                                        whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Which player would you like to send food to?" +
+                                                "Enter:+\n2: " + playerOne.getPlayerOneName() + "\n3: " + playerThree.getPlayerThreeName() + "\n4: " + playerFour.getPlayerFourName()));
+                                    }
+                                    amountSend = Integer.parseInt(JOptionPane.showInputDialog("How much would you like to send? You currently have " + playerTwo.getFood() + " pieces of food."));
+                                    while (amountSend < 0 || amountSend > playerTwo.getFood()) {
+                                        amountSend = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a number between 0 and the amount of food you currently have, " + playerTwo.getFood()
+                                                + "."));
+                                    }
+                                    if (whichPlayer == 2) {
+                                        playerOne.setFood(playerOne.getFood() + amountSend);
+                                        if(amountSend > 0){
+                                            e1++;
+                                        }
+                                    } else if (whichPlayer == 3) {
+                                        playerThree.setFood(playerThree.getFood() + amountSend);
+                                        if (amountSend > 0){
+                                            e3++;
+                                        }
+                                    } else if (whichPlayer == 4) {
+                                        playerFour.setFood(playerFour.getFood() + amountSend);
+                                        if (amountSend > 0){
+                                            e4++;
+                                        }
+                                    }
+                                    JOptionPane.showMessageDialog(null, "You sent " + amountSend + " pieces of food.");
+                                    playerTwo.setFood(playerTwo.getFood() - amountSend);
+                                }
+
+                                //supplies
+                                //2 - p1 , 3 - p3 , 4 - p4
+                                else if (gift == 2) {
+                                    int whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Which player would you like to send supplies to?" +
+                                            "Enter:+\n2: " + playerOne.getPlayerOneName() + "\n3: " + playerThree.getPlayerThreeName() + "\n4: " + playerFour.getPlayerFourName()));
+                                    while (whichPlayer < 2 || whichPlayer > 4) {
+                                        whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Which player would you like to send supplies to?" +
+                                                "Enter:+\n2: " + playerOne.getPlayerOneName() + "\n3: " + playerThree.getPlayerThreeName() + "\n4: " + playerFour.getPlayerFourName()));
+                                    }
+                                    if(whichPlayer == 2 && (playerOne.getHealth() == 0)){
+                                        whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("You cannot send supplies to a dead player. Please enter a 3 to send supplies to " + playerThree.getPlayerThreeName() +
+                                                " or enter a 4 to send supplies to " + playerFour.getPlayerFourName() + "."));
+                                        while (whichPlayer != 3 && whichPlayer != 4){
+                                            whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a 3 or a 4."));
+                                        }
+                                    }
+                                    if(whichPlayer == 3 && (playerThree.getHealth() == 0)){
+                                        whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("You cannot send supplies to a dead player. Please enter a 2 to send supplies to " +
+                                                playerOne.getPlayerOneName() + " or a 4 to send supplies to " + playerFour.getPlayerFourName() + "."));
+                                        while(whichPlayer != 2 && whichPlayer != 4){
+                                            whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a 2 or a 4."));
+                                        }
+                                    }
+                                    if(whichPlayer == 4 && (playerFour.getHealth() == 0)){
+                                        whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("You cannot send supplies to a dead player. Please enter a 2 to send supplies to " + playerOne.getPlayerOneName() +
+                                                " or a 3 to send supplies to " + playerThree.getPlayerThreeName() + "."));
+                                        while(whichPlayer != 2 && whichPlayer != 3){
+                                            whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a 2 or a 3."));
+                                        }
+                                    }
+                                    amountSend = Integer.parseInt(JOptionPane.showInputDialog("How much would you like to send? You currently have " + playerTwo.getSupplies() + " supplies."));
+                                    while (amountSend < 0 || amountSend > playerTwo.getSupplies()) {
+                                        amountSend = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a number between 0 and the amount of supplies you currently have, " + playerTwo.getSupplies()
+                                                + "."));
+                                    }
+                                    if (whichPlayer == 2) {
+                                        playerOne.setSupplies(playerTwo.getSupplies() + amountSend);
+                                        if (amountSend > 0){
+                                            e1++;
+                                        }
+                                    } else if (whichPlayer == 3) {
+                                        playerThree.setSupplies(playerThree.getSupplies() + amountSend);
+                                        if(amountSend > 0){
+                                            e3++;
+                                        }
+                                    } else if (whichPlayer == 4) {
+                                        playerFour.setSupplies(playerFour.getSupplies() + amountSend);
+                                        if(amountSend > 0){
+                                            e4++;
+                                        }
+                                    }
+                                    playerTwo.setSupplies(playerTwo.getSupplies() - amountSend);
+                                }
+                                if(amountSend == 0){
+                                    actionPoints2--;
+                                }
+                                actionPoints2++;
+                            }
+
+                            //quarantine area
+                            else if (action == 2) {
+                                if(actionPoints2 + 4 <= actionPointsMax) {
+                                    int currentPlace = game.getGameboard(playerTwo.getX(), playerTwo.getY());
+                                    if (currentPlace != 13 && currentPlace != 8 && currentPlace != 9 && currentPlace != 4 && currentPlace != 5) {
+                                        game.quarantineArea(playerTwo.getX(), playerTwo.getY());
+                                        JOptionPane.showMessageDialog(null, "Space (" + playerTwo.getX() + "," + playerTwo.getY() + ") is now quarantined and cannot become infected.");
+                                        actionPoints2 += 4;
+                                    }
+                                    else{
+                                        JOptionPane.showMessageDialog(null,"This space is already quarantined, or may be unable to be quarantined.");
+                                    }
+                                }
+                                else{
+                                    JOptionPane.showMessageDialog(null,"You do not have enough points to complete this action. " +
+                                            "Please choose another action.");
+                                }
+                            }
+                        }
+                }
+
+
+                if (playerCounter == 2 && playerThree.getHealth() != 0) {
+                    int playerLocale = game.getGameboard(playerThree.getX(), playerThree.getY());
+                    System.out.println(playerLocale);
+                    String actionText = "which action would you like to take? Enter:\n0: work\n1: gift supplies or food to another player\n2: create quarantine area",
+                            shopping = "\n3: shop for supplies or food";
+
+                    //Infected space?
+                    if (playerLocale == 1 || playerLocale == 5 || playerLocale == 9) {
+                        JOptionPane.showMessageDialog(null, "YOU HAVE ENTERED AN INFECTED SPACE. Exposure goes up one level.");
+                        e3++;
+                    }
+                        actionPoints3 = 0;
+                        while (actionPoints3 < actionPointsMax) {
+                            //Check if player at a store
+                            if (playerLocale == 4 || playerLocale == 5 || playerLocale == 9 || playerLocale == 8) {
+                                actionText += shopping;
+                            }
+                            int action = Integer.parseInt(JOptionPane.showInputDialog(playerThree.getPlayerThreeName() + ", " +
+                                    actionText + "\nAction Points Used: " + actionPoints3));
+
+
+                            //Player shops at food store
+                            if ((action == 3 && playerLocale == 4) || (action == 3 && playerLocale == 5)) {
+                                if (actionPoints3 + 4 <= actionPointsMax) {
+                                    int itemsBought = actionobj.foodShopping();
+                                    int itemsBoughtChecker = playerThree.getMoney() - (itemsBought * 2);
+                                    while (itemsBoughtChecker < 0) {
+                                        JOptionPane.showMessageDialog(null, "You have attempted to buy more food than you can afford." +
+                                                " Please buy an amount of food that you can afford.");
+                                        itemsBought = actionobj.foodShopping();
+                                        itemsBoughtChecker = playerThree.getMoney() - (itemsBought * 2);
+                                    }
+                                    playerThree.setFood(playerThree.getFood() + itemsBought);
+                                    playerThree.setMoney(playerThree.getMoney() - (itemsBought * 2));
+                                    actionPoints3 += 4;
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
+                                            "Please choose another action.");
+                                }
+                            }
+
+                            //Player shops at supply store
+                            else if ((action == 3 && playerLocale == 8) || (action == 3 && playerLocale == 9)) {
+                                if (actionPoints3 + 4 <= actionPointsMax) {
+                                    int itemsBought = actionobj.supplyShopping();
+                                    int itemsBoughtChecker = playerThree.getMoney() - (itemsBought * 2);
+                                    while (itemsBoughtChecker < 0) {
+                                        JOptionPane.showMessageDialog(null, "You have attempted to buy more supplies than you can afford. " +
+                                                "Please buy an amount of supplies you can afford.");
+                                        itemsBought = actionobj.supplyShopping();
+                                        itemsBoughtChecker = playerThree.getMoney() - (itemsBought * 2);
+                                    }
+                                    playerThree.setSupplies(playerThree.getSupplies() + itemsBought);
+                                    playerThree.setMoney(playerThree.getMoney() - (2 * itemsBought));
+                                    actionPoints3 += 4;
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
+                                            "Please choose another action.");
+                                }
+
+                            }
+
+                            //Player attempts to shop, but is not on a space that contains a store
+                            else if (action == 3 && playerLocale != 6 && playerLocale != 10) {
+                                JOptionPane.showMessageDialog(null, "You are not on a space that you may buy supplies at." +
+                                        "\nPlease enter a valid action.");
+                            }
+
+                            //Player works
+                            else if (action == 0) {
+                                if (actionPoints3 + 4 <= actionPointsMax) {
+                                    int moneyEarned = 4;
+                                    playerThree.setMoney(playerThree.getMoney() + moneyEarned);
+                                    e3++;
+                                    JOptionPane.showMessageDialog(null, "You have decided to work. You earned $" + moneyEarned + "."
+                                            + "\nYou now have $" + playerThree.getMoney() + ". You gained one exposure.");
+                                    actionPoints3 += 4;
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
+                                            "Please choose another action.");
+                                }
+                            }
+
+                            //Player gifts items to another player
+                            else if (action == 1) {
+                                int amountSend = 0;
                                 int gift = Integer.parseInt(JOptionPane.showInputDialog("What gift would you like to send? Enter: \n1: food\n2: supplies"));
                                 while (gift != 1 && gift != 2) {
                                     gift = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. What gift would you like to send? Enter: \n1: food\n2: supplies"));
@@ -502,23 +560,33 @@ public class DayOne {
                                         whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Which player would you like to send food to?" +
                                                 "Enter:+\n2: " + playerOne.getPlayerOneName() + "\n3: " + playerTwo.getPlayerTwoName() + "\n4: " + playerFour.getPlayerFourName()));
                                     }
-                                    int amountSend = Integer.parseInt(JOptionPane.showInputDialog("How much would you like to send? You currently have " + playerThree.getFood() + " pieces of food."));
+                                    amountSend = Integer.parseInt(JOptionPane.showInputDialog("How much would you like to send? You currently have " + playerThree.getFood() + " pieces of food."));
                                     while (amountSend < 0 || amountSend > playerThree.getFood()) {
                                         amountSend = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a number between 0 and the amount of food you currently have, " + playerThree.getFood()
                                                 + "."));
                                     }
                                     if (whichPlayer == 2) {
                                         playerOne.setFood(playerOne.getFood() + amountSend);
+                                        if(amountSend > 0){
+                                            e1++;
+                                        }
                                     } else if (whichPlayer == 3) {
                                         playerTwo.setFood(playerTwo.getFood() + amountSend);
+                                        if(amountSend > 0){
+                                            e2++;
+                                        }
                                     } else if (whichPlayer == 4) {
                                         playerFour.setFood(playerFour.getFood() + amountSend);
+                                        if(amountSend > 0){
+                                            e4++;
+                                        }
                                     }
                                     JOptionPane.showMessageDialog(null, "You sent " + amountSend + " pieces of food.");
                                     playerThree.setFood(playerThree.getFood() - amountSend);
                                 }
 
                                 //supplies
+                                //2 - p1 , 3 - p2 , 4 - p4
                                 else if (gift == 2) {
                                     int whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Which player would you like to send supplies to?" +
                                             "Enter:+\n2: " + playerOne.getPlayerOneName() + "\n3: " + playerTwo.getPlayerTwoName() + "\n4: " + playerFour.getPlayerFourName()));
@@ -526,183 +594,280 @@ public class DayOne {
                                         whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Which player would you like to send supplies to?" +
                                                 "Enter:+\n2: " + playerOne.getPlayerOneName() + "\n3: " + playerTwo.getPlayerTwoName() + "\n4: " + playerFour.getPlayerFourName()));
                                     }
-                                    int amountSend = Integer.parseInt(JOptionPane.showInputDialog("How much would you like to send? You currently have " + playerThree.getSupplies() + " supplies."));
+                                    if(whichPlayer == 2 && (playerOne.getHealth() == 0)){
+                                        whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("You cannot send supplies to a dead player. Please enter a 3 to send supplies to " + playerTwo.getPlayerTwoName() +
+                                                " or enter a 4 to send supplies to " + playerFour.getPlayerFourName() + "."));
+                                        while (whichPlayer != 3 && whichPlayer != 4){
+                                            whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a 3 or a 4."));
+                                        }
+                                    }
+                                    if(whichPlayer == 3 && (playerTwo.getHealth() == 0)){
+                                        whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("You cannot send supplies to a dead player. Please enter a 2 to send supplies to " +
+                                                playerOne.getPlayerOneName() + " or a 4 to send supplies to " + playerFour.getPlayerFourName() + "."));
+                                        while(whichPlayer != 2 && whichPlayer != 4){
+                                            whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a 2 or a 4."));
+                                        }
+                                    }
+                                    if(whichPlayer == 4 && (playerFour.getHealth() == 0)){
+                                        whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("You cannot send supplies to a dead player. Please enter a 2 to send supplies to " + playerOne.getPlayerOneName() +
+                                                " or a 3 to send supplies to " + playerTwo.getPlayerTwoName() + "."));
+                                        while(whichPlayer != 2 && whichPlayer != 3){
+                                            whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a 2 or a 3."));
+                                        }
+                                    }
+                                    amountSend = Integer.parseInt(JOptionPane.showInputDialog("How much would you like to send? You currently have " + playerThree.getSupplies() + " supplies."));
                                     while (amountSend < 0 || amountSend > playerThree.getSupplies()) {
                                         amountSend = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a number between 0 and the amount of supplies you currently have, " + playerThree.getSupplies()
                                                 + "."));
                                     }
                                     if (whichPlayer == 2) {
                                         playerOne.setSupplies(playerOne.getSupplies() + amountSend);
+                                        if(amountSend > 0){
+                                            e1++;
+                                        }
                                     } else if (whichPlayer == 3) {
                                         playerTwo.setSupplies(playerTwo.getSupplies() + amountSend);
+                                        if(amountSend > 0){
+                                            e2++;
+                                        }
                                     } else if (whichPlayer == 4) {
                                         playerFour.setSupplies(playerFour.getSupplies() + amountSend);
+                                        if(amountSend > 0){
+                                            e4++;
+                                        }
                                     }
                                     playerThree.setSupplies(playerThree.getSupplies() - amountSend);
+                                }
+                                if(amountSend == 0){
+                                    actionPoints3--;
                                 }
                                 actionPoints3++;
                             }
 
                             //quarantine area
                             else if (action == 2) {
-                                game.quarantineArea(playerThree.getX(), playerThree.getY());
-                                JOptionPane.showMessageDialog(null, "Space (" + playerThree.getX() + "," + playerThree.getY() + ") is now quarantined and cannot become infected.");
+                                if(actionPoints3 + 4 <= actionPointsMax) {
+                                    int currentPlace = game.getGameboard(playerThree.getX(), playerThree.getY());
+                                    if (currentPlace != 13 && currentPlace != 4 && currentPlace != 5 && currentPlace != 8 && currentPlace !=9) {
+                                        game.quarantineArea(playerThree.getX(), playerThree.getY());
+                                        JOptionPane.showMessageDialog(null, "Space (" + playerThree.getX() + "," + playerThree.getY() + ") is now quarantined and cannot become infected.");
+                                        actionPoints3 += 4;
+                                    }
+                                    else{
+                                        JOptionPane.showMessageDialog(null,"This space is already quarantined, or may be unable to be quarantined.");
+                                    }
+                                }
+                                else{
+                                    JOptionPane.showMessageDialog(null,"You do not have enough points to complete this action. " +
+                                            "Please choose another action.");
+                                }
                             }
                         }
-                        turns3++;
-                    } while (turns3 < turnsMax);
                 }
 
 
-            if (playerCounter == 3 && playerFour.getHealth() != 0) {
-                int playerLocale = game.getGameboard(playerFour.getX(), playerFour.getY());
-                System.out.println(playerLocale);
-                String actionText = "which action would you like to take? Enter:\n0: work\n1: gift supplies or food to another player\n2: create quarantine area",
-                        shopping = "\n3: shop for supplies or food";
+                if (playerCounter == 3 && playerFour.getHealth() != 0) {
+                    int playerLocale = game.getGameboard(playerFour.getX(), playerFour.getY());
+                    System.out.println(playerLocale);
+                    String actionText = "which action would you like to take? Enter:\n0: work\n1: gift supplies or food to another player\n2: create quarantine area",
+                            shopping = "\n3: shop for supplies or food";
 
-                //Infected space?
-                if (playerLocale == 3 || playerLocale == 7 || playerLocale == 11) {
-                    JOptionPane.showMessageDialog(null, "YOU HAVE ENTERED AN INFECTED SPACE. Exposure goes up one level.");
-                    e4++;
-                }
+                    //Infected space?
+                    if (playerLocale == 1 || playerLocale == 5 || playerLocale == 9) {
+                        JOptionPane.showMessageDialog(null, "YOU HAVE ENTERED AN INFECTED SPACE. Exposure goes up one level.");
+                        e4++;
+                    }
+                        actionPoints4 = 0;
+                        while (actionPoints4 < actionPointsMax) {
+                            //Check if player at a store
+                            if (playerLocale == 4 || playerLocale == 5 || playerLocale == 9 || playerLocale == 8) {
+                                actionText += shopping;
+                            }
+                            int action = Integer.parseInt(JOptionPane.showInputDialog(playerFour.getPlayerFourName() + ", " +
+                                    actionText + "\nAction Points Used: " + actionPoints4));
 
-                do {
-                    actionPoints4 = 0;
-                    while(actionPoints4 < actionPointsMax) {
-                        //Check if player at a store
-                        if (playerLocale == 6 || playerLocale == 7 || playerLocale == 9 || playerLocale == 10) {
-                            actionText += shopping;
-                        }
-                        int action = Integer.parseInt(JOptionPane.showInputDialog(playerFour.getPlayerFourName() + ", " +
-                                actionText + "\nAction Points Used: " + actionPoints4));
-
-                        //Player shops at food store
-                        if (action == 3 && playerLocale == 6) {
-                            if(actionPoints4 + 4 <= actionPointsMax){
-                            int itemsBought = actionobj.foodShopping();
-                            int itemsBoughtChecker = playerFour.getMoney() - (itemsBought * 2);
-                            while (itemsBoughtChecker < 0) {
-                                JOptionPane.showMessageDialog(null, "You have attempted to buy more food than you can afford." +
-                                        " Please buy an amount of food that you can afford.");
-                                itemsBought = actionobj.foodShopping();
-                                itemsBoughtChecker = playerFour.getMoney() - (itemsBought * 2);
-                            }
-                            playerFour.setFood(playerFour.getFood() + itemsBought);
-                            playerFour.setMoney(playerFour.getMoney() - (itemsBought * 2));
-                            actionPoints4 += 4;
-                            }
-                            else{
-                                JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
-                                        "Please choose another action.");
-                            }
-                        }
-
-                        //Player shops at supply store
-                        else if (action == 3 && playerLocale == 10) {
-                            if(actionPoints4 + 4 <= actionPointsMax){
-                            int itemsBought = actionobj.supplyShopping();
-                            int itemsBoughtChecker = playerFour.getMoney() - (itemsBought * 2);
-                            while (itemsBoughtChecker < 0) {
-                                JOptionPane.showMessageDialog(null, "You have attempted to buy more supplies than you can afford. " +
-                                        "Please buy an amount of supplies you can afford.");
-                                itemsBought = actionobj.supplyShopping();
-                                itemsBoughtChecker = playerFour.getMoney() - (itemsBought * 2);
-                            }
-                            playerFour.setSupplies(playerFour.getSupplies() + itemsBought);
-                            playerFour.setMoney(playerFour.getMoney() - (2 * itemsBought));
-                            actionPoints4 += 4;
-                            }
-                            else{
-                                JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
-                                        "Please choose another action.");
+                            //Player shops at food store
+                            if ((action == 3 && playerLocale == 4) || (action == 3 && playerLocale == 5)) {
+                                if (actionPoints4 + 4 <= actionPointsMax) {
+                                    int itemsBought = actionobj.foodShopping();
+                                    int itemsBoughtChecker = playerFour.getMoney() - (itemsBought * 2);
+                                    while (itemsBoughtChecker < 0) {
+                                        JOptionPane.showMessageDialog(null, "You have attempted to buy more food than you can afford." +
+                                                " Please buy an amount of food that you can afford.");
+                                        itemsBought = actionobj.foodShopping();
+                                        itemsBoughtChecker = playerFour.getMoney() - (itemsBought * 2);
+                                    }
+                                    playerFour.setFood(playerFour.getFood() + itemsBought);
+                                    playerFour.setMoney(playerFour.getMoney() - (itemsBought * 2));
+                                    actionPoints4 += 4;
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
+                                            "Please choose another action.");
+                                }
                             }
 
-                        }
+                            //Player shops at supply store
+                            else if ((action == 3 && playerLocale == 8) || (action == 3 && playerLocale == 9)) {
+                                if (actionPoints4 + 4 <= actionPointsMax) {
+                                    int itemsBought = actionobj.supplyShopping();
+                                    int itemsBoughtChecker = playerFour.getMoney() - (itemsBought * 2);
+                                    while (itemsBoughtChecker < 0) {
+                                        JOptionPane.showMessageDialog(null, "You have attempted to buy more supplies than you can afford. " +
+                                                "Please buy an amount of supplies you can afford.");
+                                        itemsBought = actionobj.supplyShopping();
+                                        itemsBoughtChecker = playerFour.getMoney() - (itemsBought * 2);
+                                    }
+                                    playerFour.setSupplies(playerFour.getSupplies() + itemsBought);
+                                    playerFour.setMoney(playerFour.getMoney() - (2 * itemsBought));
+                                    actionPoints4 += 4;
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
+                                            "Please choose another action.");
+                                }
 
-                        //Player attempts to shop, but is not on a space that contains a store
-                        else if (action == 3 && playerLocale != 6 && playerLocale != 10) {
-                            JOptionPane.showMessageDialog(null, "You are not on a space that you may buy supplies at." +
-                                    "\nPlease enter a valid action.");
-                        }
-                        //Player works
-                        else if (action == 0) {
-                            if(actionPoints4 + 4 < actionPointsMax){
-                            int moneyEarned = 4;
-                            playerFour.setMoney(playerFour.getMoney() + moneyEarned);
-                            e4++;
-                            JOptionPane.showMessageDialog(null, "You have decided to work. You earned $" + moneyEarned + "."
-                                    + "\nYou now have $" + playerFour.getMoney() + ". You gained one exposure.");
-                            actionPoints4 += 4;
                             }
-                            else{
-                                JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
-                                        "Please choose another action.");
-                            }
-                        }
 
-                        //Player gifts items to another player
-                        else if (action == 1) {
-                            int gift = Integer.parseInt(JOptionPane.showInputDialog("What gift would you like to send? Enter: \n1: food\n2: supplies"));
-                            while (gift != 1 && gift != 2) {
-                                gift = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. What gift would you like to send? Enter: \n1: food\n2: supplies"));
+                            //Player attempts to shop, but is not on a space that contains a store
+                            else if (action == 3 && playerLocale != 6 && playerLocale != 10) {
+                                JOptionPane.showMessageDialog(null, "You are not on a space that you may buy supplies at." +
+                                        "\nPlease enter a valid action.");
                             }
-                            //food
-                            if (gift == 1) {
-                                int whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Which player would you like to send food to?" +
-                                        "Enter:+\n2: " + playerOne.getPlayerOneName() + "\n3: " + playerTwo.getPlayerTwoName() + "\n4: " + playerThree.getPlayerThreeName()));
-                                while (whichPlayer < 2 || whichPlayer > 4) {
-                                    whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Which player would you like to send food to?" +
+                            //Player works
+                            else if (action == 0) {
+                                if (actionPoints4 + 4 <= actionPointsMax) {
+                                    int moneyEarned = 4;
+                                    playerFour.setMoney(playerFour.getMoney() + moneyEarned);
+                                    e4++;
+                                    JOptionPane.showMessageDialog(null, "You have decided to work. You earned $" + moneyEarned + "."
+                                            + "\nYou now have $" + playerFour.getMoney() + ". You gained one exposure.");
+                                    actionPoints4 += 4;
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
+                                            "Please choose another action.");
+                                }
+                            }
+
+                            //Player gifts items to another player
+                            else if (action == 1) {
+                                int amountSend = 0;
+                                int gift = Integer.parseInt(JOptionPane.showInputDialog("What gift would you like to send? Enter: \n1: food\n2: supplies"));
+                                while (gift != 1 && gift != 2) {
+                                    gift = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. What gift would you like to send? Enter: \n1: food\n2: supplies"));
+                                }
+                                //food
+                                if (gift == 1) {
+                                    int whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Which player would you like to send food to?" +
                                             "Enter:+\n2: " + playerOne.getPlayerOneName() + "\n3: " + playerTwo.getPlayerTwoName() + "\n4: " + playerThree.getPlayerThreeName()));
+                                    while (whichPlayer < 2 || whichPlayer > 4) {
+                                        whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Which player would you like to send food to?" +
+                                                "Enter:+\n2: " + playerOne.getPlayerOneName() + "\n3: " + playerTwo.getPlayerTwoName() + "\n4: " + playerThree.getPlayerThreeName()));
+                                    }
+                                    amountSend = Integer.parseInt(JOptionPane.showInputDialog("How much would you like to send? You currently have " + playerFour.getFood() + " pieces of food."));
+                                    while (amountSend < 0 || amountSend > playerFour.getFood()) {
+                                        amountSend = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a number between 0 and the amount of food you currently have, " + playerFour.getFood()
+                                                + "."));
+                                    }
+                                    if (whichPlayer == 2) {
+                                        playerOne.setFood(playerOne.getFood() + amountSend);
+                                        if(amountSend > 0){
+                                            e1++;
+                                        }
+                                    } else if (whichPlayer == 3) {
+                                        playerTwo.setFood(playerTwo.getFood() + amountSend);
+                                        if(amountSend > 0){
+                                            e2++;
+                                        }
+                                    } else if (whichPlayer == 4) {
+                                        playerThree.setFood(playerThree.getFood() + amountSend);
+                                        if(amountSend > 0){
+                                            e3++;
+                                        }
+                                    }
+                                    JOptionPane.showMessageDialog(null, "You sent " + amountSend + " pieces of food.");
+                                    playerFour.setFood(playerFour.getFood() - amountSend);
                                 }
-                                int amountSend = Integer.parseInt(JOptionPane.showInputDialog("How much would you like to send? You currently have " + playerFour.getFood() + " pieces of food."));
-                                while (amountSend < 0 || amountSend > playerFour.getFood()) {
-                                    amountSend = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a number between 0 and the amount of food you currently have, " + playerFour.getFood()
-                                            + "."));
-                                }
-                                if (whichPlayer == 2) {
-                                    playerOne.setFood(playerOne.getFood() + amountSend);
-                                } else if (whichPlayer == 3) {
-                                    playerTwo.setFood(playerTwo.getFood() + amountSend);
-                                } else if (whichPlayer == 4) {
-                                    playerThree.setFood(playerThree.getFood() + amountSend);
-                                }
-                                JOptionPane.showMessageDialog(null, "You sent " + amountSend + " pieces of food.");
-                                playerFour.setFood(playerFour.getFood() - amountSend);
-                            }
-                            //supplies
-                            else if (gift == 2) {
-                                int whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Which player would you like to send supplies to?" +
-                                        "Enter:+\n2: " + playerOne.getPlayerOneName() + "\n3: " + playerTwo.getPlayerTwoName() + "\n4: " + playerThree.getPlayerThreeName()));
-                                while (whichPlayer < 2 || whichPlayer > 4) {
-                                    whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Which player would you like to send supplies to?" +
+                                //supplies
+                                //2 - p1 , 3 - p2 , 4 - p3
+                                else if (gift == 2) {
+                                    int whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Which player would you like to send supplies to?" +
                                             "Enter:+\n2: " + playerOne.getPlayerOneName() + "\n3: " + playerTwo.getPlayerTwoName() + "\n4: " + playerThree.getPlayerThreeName()));
+                                    while (whichPlayer < 2 || whichPlayer > 4) {
+                                        whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Which player would you like to send supplies to?" +
+                                                "Enter:+\n2: " + playerOne.getPlayerOneName() + "\n3: " + playerTwo.getPlayerTwoName() + "\n4: " + playerThree.getPlayerThreeName()));
+                                    }
+                                    if(whichPlayer == 2 && (playerOne.getHealth() == 0)){
+                                        whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("You cannot send supplies to a dead player. Please enter a 3 to send supplies to " + playerTwo.getPlayerTwoName() +
+                                                " or enter a 4 to send supplies to " + playerThree.getPlayerThreeName() + "."));
+                                        while (whichPlayer != 3 && whichPlayer != 4){
+                                            whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a 3 or a 4."));
+                                        }
+                                    }
+                                    if(whichPlayer == 3 && (playerTwo.getHealth() == 0)){
+                                        whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("You cannot send supplies to a dead player. Please enter a 2 to send supplies to " +
+                                                playerOne.getPlayerOneName() + " or a 4 to send supplies to " + playerThree.getPlayerThreeName() + "."));
+                                        while(whichPlayer != 2 && whichPlayer != 4){
+                                            whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a 2 or a 4."));
+                                        }
+                                    }
+                                    if(whichPlayer == 4 && (playerThree.getHealth() == 0)){
+                                        whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("You cannot send supplies to a dead player. Please enter a 2 to send supplies to " + playerOne.getPlayerOneName() +
+                                                " or a 3 to send supplies to " + playerTwo.getPlayerTwoName() + "."));
+                                        while(whichPlayer != 2 && whichPlayer != 3){
+                                            whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a 2 or a 3."));
+                                        }
+                                    }
+                                    amountSend = Integer.parseInt(JOptionPane.showInputDialog("How much would you like to send? You currently have " + playerFour.getSupplies() + " supplies."));
+                                    while (amountSend < 0 || amountSend > playerThree.getSupplies()) {
+                                        amountSend = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a number between 0 and the amount of supplies you currently have, " + playerFour.getSupplies()
+                                                + "."));
+                                    }
+                                    if (whichPlayer == 2) {
+                                        playerOne.setSupplies(playerTwo.getSupplies() + amountSend);
+                                        if(amountSend > 0){
+                                            e1++;
+                                        }
+                                    } else if (whichPlayer == 3) {
+                                        playerTwo.setSupplies(playerTwo.getSupplies() + amountSend);
+                                        if(amountSend > 0){
+                                            e2++;
+                                        }
+                                    } else if (whichPlayer == 4) {
+                                        playerThree.setSupplies(playerThree.getSupplies() + amountSend);
+                                        if(amountSend > 0){
+                                            e3++;
+                                        }
+                                    }
+                                    playerFour.setSupplies(playerFour.getSupplies() - amountSend);
+
                                 }
-                                int amountSend = Integer.parseInt(JOptionPane.showInputDialog("How much would you like to send? You currently have " + playerFour.getSupplies() + " supplies."));
-                                while (amountSend < 0 || amountSend > playerThree.getSupplies()) {
-                                    amountSend = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a number between 0 and the amount of supplies you currently have, " + playerFour.getSupplies()
-                                            + "."));
+                                if(amountSend == 0){
+                                    actionPoints4--;
                                 }
-                                if (whichPlayer == 2) {
-                                    playerOne.setSupplies(playerTwo.getSupplies() + amountSend);
-                                } else if (whichPlayer == 3) {
-                                    playerTwo.setSupplies(playerTwo.getSupplies() + amountSend);
-                                } else if (whichPlayer == 4) {
-                                    playerThree.setSupplies(playerThree.getSupplies() + amountSend);
-                                }
-                                playerFour.setSupplies(playerFour.getSupplies() - amountSend);
                                 actionPoints4++;
                             }
+                            //quarantine area
+                            else if (action == 2) {
+                                if(actionPoints3 + 4 <= actionPointsMax) {
+                                    int currentPlace = game.getGameboard(playerFour.getX(), playerFour.getY());
+                                    if (currentPlace != 13 && currentPlace != 4 && currentPlace != 5 && currentPlace != 8 && currentPlace !=9) {
+                                        game.quarantineArea(playerFour.getX(), playerFour.getY());
+                                        JOptionPane.showMessageDialog(null, "Space (" + playerFour.getX() + "," + playerFour.getY() + ") is now quarantined and cannot become infected.");
+                                        actionPoints4 += 4;
+                                    }
+                                    else{
+                                        JOptionPane.showMessageDialog(null,"This space is already quarantined, or may be unable to be quarantined.");
+                                    }
+                                }
+                                else{
+                                    JOptionPane.showMessageDialog(null,"You do not have enough points to complete this action. " +
+                                            "Please choose another action.");
+                                }
+                            }
                         }
-                        //quarantine area
-                        else if (action == 2) {
-                            game.quarantineArea(playerFour.getX(), playerFour.getY());
-                            JOptionPane.showMessageDialog(null, "Space (" + playerFour.getX() + "," + playerFour.getY() + ") is now quarantined and cannot become infected.");
-                        }
-                    }
-                    turns4++;
-                } while (turns4 < turnsMax);
+                }
             }
-            playerCounter++;
+
+            //Vector Movement HERE!!!!!
         }
 
 
@@ -710,7 +875,7 @@ public class DayOne {
 
         int cardDrawn = rando.randomCard();
 
-        while(eventHappened = true) {
+        while(eventHappened = false) {
 
             int moneyToAdd = 0;
 
@@ -915,6 +1080,9 @@ public class DayOne {
         playerOne.setHealth(playerOne.getHealth() - hL1);
         if (playerOne.getHealth() < 0){
             playerOne.setHealth(0);
+            playerOne.setX(-50);
+            playerOne.setY(-50);
+            //player one death text
         }
 
         if(playerTwo.getFood() > 2){
@@ -930,6 +1098,9 @@ public class DayOne {
         playerTwo.setHealth(playerTwo.getHealth() - hL2);
         if(playerTwo.getHealth() < 0){
             playerTwo.setHealth(0);
+            playerTwo.setX(-50);
+            playerTwo.setY(-50);
+            //Player two death text
         }
 
         if (playerThree.getFood() > 2){
@@ -947,6 +1118,9 @@ public class DayOne {
         playerThree.setHealth(playerThree.getHealth() - hL3);
         if(playerThree.getHealth() < 0){
             playerThree.setHealth(0);
+            playerThree.setX(-50);
+            playerThree.setY(-50);
+            //player three death text
         }
 
         if(playerFour.getFood() > 2){
@@ -964,8 +1138,26 @@ public class DayOne {
         playerFour.setHealth(playerFour.getHealth() - hL4);
         if(playerFour.getHealth() < 0){
             playerFour.setHealth(0);
+            playerFour.setX(-50);
+            playerFour.setY(-50);
+            //player four death text
         }
 
+       String alivePlayers = "";
+        if(playerOne.getHealth() > 0){
+            alivePlayers += playerOne.getPlayerOneName() + "\n";
+        }
+        if (playerTwo.getHealth() > 0){
+            alivePlayers += playerTwo.getPlayerTwoName() + "\n";
+        }
+        if(playerThree.getHealth() > 0){
+            alivePlayers += playerThree.getPlayerThreeName() + "\n";
+        }
+        if (playerFour.getHealth() > 0){
+            alivePlayers += playerFour.getPlayerFourName();
+        }
+
+        JOptionPane.showMessageDialog(null, "Remaining Players: " + alivePlayers);
 
         DayTwo daytwo = new DayTwo(playerOne.getPlayerOneName(), playerOne.getHealth(), playerOne.getSupplies(), playerOne.getFood(),
                 playerOne.getSymptoms(), playerOne.getMoney(), playerOne.getX(), playerOne.getY(), playerOne.getInfected(),
