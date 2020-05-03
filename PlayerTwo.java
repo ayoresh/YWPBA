@@ -11,7 +11,7 @@ public class PlayerTwo {
         supplies = 0;
         food = 0;
         symptoms = 0;
-        money = 0;
+        money = 8;
         x = 0;
         y = 0;
         infected = false;
@@ -23,7 +23,7 @@ public class PlayerTwo {
         supplies = 0;
         food = 0;
         symptoms = 0;
-        money = 0;
+        money = 8;
         x = 0;
         y = 0;
         infected = false;

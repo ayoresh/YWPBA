@@ -58,15 +58,8 @@ public class DayOne {
 
                 if (playerCounter == 0 && playerOne.getHealth() != 0) {
                     int playerLocale = game.getGameboard(playerOne.getX(), playerOne.getY());
-                    System.out.println(playerLocale);
-                    String actionText = "which action would you like to take? Enter:\n0: work\n1: gift supplies or food to another player\n2: create quarantine area",
-                            shopping = "\n3: shop for supplies or food";
-
-                    //Infected space?
-                    if (playerLocale == 1 || playerLocale == 5 || playerLocale == 9) {
-                        JOptionPane.showMessageDialog(null, "YOU HAVE ENTERED AN INFECTED SPACE. Exposure goes up one level.");
-                        e1++;
-                    }
+                    String actionText = "which action would you like to take? Enter:\n0: work\n1: gift supplies or food to another player\n2: create quarantine area\n3: move\n10: end turn",
+                            shopping = "\n4: shop for supplies or food";
 
 
                         actionPoints1 = 0;
@@ -80,7 +73,7 @@ public class DayOne {
 
 
                             //Player shops at food store
-                            if ((action == 3 && playerLocale == 4) || (action == 3 && playerLocale == 5)) {
+                            if ((action == 4 && playerLocale == 4) || (action == 4 && playerLocale == 5)) {
                                 if (actionPoints1 + 4 <= actionPointsMax) {
                                     int itemsBought = actionobj.foodShopping();
                                     int itemsBoughtChecker = playerOne.getMoney() - (itemsBought * 2);
@@ -100,7 +93,7 @@ public class DayOne {
                             }
 
                             //Player shops at supply store
-                            else if ((action == 3 && playerLocale == 8) || (action == 3 && playerLocale == 9)) {
+                            else if ((action == 4 && playerLocale == 8) || (action == 4 && playerLocale == 9)) {
                                 if (actionPoints1 + 4 <= actionPointsMax) {
                                     int itemsBought = actionobj.supplyShopping();
                                     int itemsBoughtChecker = playerOne.getMoney() - (itemsBought * 2);
@@ -121,7 +114,7 @@ public class DayOne {
                             }
 
                             //Player attempts to shop, but is not on a space that contains a store
-                            else if (action == 3 && playerLocale != 6 && playerLocale != 10) {
+                            else if (action == 4 && playerLocale != 4 && playerLocale != 5 && playerLocale != 8 && playerLocale != 9) {
                                 JOptionPane.showMessageDialog(null, "You are not on a space that you may buy supplies at." +
                                         "\nPlease enter a valid action.");
                             }
@@ -141,6 +134,58 @@ public class DayOne {
                                 }
                             }
 
+                            //Player Movement
+                            else if (action == 3){
+                                boolean movePossible = true;
+                                int movement = Integer.parseInt(JOptionPane.showInputDialog("Which direction would you like to move? Enter:" +
+                                        "\n1: Move Right\n2: Move Left\n3: Move Up\n 4: Move down"));
+                                while(movement < 1 || movement > 4){
+                                    JOptionPane.showMessageDialog(null,"Invalid entry. Please enter a number between 1 and 4.");
+                                    movement = Integer.parseInt(JOptionPane.showInputDialog("Which direction would you like to move? Enter:" +
+                                            "\n1: Move Right\n2: Move Left\n3: Move Up\n 4: Move down"));
+                                }
+                                if(playerOne.getY() == 9 && movement == 1){
+                                    JOptionPane.showMessageDialog(null,"You may not travel right, as you are on the edge of the board.");
+                                    movePossible = false;
+                                }
+                                if(playerOne.getY() == 0 && movement == 2){
+                                    JOptionPane.showMessageDialog(null,"You may not travel left, as you are on the edge of the board.");
+                                    movePossible = false;
+                                }
+                                if(playerOne.getX() == 0 && movement == 3){
+                                    JOptionPane.showMessageDialog(null,"You may not travel up, as you are on the edge of the board.");
+                                    movePossible = false;
+                                }
+                                if(playerOne.getX() == 9 && movement == 4){
+                                    JOptionPane.showMessageDialog(null,"You may not travel down, as you are on the edge of the board.");
+                                    movePossible = false;
+                                }
+
+                                if(movePossible){
+                                    if(movement == 1){
+                                        playerOne.setY(playerOne.getY() + 1);
+                                    } else if(movement == 2){
+                                        playerOne.setY(playerOne.getY() - 1);
+                                    } else if(movement == 3){
+                                        playerOne.setX(playerOne.getX() - 1);
+                                    } else if(movement == 4){
+                                        playerOne.setX(playerOne.getX() + 1);
+                                    }
+
+                                    playerLocale = game.getGameboard(playerOne.getX(), playerOne.getY());
+                                    if (playerLocale == 1 || playerLocale == 5 || playerLocale == 9) {
+                                        JOptionPane.showMessageDialog(null, "YOU HAVE ENTERED AN INFECTED SPACE. Exposure goes up one level.");
+                                        e1++;
+                                    }
+
+                                    JOptionPane.showMessageDialog(null,"New location: (" + playerOne.getX() + "," + playerOne.getY() + ").");
+                                    actionPoints1++;
+
+                                }
+
+
+
+                            }
                             //Player gifts items to another player
                             else if (action == 1) {
                                 int gift = Integer.parseInt(JOptionPane.showInputDialog("What gift would you like to send? Enter: \n1: food\n2: supplies"));
@@ -238,14 +283,61 @@ public class DayOne {
                                 }
                                 actionPoints1++;
                             }
+                            else if(action == 10){
+                                JOptionPane.showMessageDialog(null, "Turn ended.");
+                                actionPoints1 = 4;
+                            }
                             //quarantine area
                             else if (action == 2) {
+                                boolean together = false;
+                                int pl1 = game.getGameboard(playerOne.getX(), playerOne.getY()), pl2 = game.getGameboard(playerTwo.getX(), playerTwo.getY()),
+                                        pl3 = game.getGameboard(playerThree.getX(), playerThree.getY()), pl4 = game.getGameboard(playerFour.getX(), playerFour.getY());
+                                if(pl1 == pl2 || pl2 == pl3 || pl3 == pl4 || pl1 == pl4 || pl2 == pl4 || pl1 == pl3){
+                                    together = true;
+                                }
+                                if(actionPoints1 <= 2 && together){
+                                    int currentPlace = game.getGameboard(playerOne.getX(), playerOne.getY());
+                                    if (currentPlace != 13 && currentPlace != 4 && currentPlace != 5 && currentPlace != 8 && currentPlace !=9) {
+                                        game.quarantineArea(playerOne.getX(), playerOne.getY());
+                                        JOptionPane.showMessageDialog(null, "Space (" + playerOne.getX() + "," + playerOne.getY() + ") is now quarantined and cannot become infected.");
+                                        actionPoints1 += 2;
+                                        if((pl1 == pl2) && (pl2 == pl3) && (pl3 == pl4)){
+                                            e1++; e2++; e3++; e4++;
+                                        }
+                                        else if((pl1==pl2) && (pl2==pl3)){
+                                            e1++; e2++; e3++;
+                                        } else if((pl1 == pl3) && (pl3 == pl4)){
+                                            e1++; e3++; e4++;
+                                        } else if(pl1 == pl2 && pl2 == pl4){
+                                            e1++; e2++; e4++;
+                                        } else if(pl2 == pl3 && pl3 == pl4){
+                                            e2++; e3++; e4++;
+                                        } else if(pl1 == pl2){
+                                            e1++; e2++;
+                                        } else if(pl2 == pl3){
+                                            e2++; e3++;
+                                        } else if(pl3 == pl4){
+                                            e3++; e4++;
+                                        } else if(pl1 == pl4){
+                                            e1++; e4++;
+                                        } else if(pl2 == pl4){
+                                            e2++; e4++;
+                                        } else if(pl1 == pl3){
+                                            e1++; e3++;
+                                        }
+                                    }
+                                    else{
+                                        JOptionPane.showMessageDialog(null,"This space is already quarantined, or may be unable to be quarantined.");
+                                    }
+                                }
                                 if(actionPoints1 + 4 <= actionPointsMax) {
                                     int currentPlace = game.getGameboard(playerOne.getX(), playerOne.getY());
                                     if (currentPlace != 13 && currentPlace != 4 && currentPlace != 5 && currentPlace != 8 && currentPlace !=9) {
                                         game.quarantineArea(playerOne.getX(), playerOne.getY());
                                         JOptionPane.showMessageDialog(null, "Space (" + playerOne.getX() + "," + playerOne.getY() + ") is now quarantined and cannot become infected.");
                                         actionPoints1 += 4;
+                                        actionPoints1 += 4;
+                                        e1++;
                                     }
                                     else{
                                         JOptionPane.showMessageDialog(null,"This space is already quarantined, or may be unable to be quarantined.");
@@ -256,19 +348,46 @@ public class DayOne {
                                             "Please choose another action.");
                                 }
                             }
+                            playerLocale = game.getGameboard(playerOne.getX(), playerOne.getY());
+                            if (playerLocale != 4 && playerLocale != 5 && playerLocale != 9 && playerLocale != 8) {
+                                actionText = "which action would you like to take? Enter:\n0: work\n1: gift supplies or food to another player\n2: create quarantine area\n3: move\n10: end turn";
+                            }
                         }
+
+                    //Players land on same location?
+                    int pl1 = game.getGameboard(playerOne.getX(), playerOne.getY()), pl2 = game.getGameboard(playerTwo.getX(), playerTwo.getY()),
+                            pl3 = game.getGameboard(playerThree.getX(), playerThree.getY()), pl4 = game.getGameboard(playerFour.getX(), playerFour.getY());
+                    if((pl1 == pl2) && (pl2 == pl3) && (pl3 == pl4)){
+                        e1++; e2++; e3++; e4++;
+                    }
+                    else if((pl1==pl2) && (pl2==pl3)){
+                        e1++; e2++; e3++;
+                    } else if((pl1 == pl3) && (pl3 == pl4)){
+                        e1++; e3++; e4++;
+                    } else if(pl1 == pl2 && pl2 == pl4){
+                        e1++; e2++; e4++;
+                    } else if(pl2 == pl3 && pl3 == pl4){
+                        e2++; e3++; e4++;
+                    } else if(pl1 == pl2){
+                        e1++; e2++;
+                    } else if(pl2 == pl3){
+                        e2++; e3++;
+                    } else if(pl3 == pl4){
+                        e3++; e4++;
+                    } else if(pl1 == pl4){
+                        e1++; e4++;
+                    } else if(pl2 == pl4){
+                        e2++; e4++;
+                    } else if(pl1 == pl3){
+                        e1++; e3++;
+                    }
                 }
                 if (playerCounter == 1 && playerTwo.getHealth() != 0) {
                     int playerLocale = game.getGameboard(playerTwo.getX(), playerTwo.getY());
-                    System.out.println(playerLocale);
-                    String actionText = "which action would you like to take? Enter:\n0: work\n1: gift supplies or food to another player\n2: create quarantine area",
-                            shopping = "\n3: shop for supplies or food";
+                    String actionText = "which action would you like to take? Enter:\n0: work\n1: gift supplies or food to another player\n2: create quarantine area\n3: move\n10: end turn",
+                            shopping = "\n4: shop for supplies or food";
 
-                    //Infected space?
-                    if (playerLocale == 1 || playerLocale == 5 || playerLocale == 9) {
-                        JOptionPane.showMessageDialog(null, "YOU HAVE ENTERED AN INFECTED SPACE. Exposure goes up one level.");
-                        e2++;
-                    }
+
                         actionPoints2 = 0;
                         while (actionPoints2 < actionPointsMax) {
                             //Check if player at a store
@@ -280,7 +399,7 @@ public class DayOne {
 
 
                             //Player shops at food store
-                            if ((action == 3 && playerLocale == 4) || (action == 3 && playerLocale == 5)) {
+                            if ((action == 4 && playerLocale == 4) || (action == 4 && playerLocale == 5)) {
                                 if (actionPoints2 + 4 <= actionPointsMax) {
                                     int itemsBought = actionobj.foodShopping();
                                     int itemsBoughtChecker = playerTwo.getMoney() - (itemsBought * 2);
@@ -300,7 +419,7 @@ public class DayOne {
                             }
 
                             //Player shops at supply store
-                            else if ((action == 3 && playerLocale == 8) || (action == 3 && playerLocale == 9)) {
+                            else if ((action == 4 && playerLocale == 8) || (action == 4 && playerLocale == 9)) {
                                 if (actionPoints2 + 4 < actionPointsMax) {
                                     int itemsBought = actionobj.supplyShopping();
                                     int itemsBoughtChecker = playerTwo.getMoney() - (itemsBought * 2);
@@ -321,7 +440,7 @@ public class DayOne {
                             }
 
                             //Player attempts to shop, but is not on a space that contains a store
-                            else if (action == 3 && playerLocale != 6 && playerLocale != 10) {
+                            else if (action == 4 && playerLocale != 4 && playerLocale != 5 && playerLocale != 8 && playerLocale != 9) {
                                 JOptionPane.showMessageDialog(null, "You are not on a space that you may buy supplies at." +
                                         "\nPlease enter a valid action.");
                             }
@@ -338,6 +457,55 @@ public class DayOne {
                                 } else {
                                     JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
                                             "Please choose another action.");
+                                }
+                            }
+                            //Player Movement
+                            else if (action == 3){
+                                boolean movePossible = true;
+                                int movement = Integer.parseInt(JOptionPane.showInputDialog("Which direction would you like to move? Enter:" +
+                                        "\n1: Move Right\n2: Move Left\n3: Move Up\n 4: Move down"));
+                                while(movement < 1 || movement > 4){
+                                    JOptionPane.showMessageDialog(null,"Invalid entry. Please enter a number between 1 and 4.");
+                                    movement = Integer.parseInt(JOptionPane.showInputDialog("Which direction would you like to move? Enter:" +
+                                            "\n1: Move Right\n2: Move Left\n3: Move Up\n 4: Move down"));
+                                }
+                                if(playerTwo.getY() == 9 && movement == 1){
+                                    JOptionPane.showMessageDialog(null,"You may not travel right, as you are on the edge of the board.");
+                                    movePossible = false;
+                                }
+                                if(playerTwo.getY() == 0 && movement == 2){
+                                    JOptionPane.showMessageDialog(null,"You may not travel left, as you are on the edge of the board.");
+                                    movePossible = false;
+                                }
+                                if(playerTwo.getX() == 0 && movement == 3){
+                                    JOptionPane.showMessageDialog(null,"You may not travel up, as you are on the edge of the board.");
+                                    movePossible = false;
+                                }
+                                if(playerTwo.getX() == 9 && movement == 4){
+                                    JOptionPane.showMessageDialog(null,"You may not travel down, as you are on the edge of the board.");
+                                    movePossible = false;
+                                }
+
+                                if(movePossible){
+                                    if(movement == 1){
+                                        playerTwo.setY(playerTwo.getY() + 1);
+                                    } else if(movement == 2){
+                                        playerTwo.setY(playerTwo.getY() - 1);
+                                    } else if(movement == 3){
+                                        playerTwo.setX(playerTwo.getX() - 1);
+                                    } else if(movement == 4){
+                                        playerTwo.setX(playerTwo.getX() + 1);
+                                    }
+
+                                    playerLocale = game.getGameboard(playerTwo.getX(), playerTwo.getY());
+                                    if (playerLocale == 1 || playerLocale == 5 || playerLocale == 9) {
+                                        JOptionPane.showMessageDialog(null, "YOU HAVE ENTERED AN INFECTED SPACE. Exposure goes up one level.");
+                                        e2++;
+                                    }
+
+                                    JOptionPane.showMessageDialog(null,"New location: (" + playerTwo.getX() + "," + playerTwo.getY() + ").");
+                                    actionPoints2++;
+
                                 }
                             }
 
@@ -439,15 +607,60 @@ public class DayOne {
                                 }
                                 actionPoints2++;
                             }
-
+                            else if(action == 10){
+                                JOptionPane.showMessageDialog(null, "Turn ended.");
+                                actionPoints2 = 4;
+                            }
                             //quarantine area
                             else if (action == 2) {
+                                boolean together = false;
+                                int pl1 = game.getGameboard(playerOne.getX(), playerOne.getY()), pl2 = game.getGameboard(playerTwo.getX(), playerTwo.getY()),
+                                        pl3 = game.getGameboard(playerThree.getX(), playerThree.getY()), pl4 = game.getGameboard(playerFour.getX(), playerFour.getY());
+                                if(pl1 == pl2 || pl2 == pl3 || pl3 == pl4 || pl1 == pl4 || pl2 == pl4 || pl1 == pl3){
+                                    together = true;
+                                }
+                                if(actionPoints2 <= 2 && together){
+                                    int currentPlace = game.getGameboard(playerTwo.getX(), playerTwo.getY());
+                                    if (currentPlace != 13 && currentPlace != 4 && currentPlace != 5 && currentPlace != 8 && currentPlace !=9) {
+                                        game.quarantineArea(playerTwo.getX(), playerTwo.getY());
+                                        JOptionPane.showMessageDialog(null, "Space (" + playerTwo.getX() + "," + playerTwo.getY() + ") is now quarantined and cannot become infected.");
+                                        actionPoints2 += 2;
+                                        if((pl1 == pl2) && (pl2 == pl3) && (pl3 == pl4)){
+                                            e1++; e2++; e3++; e4++;
+                                        }
+                                        else if((pl1==pl2) && (pl2==pl3)){
+                                            e1++; e2++; e3++;
+                                        } else if((pl1 == pl3) && (pl3 == pl4)){
+                                            e1++; e3++; e4++;
+                                        } else if(pl1 == pl2 && pl2 == pl4){
+                                            e1++; e2++; e4++;
+                                        } else if(pl2 == pl3 && pl3 == pl4){
+                                            e2++; e3++; e4++;
+                                        } else if(pl1 == pl2){
+                                            e1++; e2++;
+                                        } else if(pl2 == pl3){
+                                            e2++; e3++;
+                                        } else if(pl3 == pl4){
+                                            e3++; e4++;
+                                        } else if(pl1 == pl4){
+                                            e1++; e4++;
+                                        } else if(pl2 == pl4){
+                                            e2++; e4++;
+                                        } else if(pl1 == pl3){
+                                            e1++; e3++;
+                                        }
+                                    }
+                                    else{
+                                        JOptionPane.showMessageDialog(null,"This space is already quarantined, or may be unable to be quarantined.");
+                                    }
+                                }
                                 if(actionPoints2 + 4 <= actionPointsMax) {
                                     int currentPlace = game.getGameboard(playerTwo.getX(), playerTwo.getY());
                                     if (currentPlace != 13 && currentPlace != 8 && currentPlace != 9 && currentPlace != 4 && currentPlace != 5) {
                                         game.quarantineArea(playerTwo.getX(), playerTwo.getY());
                                         JOptionPane.showMessageDialog(null, "Space (" + playerTwo.getX() + "," + playerTwo.getY() + ") is now quarantined and cannot become infected.");
                                         actionPoints2 += 4;
+                                        e2++;
                                     }
                                     else{
                                         JOptionPane.showMessageDialog(null,"This space is already quarantined, or may be unable to be quarantined.");
@@ -458,21 +671,48 @@ public class DayOne {
                                             "Please choose another action.");
                                 }
                             }
+                            playerLocale = game.getGameboard(playerTwo.getX(), playerTwo.getY());
+                            if (playerLocale != 4 && playerLocale != 5 && playerLocale != 9 && playerLocale != 8) {
+                                actionText = "which action would you like to take? Enter:\n0: work\n1: gift supplies or food to another player\n2: create quarantine area\n3: move\n10: end turn";
+                            }
+
                         }
+
+                    //Players land on same location?
+                    int pl1 = game.getGameboard(playerOne.getX(), playerOne.getY()), pl2 = game.getGameboard(playerTwo.getX(), playerTwo.getY()),
+                            pl3 = game.getGameboard(playerThree.getX(), playerThree.getY()), pl4 = game.getGameboard(playerFour.getX(), playerFour.getY());
+                    if((pl1 == pl2) && (pl2 == pl3) && (pl3 == pl4)){
+                        e1++; e2++; e3++; e4++;
+                    }
+                    else if((pl1==pl2) && (pl2==pl3)){
+                        e1++; e2++; e3++;
+                    } else if((pl1 == pl3) && (pl3 == pl4)){
+                        e1++; e3++; e4++;
+                    } else if(pl1 == pl2 && pl2 == pl4){
+                        e1++; e2++; e4++;
+                    } else if(pl2 == pl3 && pl3 == pl4){
+                        e2++; e3++; e4++;
+                    } else if(pl1 == pl2){
+                        e1++; e2++;
+                    } else if(pl2 == pl3){
+                        e2++; e3++;
+                    } else if(pl3 == pl4){
+                        e3++; e4++;
+                    } else if(pl1 == pl4){
+                        e1++; e4++;
+                    } else if(pl2 == pl4){
+                        e2++; e4++;
+                    } else if(pl1 == pl3){
+                        e1++; e3++;
+                    }
                 }
 
 
                 if (playerCounter == 2 && playerThree.getHealth() != 0) {
                     int playerLocale = game.getGameboard(playerThree.getX(), playerThree.getY());
-                    System.out.println(playerLocale);
-                    String actionText = "which action would you like to take? Enter:\n0: work\n1: gift supplies or food to another player\n2: create quarantine area",
-                            shopping = "\n3: shop for supplies or food";
+                    String actionText = "which action would you like to take? Enter:\n0: work\n1: gift supplies or food to another player\n2: create quarantine area\n3: move\n10: end turn",
+                            shopping = "\n4: shop for supplies or food";
 
-                    //Infected space?
-                    if (playerLocale == 1 || playerLocale == 5 || playerLocale == 9) {
-                        JOptionPane.showMessageDialog(null, "YOU HAVE ENTERED AN INFECTED SPACE. Exposure goes up one level.");
-                        e3++;
-                    }
                         actionPoints3 = 0;
                         while (actionPoints3 < actionPointsMax) {
                             //Check if player at a store
@@ -484,7 +724,7 @@ public class DayOne {
 
 
                             //Player shops at food store
-                            if ((action == 3 && playerLocale == 4) || (action == 3 && playerLocale == 5)) {
+                            if ((action == 4 && playerLocale == 4) || (action == 4 && playerLocale == 5)) {
                                 if (actionPoints3 + 4 <= actionPointsMax) {
                                     int itemsBought = actionobj.foodShopping();
                                     int itemsBoughtChecker = playerThree.getMoney() - (itemsBought * 2);
@@ -504,7 +744,7 @@ public class DayOne {
                             }
 
                             //Player shops at supply store
-                            else if ((action == 3 && playerLocale == 8) || (action == 3 && playerLocale == 9)) {
+                            else if ((action == 4 && playerLocale == 8) || (action == 4 && playerLocale == 9)) {
                                 if (actionPoints3 + 4 <= actionPointsMax) {
                                     int itemsBought = actionobj.supplyShopping();
                                     int itemsBoughtChecker = playerThree.getMoney() - (itemsBought * 2);
@@ -525,7 +765,7 @@ public class DayOne {
                             }
 
                             //Player attempts to shop, but is not on a space that contains a store
-                            else if (action == 3 && playerLocale != 6 && playerLocale != 10) {
+                            else if (action == 4 && playerLocale != 4 && playerLocale != 5 && playerLocale != 8 && playerLocale != 9) {
                                 JOptionPane.showMessageDialog(null, "You are not on a space that you may buy supplies at." +
                                         "\nPlease enter a valid action.");
                             }
@@ -542,6 +782,56 @@ public class DayOne {
                                 } else {
                                     JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
                                             "Please choose another action.");
+                                }
+                            }
+
+                            //Player Movement
+                            else if (action == 3){
+                                boolean movePossible = true;
+                                int movement = Integer.parseInt(JOptionPane.showInputDialog("Which direction would you like to move? Enter:" +
+                                        "\n1: Move Right\n2: Move Left\n3: Move Up\n 4: Move down"));
+                                while(movement < 1 || movement > 4){
+                                    JOptionPane.showMessageDialog(null,"Invalid entry. Please enter a number between 1 and 4.");
+                                    movement = Integer.parseInt(JOptionPane.showInputDialog("Which direction would you like to move? Enter:" +
+                                            "\n1: Move Right\n2: Move Left\n3: Move Up\n 4: Move down"));
+                                }
+                                if(playerThree.getY() == 9 && movement == 1){
+                                    JOptionPane.showMessageDialog(null,"You may not travel right, as you are on the edge of the board.");
+                                    movePossible = false;
+                                }
+                                if(playerThree.getY() == 0 && movement == 2){
+                                    JOptionPane.showMessageDialog(null,"You may not travel left, as you are on the edge of the board.");
+                                    movePossible = false;
+                                }
+                                if(playerThree.getX() == 0 && movement == 3){
+                                    JOptionPane.showMessageDialog(null,"You may not travel up, as you are on the edge of the board.");
+                                    movePossible = false;
+                                }
+                                if(playerThree.getX() == 9 && movement == 4){
+                                    JOptionPane.showMessageDialog(null,"You may not travel down, as you are on the edge of the board.");
+                                    movePossible = false;
+                                }
+
+                                if(movePossible){
+                                    if(movement == 1){
+                                        playerThree.setY(playerThree.getY() + 1);
+                                    } else if(movement == 2){
+                                        playerThree.setY(playerThree.getY() - 1);
+                                    } else if(movement == 3){
+                                        playerThree.setX(playerThree.getX() - 1);
+                                    } else if(movement == 4){
+                                        playerThree.setX(playerThree.getX() + 1);
+                                    }
+
+                                    playerLocale = game.getGameboard(playerThree.getX(), playerThree.getY());
+                                    if (playerLocale == 1 || playerLocale == 5 || playerLocale == 9) {
+                                        JOptionPane.showMessageDialog(null, "YOU HAVE ENTERED AN INFECTED SPACE. Exposure goes up one level.");
+                                        e3++;
+                                    }
+
+                                    JOptionPane.showMessageDialog(null,"New location: (" + playerThree.getX() + "," + playerThree.getY() + ").");
+                                    actionPoints3++;
+
                                 }
                             }
 
@@ -643,15 +933,60 @@ public class DayOne {
                                 }
                                 actionPoints3++;
                             }
-
+                            else if(action == 10){
+                                JOptionPane.showMessageDialog(null, "Turn ended.");
+                                actionPoints3 = 4;
+                            }
                             //quarantine area
                             else if (action == 2) {
+                                boolean together = false;
+                                int pl1 = game.getGameboard(playerOne.getX(), playerOne.getY()), pl2 = game.getGameboard(playerTwo.getX(), playerTwo.getY()),
+                                        pl3 = game.getGameboard(playerThree.getX(), playerThree.getY()), pl4 = game.getGameboard(playerFour.getX(), playerFour.getY());
+                                if(pl1 == pl2 || pl2 == pl3 || pl3 == pl4 || pl1 == pl4 || pl2 == pl4 || pl1 == pl3){
+                                    together = true;
+                                }
+                                if(actionPoints3 <= 2 && together){
+                                    int currentPlace = game.getGameboard(playerThree.getX(), playerThree.getY());
+                                    if (currentPlace != 13 && currentPlace != 4 && currentPlace != 5 && currentPlace != 8 && currentPlace !=9) {
+                                        game.quarantineArea(playerThree.getX(), playerThree.getY());
+                                        JOptionPane.showMessageDialog(null, "Space (" + playerThree.getX() + "," + playerThree.getY() + ") is now quarantined and cannot become infected.");
+                                        actionPoints3 += 2;
+                                        if((pl1 == pl2) && (pl2 == pl3) && (pl3 == pl4)){
+                                            e1++; e2++; e3++; e4++;
+                                        }
+                                        else if((pl1==pl2) && (pl2==pl3)){
+                                            e1++; e2++; e3++;
+                                        } else if((pl1 == pl3) && (pl3 == pl4)){
+                                            e1++; e3++; e4++;
+                                        } else if(pl1 == pl2 && pl2 == pl4){
+                                            e1++; e2++; e4++;
+                                        } else if(pl2 == pl3 && pl3 == pl4){
+                                            e2++; e3++; e4++;
+                                        } else if(pl1 == pl2){
+                                            e1++; e2++;
+                                        } else if(pl2 == pl3){
+                                            e2++; e3++;
+                                        } else if(pl3 == pl4){
+                                            e3++; e4++;
+                                        } else if(pl1 == pl4){
+                                            e1++; e4++;
+                                        } else if(pl2 == pl4){
+                                            e2++; e4++;
+                                        } else if(pl1 == pl3){
+                                            e1++; e3++;
+                                        }
+                                    }
+                                    else{
+                                        JOptionPane.showMessageDialog(null,"This space is already quarantined, or may be unable to be quarantined.");
+                                    }
+                                }
                                 if(actionPoints3 + 4 <= actionPointsMax) {
                                     int currentPlace = game.getGameboard(playerThree.getX(), playerThree.getY());
                                     if (currentPlace != 13 && currentPlace != 4 && currentPlace != 5 && currentPlace != 8 && currentPlace !=9) {
                                         game.quarantineArea(playerThree.getX(), playerThree.getY());
                                         JOptionPane.showMessageDialog(null, "Space (" + playerThree.getX() + "," + playerThree.getY() + ") is now quarantined and cannot become infected.");
                                         actionPoints3 += 4;
+                                        e3++;
                                     }
                                     else{
                                         JOptionPane.showMessageDialog(null,"This space is already quarantined, or may be unable to be quarantined.");
@@ -662,21 +997,47 @@ public class DayOne {
                                             "Please choose another action.");
                                 }
                             }
+                            playerLocale = game.getGameboard(playerThree.getX(), playerThree.getY());
+                            if (playerLocale != 4 && playerLocale != 5 && playerLocale != 9 && playerLocale != 8) {
+                                actionText = "which action would you like to take? Enter:\n0: work\n1: gift supplies or food to another player\n2: create quarantine area\n3: move\n10: end turn";
+                            }
                         }
+
+                    //Players land on same location?
+                    int pl1 = game.getGameboard(playerOne.getX(), playerOne.getY()), pl2 = game.getGameboard(playerTwo.getX(), playerTwo.getY()),
+                            pl3 = game.getGameboard(playerThree.getX(), playerThree.getY()), pl4 = game.getGameboard(playerFour.getX(), playerFour.getY());
+                    if((pl1 == pl2) && (pl2 == pl3) && (pl3 == pl4)){
+                        e1++; e2++; e3++; e4++;
+                    }
+                    else if((pl1==pl2) && (pl2==pl3)){
+                        e1++; e2++; e3++;
+                    } else if((pl1 == pl3) && (pl3 == pl4)){
+                        e1++; e3++; e4++;
+                    } else if(pl1 == pl2 && pl2 == pl4){
+                        e1++; e2++; e4++;
+                    } else if(pl2 == pl3 && pl3 == pl4){
+                        e2++; e3++; e4++;
+                    } else if(pl1 == pl2){
+                        e1++; e2++;
+                    } else if(pl2 == pl3){
+                        e2++; e3++;
+                    } else if(pl3 == pl4){
+                        e3++; e4++;
+                    } else if(pl1 == pl4){
+                        e1++; e4++;
+                    } else if(pl2 == pl4){
+                        e2++; e4++;
+                    } else if(pl1 == pl3){
+                        e1++; e3++;
+                    }
                 }
 
 
                 if (playerCounter == 3 && playerFour.getHealth() != 0) {
                     int playerLocale = game.getGameboard(playerFour.getX(), playerFour.getY());
-                    System.out.println(playerLocale);
-                    String actionText = "which action would you like to take? Enter:\n0: work\n1: gift supplies or food to another player\n2: create quarantine area",
-                            shopping = "\n3: shop for supplies or food";
+                    String actionText = "which action would you like to take? Enter:\n0: work\n1: gift supplies or food to another player\n2: create quarantine area\n3: move\n10: end turn",
+                            shopping = "\n4: shop for supplies or food";
 
-                    //Infected space?
-                    if (playerLocale == 1 || playerLocale == 5 || playerLocale == 9) {
-                        JOptionPane.showMessageDialog(null, "YOU HAVE ENTERED AN INFECTED SPACE. Exposure goes up one level.");
-                        e4++;
-                    }
                         actionPoints4 = 0;
                         while (actionPoints4 < actionPointsMax) {
                             //Check if player at a store
@@ -687,7 +1048,7 @@ public class DayOne {
                                     actionText + "\nAction Points Used: " + actionPoints4));
 
                             //Player shops at food store
-                            if ((action == 3 && playerLocale == 4) || (action == 3 && playerLocale == 5)) {
+                            if ((action == 4 && playerLocale == 4) || (action == 4 && playerLocale == 5)) {
                                 if (actionPoints4 + 4 <= actionPointsMax) {
                                     int itemsBought = actionobj.foodShopping();
                                     int itemsBoughtChecker = playerFour.getMoney() - (itemsBought * 2);
@@ -707,7 +1068,7 @@ public class DayOne {
                             }
 
                             //Player shops at supply store
-                            else if ((action == 3 && playerLocale == 8) || (action == 3 && playerLocale == 9)) {
+                            else if ((action == 4 && playerLocale == 8) || (action == 4 && playerLocale == 9)) {
                                 if (actionPoints4 + 4 <= actionPointsMax) {
                                     int itemsBought = actionobj.supplyShopping();
                                     int itemsBoughtChecker = playerFour.getMoney() - (itemsBought * 2);
@@ -728,7 +1089,7 @@ public class DayOne {
                             }
 
                             //Player attempts to shop, but is not on a space that contains a store
-                            else if (action == 3 && playerLocale != 6 && playerLocale != 10) {
+                            else if (action == 4 && playerLocale != 4 && playerLocale != 5 && playerLocale != 8 && playerLocale != 9) {
                                 JOptionPane.showMessageDialog(null, "You are not on a space that you may buy supplies at." +
                                         "\nPlease enter a valid action.");
                             }
@@ -747,6 +1108,58 @@ public class DayOne {
                                 }
                             }
 
+                            //Player Movement
+                            else if (action == 3){
+                                boolean movePossible = true;
+                                int movement = Integer.parseInt(JOptionPane.showInputDialog("Which direction would you like to move? Enter:" +
+                                        "\n1: Move Right\n2: Move Left\n3: Move Up\n 4: Move down"));
+                                while(movement < 1 || movement > 4){
+                                    JOptionPane.showMessageDialog(null,"Invalid entry. Please enter a number between 1 and 4.");
+                                    movement = Integer.parseInt(JOptionPane.showInputDialog("Which direction would you like to move? Enter:" +
+                                            "\n1: Move Right\n2: Move Left\n3: Move Up\n 4: Move down"));
+                                }
+                                if(playerFour.getY() == 9 && movement == 1){
+                                    JOptionPane.showMessageDialog(null,"You may not travel right, as you are on the edge of the board.");
+                                    movePossible = false;
+                                }
+                                if(playerFour.getY() == 0 && movement == 2){
+                                    JOptionPane.showMessageDialog(null,"You may not travel left, as you are on the edge of the board.");
+                                    movePossible = false;
+                                }
+                                if(playerFour.getX() == 0 && movement == 3){
+                                    JOptionPane.showMessageDialog(null,"You may not travel up, as you are on the edge of the board.");
+                                    movePossible = false;
+                                }
+                                if(playerFour.getX() == 9 && movement == 4){
+                                    JOptionPane.showMessageDialog(null,"You may not travel down, as you are on the edge of the board.");
+                                    movePossible = false;
+                                }
+
+                                if(movePossible){
+                                    if(movement == 1){
+                                        playerFour.setY(playerFour.getY() + 1);
+                                    } else if(movement == 2){
+                                        playerFour.setY(playerFour.getY() - 1);
+                                    } else if(movement == 3){
+                                        playerFour.setX(playerFour.getX() - 1);
+                                    } else if(movement == 4){
+                                        playerFour.setX(playerFour.getX() + 1);
+                                    }
+
+                                    playerLocale = game.getGameboard(playerFour.getX(), playerFour.getY());
+                                    if (playerLocale == 1 || playerLocale == 5 || playerLocale == 9) {
+                                        JOptionPane.showMessageDialog(null, "YOU HAVE ENTERED AN INFECTED SPACE. Exposure goes up one level.");
+                                        e4++;
+                                    }
+
+                                    JOptionPane.showMessageDialog(null,"New location: (" + playerFour.getX() + "," + playerFour.getY() + ").");
+                                    actionPoints4++;
+
+                                }
+
+
+
+                            }
                             //Player gifts items to another player
                             else if (action == 1) {
                                 int amountSend = 0;
@@ -845,14 +1258,60 @@ public class DayOne {
                                 }
                                 actionPoints4++;
                             }
+                            else if(action == 10){
+                                JOptionPane.showMessageDialog(null, "Turn ended.");
+                                actionPoints4 = 4;
+                            }
                             //quarantine area
                             else if (action == 2) {
+                                boolean together = false;
+                                int pl1 = game.getGameboard(playerOne.getX(), playerOne.getY()), pl2 = game.getGameboard(playerTwo.getX(), playerTwo.getY()),
+                                        pl3 = game.getGameboard(playerThree.getX(), playerThree.getY()), pl4 = game.getGameboard(playerFour.getX(), playerFour.getY());
+                                if(pl1 == pl2 || pl2 == pl3 || pl3 == pl4 || pl1 == pl4 || pl2 == pl4 || pl1 == pl3){
+                                    together = true;
+                                }
+                                if(actionPoints4 <= 2 && together){
+                                    int currentPlace = game.getGameboard(playerFour.getX(), playerFour.getY());
+                                    if (currentPlace != 13 && currentPlace != 4 && currentPlace != 5 && currentPlace != 8 && currentPlace !=9) {
+                                        game.quarantineArea(playerFour.getX(), playerFour.getY());
+                                        JOptionPane.showMessageDialog(null, "Space (" + playerFour.getX() + "," + playerFour.getY() + ") is now quarantined and cannot become infected.");
+                                        actionPoints4 += 2;
+                                        if((pl1 == pl2) && (pl2 == pl3) && (pl3 == pl4)){
+                                            e1++; e2++; e3++; e4++;
+                                        }
+                                        else if((pl1==pl2) && (pl2==pl3)){
+                                            e1++; e2++; e3++;
+                                        } else if((pl1 == pl3) && (pl3 == pl4)){
+                                            e1++; e3++; e4++;
+                                        } else if(pl1 == pl2 && pl2 == pl4){
+                                            e1++; e2++; e4++;
+                                        } else if(pl2 == pl3 && pl3 == pl4){
+                                            e2++; e3++; e4++;
+                                        } else if(pl1 == pl2){
+                                            e1++; e2++;
+                                        } else if(pl2 == pl3){
+                                            e2++; e3++;
+                                        } else if(pl3 == pl4){
+                                            e3++; e4++;
+                                        } else if(pl1 == pl4){
+                                            e1++; e4++;
+                                        } else if(pl2 == pl4){
+                                            e2++; e4++;
+                                        } else if(pl1 == pl3){
+                                            e1++; e3++;
+                                        }
+                                    }
+                                    else{
+                                        JOptionPane.showMessageDialog(null,"This space is already quarantined, or may be unable to be quarantined.");
+                                    }
+                                }
                                 if(actionPoints3 + 4 <= actionPointsMax) {
                                     int currentPlace = game.getGameboard(playerFour.getX(), playerFour.getY());
                                     if (currentPlace != 13 && currentPlace != 4 && currentPlace != 5 && currentPlace != 8 && currentPlace !=9) {
                                         game.quarantineArea(playerFour.getX(), playerFour.getY());
                                         JOptionPane.showMessageDialog(null, "Space (" + playerFour.getX() + "," + playerFour.getY() + ") is now quarantined and cannot become infected.");
                                         actionPoints4 += 4;
+                                        e4++;
                                     }
                                     else{
                                         JOptionPane.showMessageDialog(null,"This space is already quarantined, or may be unable to be quarantined.");
@@ -863,9 +1322,42 @@ public class DayOne {
                                             "Please choose another action.");
                                 }
                             }
+                            playerLocale = game.getGameboard(playerFour.getX(), playerFour.getY());
+                            if (playerLocale != 4 && playerLocale != 5 && playerLocale != 9 && playerLocale != 8) {
+                                actionText = "which action would you like to take? Enter:\n0: work\n1: gift supplies or food to another player\n2: create quarantine area\n3: move\n10: end turn";
+                            }
                         }
                 }
+
+                //Players land on same location?
+                int pl1 = game.getGameboard(playerOne.getX(), playerOne.getY()), pl2 = game.getGameboard(playerTwo.getX(), playerTwo.getY()),
+                        pl3 = game.getGameboard(playerThree.getX(), playerThree.getY()), pl4 = game.getGameboard(playerFour.getX(), playerFour.getY());
+                if((pl1 == pl2) && (pl2 == pl3) && (pl3 == pl4)){
+                    e1++; e2++; e3++; e4++;
+                }
+                else if((pl1==pl2) && (pl2==pl3)){
+                    e1++; e2++; e3++;
+                } else if((pl1 == pl3) && (pl3 == pl4)){
+                    e1++; e3++; e4++;
+                } else if(pl1 == pl2 && pl2 == pl4){
+                    e1++; e2++; e4++;
+                } else if(pl2 == pl3 && pl3 == pl4){
+                    e2++; e3++; e4++;
+                } else if(pl1 == pl2){
+                    e1++; e2++;
+                } else if(pl2 == pl3){
+                    e2++; e3++;
+                } else if(pl3 == pl4){
+                    e3++; e4++;
+                } else if(pl1 == pl4){
+                    e1++; e4++;
+                } else if(pl2 == pl4){
+                    e2++; e4++;
+                } else if(pl1 == pl3){
+                    e1++; e3++;
+                }
             }
+
 
             //Vector Movement HERE!!!!!
         }
