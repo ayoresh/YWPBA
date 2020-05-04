@@ -30,9 +30,7 @@ public class DayOne {
     public void dayOne(){
 
 
-        //Exposure counters
-        int e1 = 0, e2 = 0, e3 = 0, e4 = 0;
-        boolean eventHappened = false;
+
 
 
         //Set home bases and tells each player where their home base is
@@ -49,7 +47,9 @@ public class DayOne {
         playerFour.setY(7);
         JOptionPane.showMessageDialog(null, playerFour.getPlayerFourName() + ", your home base is at (7,7).");
 
-
+        //Exposure counters
+        int e1 = 0, e2 = 0, e3 = 0, e4 = 0;
+        boolean eventHappened = false;
         JOptionPane.showMessageDialog(null, "Here is where the story for day one begins.");
         if(eventTime.getEssentialBusiness()){
             JOptionPane.showMessageDialog(null,"Each player has received $4 thanks to the P.P.P.");
@@ -1482,8 +1482,9 @@ public class DayOne {
                     eventHappened = true;
                 }
             }
-
-
+            else{
+                //Nothing? Hospital event?
+            }
         }
 
 
