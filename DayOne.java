@@ -51,6 +51,13 @@ public class DayOne {
 
 
         JOptionPane.showMessageDialog(null, "Here is where the story for day one begins.");
+        if(eventTime.getEssentialBusiness()){
+            JOptionPane.showMessageDialog(null,"Each player has received $4 thanks to the P.P.P.");
+            playerOne.setMoney(playerOne.getMoney() + 4);
+            playerTwo.setMoney(playerTwo.getMoney() + 4);
+            playerThree.setMoney(playerThree.getMoney() + 4);
+            playerFour.setMoney(playerFour.getMoney() + 4);
+        }
         for(int x = 0; x < 5; x++) {
             for (int playerCounter = 0; playerCounter < 4; playerCounter++) {
 
@@ -121,6 +128,7 @@ public class DayOne {
 
                             //Player works
                             else if (action == 0) {
+                                if(!eventTime.getEssentialBusiness()){
                                 if (actionPoints1 + 4 <= actionPointsMax) {
                                     int moneyEarned = 4;
                                     playerOne.setMoney(playerOne.getMoney() + moneyEarned);
@@ -131,6 +139,10 @@ public class DayOne {
                                 } else {
                                     JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
                                             "Please choose another action.");
+                                }
+                                }
+                                else{
+                                    JOptionPane.showMessageDialog(null, "Working is not available due to the closure of essential businesses.");
                                 }
                             }
 
@@ -447,6 +459,7 @@ public class DayOne {
 
                             //Player works
                             else if (action == 0) {
+                                if(!eventTime.getEssentialBusiness()){
                                 if (actionPoints2 + 4 <= actionPointsMax) {
                                     int moneyEarned = 4;
                                     playerTwo.setMoney(playerTwo.getMoney() + moneyEarned);
@@ -457,6 +470,10 @@ public class DayOne {
                                 } else {
                                     JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
                                             "Please choose another action.");
+                                }
+                                }
+                                else{
+                                    JOptionPane.showMessageDialog(null, "Working is not available due to the closure of essential businesses.");
                                 }
                             }
                             //Player Movement
@@ -772,6 +789,7 @@ public class DayOne {
 
                             //Player works
                             else if (action == 0) {
+                                if(!eventTime.getEssentialBusiness()){
                                 if (actionPoints3 + 4 <= actionPointsMax) {
                                     int moneyEarned = 4;
                                     playerThree.setMoney(playerThree.getMoney() + moneyEarned);
@@ -783,6 +801,10 @@ public class DayOne {
                                     JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
                                             "Please choose another action.");
                                 }
+                            }
+                            else{
+                                JOptionPane.showMessageDialog(null, "Working is not available due to the closure of essential businesses.");
+                            }
                             }
 
                             //Player Movement
@@ -1094,7 +1116,9 @@ public class DayOne {
                                         "\nPlease enter a valid action.");
                             }
                             //Player works
+
                             else if (action == 0) {
+                                if(!eventTime.getEssentialBusiness()){
                                 if (actionPoints4 + 4 <= actionPointsMax) {
                                     int moneyEarned = 4;
                                     playerFour.setMoney(playerFour.getMoney() + moneyEarned);
@@ -1105,6 +1129,10 @@ public class DayOne {
                                 } else {
                                     JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
                                             "Please choose another action.");
+                                }
+                                }
+                                else{
+                                    JOptionPane.showMessageDialog(null, "Working is not available due to the closure of essential businesses.");
                                 }
                             }
 
@@ -1360,6 +1388,12 @@ public class DayOne {
 
 
             //Vector Movement HERE!!!!!
+            game.vectorOne();
+            game.vectorTwo();
+            game.vectorThree();
+            game.vectorFour();
+            game.vectorFive();
+            game.vectorSix();
         }
 
 
@@ -1372,15 +1406,13 @@ public class DayOne {
             int moneyToAdd = 0;
 
             if (cardDrawn == 1) {
-                eventHappened = eventTime.getSupplyShortage();
-                if (!eventHappened){
+                if (!eventTime.getSupplyShortage()){
                     eventTime.supplyShortageEvent();
                     eventHappened = true;
                 }
             }
             else if (cardDrawn == 2) {
-                eventHappened = eventTime.getEconomicRelief();
-                if (!eventHappened) {
+                if (!eventTime.getEconomicRelief()) {
                     moneyToAdd = eventTime.economicReliefEvent();
                     playerOne.setMoney(playerOne.getMoney() + moneyToAdd);
                     playerTwo.setMoney(playerTwo.getMoney() + moneyToAdd);
@@ -1392,6 +1424,61 @@ public class DayOne {
             else if (cardDrawn == 3){
                 if (eventTime.getTimesQ() < 3){
                     eventTime.govQuarantine();
+                    eventHappened = true;
+                }
+            }
+            else if (cardDrawn == 4){
+                if(!eventTime.getLooting()){
+                    eventTime.looting();
+                    eventHappened = true;
+                }
+            }
+            else if(cardDrawn == 5){
+                if(!eventTime.getTests()){
+                    String toAddToTestingText = "";
+                    int tocheck = rando.fourSidedDie();
+                    if(tocheck == 1){
+                        toAddToTestingText = "drive through testing centers located in repurposed mall parking lots.";
+                    } else if(tocheck == 2){
+                        toAddToTestingText = "select pharmacies and urgent care clinics.";;
+                    } else if(tocheck == 3){
+                        toAddToTestingText = "primary care physicians' and select specialists' offices.";
+                    } else{
+                        toAddToTestingText = "hospitals.";
+                    }
+                    JOptionPane.showMessageDialog(null,"After being fast tracked by the FDA, a new test for COVID-19 has become available.\n" +
+                            "Now the wait for results is hours, not days. Starting tomorrow, they will\nbe available to the general public at " + toAddToTestingText);
+                    if(playerOne.getInfected()){
+                        JOptionPane.showMessageDialog(null, playerOne.getPlayerOneName() + " is infected.");
+                    } else if (!playerOne.getInfected()){
+                        JOptionPane.showMessageDialog(null, playerOne.getPlayerOneName() + " is not infected.");
+                    }
+                    if(playerTwo.getInfected()){
+                        JOptionPane.showMessageDialog(null,playerTwo.getPlayerTwoName() + " is infected.");
+                    } else if(!playerTwo.getInfected()){
+                        JOptionPane.showMessageDialog(null, playerTwo.getPlayerTwoName() + " is not infected.");
+                    }
+                    if(playerThree.getInfected()){
+                        JOptionPane.showMessageDialog(null, playerThree.getPlayerThreeName() + " is infected.");
+                    }else if(!playerThree.getInfected()){
+                        JOptionPane.showMessageDialog(null, playerThree.getPlayerThreeName() + " is not infected.");
+                    }
+                    if(playerFour.getInfected()){
+                        JOptionPane.showMessageDialog(null, playerFour.getPlayerFourName() + " is infected.");
+                    } else if (!playerFour.getInfected()){
+                        JOptionPane.showMessageDialog(null, playerFour.getPlayerFourName() + " is not infected.");
+                    }
+                }
+            }
+            else if(cardDrawn == 6){
+                if(!eventTime.getEssentialBusiness()){
+                    eventTime.essentialClosings();
+                    eventHappened = true;
+                }
+            }
+            else if(cardDrawn == 7){
+                if(eventTime.getTimesSD() < 3){
+                    eventTime.socialDistancing();
                     eventHappened = true;
                 }
             }
