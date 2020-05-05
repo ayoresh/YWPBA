@@ -322,7 +322,7 @@ public class GameBoard {
         return num;
     }
 
-    public void vectorOne(){
+    public String vectorOne(){
         if(v1x > -1 && v1y > -1 && v1d != -1){
             boolean dChange = false;
             if(v1y == 9 && v1d == 1){
@@ -475,10 +475,24 @@ public class GameBoard {
                 direction = "down";
             }
 
-            JOptionPane.showMessageDialog(null,"(" + v1x + "," + v1y + ") is now infected by a vector. \nMove the Vector 1 token to this space.\nDirection: " + direction);
+
         }
+        String toreturn = "";
+        String v1dTXT = "";
+        if(v1d == 1){
+            v1dTXT = "right";
+        }
+        else if(v1d == 2){
+            v1dTXT = "left";
+        } else if(v1d == 3){
+            v1dTXT = "up";
+        } else{
+            v1dTXT = "left";
+        }
+        toreturn = "New vector infected: (" + v1x + "," + v1y + ")\nMove Vector One to this location. Direction: " + v1dTXT;
+        return toreturn;
     }
-    public void vectorTwo(){
+    public String vectorTwo(){
         if(v2x > -1 && v2y > -1 && v2d != -1){
             boolean dChange = false;
             if(v2y == 9 && v2d == 1){
@@ -631,10 +645,24 @@ public class GameBoard {
                 direction = "down";
             }
 
-            JOptionPane.showMessageDialog(null,"(" + v2x + "," + v2y + ") is now infected by a vector. \nMove the Vector 1 token to this space.\nDirection: " + direction);
+
         }
+        String toreturn = "";
+        String v2dTXT = "";
+        if(v1d == 1){
+            v2dTXT = "right";
+        }
+        else if(v1d == 2){
+            v2dTXT = "left";
+        } else if(v1d == 3){
+            v2dTXT = "up";
+        } else{
+            v2dTXT = "left";
+        }
+        toreturn = "New vector infected: (" + v2x + "," + v2y + ")\nMove Vector Two to this location. Direction: " + v2dTXT;
+        return toreturn;
     }
-    public void vectorThree(){
+    public String vectorThree(){
         if(v3x > -1 && v3y > -1 && v3d != -1){
             boolean dChange = false;
             if(v3y == 9 && v3d == 1){
@@ -787,10 +815,24 @@ public class GameBoard {
                 direction = "down";
             }
 
-            JOptionPane.showMessageDialog(null,"(" + v3x + "," + v3y + ") is now infected by a vector. \nMove the Vector 1 token to this space.\nDirection: " + direction);
+
         }
+        String toreturn = "";
+        String v3dTXT = "";
+        if(v1d == 1){
+            v3dTXT = "right";
+        }
+        else if(v1d == 2){
+            v3dTXT = "left";
+        } else if(v1d == 3){
+            v3dTXT = "up";
+        } else{
+            v3dTXT = "left";
+        }
+        toreturn = "New vector infected: (" + v3x + "," + v3y + ")\nMove Vector Three to this location. Direction: " + v3dTXT;
+        return toreturn;
     }
-    public void vectorFour(){
+    public String vectorFour(){
         if(v4x > -1 && v4y > -1 && v4d != -1){
             boolean dChange = false;
             if(v4y == 9 && v4d == 1){
@@ -943,10 +985,23 @@ public class GameBoard {
                 direction = "down";
             }
 
-            JOptionPane.showMessageDialog(null,"(" + v4x + "," + v4y + ") is now infected by a vector. \nMove the Vector 1 token to this space.\nDirection: " + direction);
         }
+        String toreturn = "";
+        String v4dTXT = "";
+        if(v1d == 1){
+            v4dTXT = "right";
+        }
+        else if(v1d == 2){
+            v4dTXT = "left";
+        } else if(v1d == 3){
+            v4dTXT = "up";
+        } else{
+            v4dTXT = "left";
+        }
+        toreturn = "New vector infected: (" + v4x + "," + v4y + ")\nMove Vector Four to this location. Direction: " + v4dTXT;
+        return toreturn;
     }
-    public void vectorFive(){
+    public String vectorFive(){
         if(v5x > -1 && v5y > -1 && v5d != -1){
             boolean dChange = false;
             if(v5y == 9 && v5d == 1){
@@ -1090,8 +1145,22 @@ public class GameBoard {
             }
 
         }
+        String toreturn = "";
+        String v5dTXT = "";
+        if(v1d == 1){
+            v5dTXT = "right";
+        }
+        else if(v1d == 2){
+            v5dTXT = "left";
+        } else if(v1d == 3){
+            v5dTXT = "up";
+        } else{
+            v5dTXT = "left";
+        }
+        toreturn = "New vector infected: (" + v5x + "," + v5y + ")\nMove Vector Five to this location. Direction: " + v5dTXT;
+        return toreturn;
     }
-    public void vectorSix(){
+    public String vectorSix(){
         if(v6x > -1 && v6y > -1 && v6d != -1){
             boolean dChange = false;
             if(v6y == 9 && v6d == 1){
@@ -1244,8 +1313,22 @@ public class GameBoard {
                 direction = "down";
             }
 
-            JOptionPane.showMessageDialog(null,"(" + v6x + "," + v6y + ") is now infected by a vector. \nMove the Vector 1 token to this space.\nDirection: " + direction);
+
         }
+        String toreturn = "";
+        String v6dTXT = "";
+        if(v1d == 1){
+            v6dTXT = "right";
+        }
+        else if(v1d == 2){
+            v6dTXT = "left";
+        } else if(v1d == 3){
+            v6dTXT = "up";
+        } else{
+            v6dTXT = "left";
+        }
+        toreturn = "New vector infected: (" + v6x + "," + v6y + ")\nMove Vector Six to this location. Direction: " + v6dTXT;
+        return toreturn;
     }
 
 

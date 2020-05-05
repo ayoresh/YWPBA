@@ -1388,12 +1388,32 @@ public class DayOne {
 
 
             //Vector Movement HERE!!!!!
-            game.vectorOne();
-            game.vectorTwo();
-            game.vectorThree();
-            game.vectorFour();
-            game.vectorFive();
-            game.vectorSix();
+            String v1txt="", v2txt="", v3txt="", v4txt="", v5txt="", v6txt="";
+
+            v1txt = game.vectorOne();
+            v2txt = game.vectorTwo();
+            v3txt = game.vectorThree();
+            v4txt = game.vectorFour();
+            v5txt = game.vectorFive();
+            v6txt = game.vectorSix();
+            if(!v1txt.equals("")){
+                JOptionPane.showMessageDialog(null,v1txt);
+            }
+            if(!v2txt.equals("")){
+                JOptionPane.showMessageDialog(null, v2txt);
+            }
+            if(!v3txt.equals("")){
+                JOptionPane.showMessageDialog(null, v3txt);
+            }
+            if(!v4txt.equals("")){
+                JOptionPane.showMessageDialog(null, v4txt);
+            }
+            if(!v5txt.equals("")){
+                JOptionPane.showMessageDialog(null, v5txt);
+            }
+            if(!v6txt.equals("")){
+                JOptionPane.showMessageDialog(null, v6txt);
+            }
         }
 
 
