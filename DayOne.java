@@ -5,8 +5,11 @@
 
 import javax.swing.JOptionPane;
 import java.awt.*;
+import java.util.Random;
 
 public class DayOne {
+    int seed = 0;//place holder declaration for game seed
+
 
     PlayerOne playerOne;
     PlayerTwo playerTwo;
@@ -26,7 +29,209 @@ public class DayOne {
         game = new GameBoard(gameboard);
 
     }
+    public String getGridDescription(int x,int y,int gameSeed){
+        int gridTextIndexOne, gridTextIndexTwo, gridTextIndexThree;
+        String gridText = "On this block there is ";
+        Random textSelector = new Random(x + (y * 10) + gameSeed );
+        gridTextIndexOne = textSelector.nextInt( 84 );
+        switch (gridTextIndexOne) {
+            case 0,1,2: gridText +="a swimming pool that may not open this year";
+                break;
+            case 3,4,5,6: gridText +="a deserted playground";
+                break;
+            case 7,8,9: gridText +="a stand of trees";
+                gridTextIndexTwo = textSelector.nextInt( 6 );
+                switch (gridTextIndexTwo) {
+                    case 0: gridText +=" with a balloon tangled in the branches.";
+                        break;
+                    case 1: gridText +=" with a bike chained to one.";
+                        break;
+                    case 2: gridText += "litter is mixed into the undergrowth";
+                        break;
+                    case 3,4,5:
+                        gridText +=".";
+                        break;
+                    default:
+                        //throw error
+                        break;
+                }
+                break;
+            case 10,11: gridText += "a statue to a military officer who would otherwise be long forgotten.";
+                break;
+            case 12,13,14: gridText += "a fountain that ";
+                gridTextIndexTwo = textSelector.nextInt( 4 );
+                switch (gridTextIndexTwo) {
+                    case 0: gridText +="tourists ";
+                        break;
+                    case 1: gridText +="local children ";
+                        break;
+                    case 2: gridText += "retirees feeding birds ";
+                        break;
+                    case 3:
+                        gridText += "bored teenagers ";
+                        break;
+                    default:
+                        //throw error
+                        break;
+                }
+                gridText += "once sat by ";
+                break;
+            case 15,16,17,18: gridText += "a park with ";
+                gridTextIndexTwo = textSelector.nextInt( 4 );
+                switch (gridTextIndexTwo) {
+                    case 0: gridText +="chess tables.";
+                        break;
+                    case 1: gridText +="graffitied benches and picnic tables.";
+                        break;
+                    case 2: gridText += "children's leftover chalk drawing on the asphalt bike path.";
+                        break;
+                    case 3:
+                        gridText += "a quiet stream flowing into a small drainage tunnel.";
+                        break;
+                    default:
+                        //throw error
+                        break;
+                }
+                break;
+            case 19: gridText += "City Hall, now closed to the public.";
+                break;
+            case 20,21: gridText += "a local news paper, which is still publishing, though most of it's staff are working from home.";
+                break;
+            case 22: gridText += "an angular abstract sculture of welded steel.";
+                break;
+            case 23,24,25: gridText += "the vacant parking lot of the mass transit center that is now indefinitely closed";
+                break;
+            case 26,27,28: gridText += "an apartment complex whose construction has been put on hiatus";
+                break;
+            case 29,30,31,32: gridText += "a local library, it's sign advertising how to contact a librarian from home";
+                break;
+            case 33,34: gridText += "a police station that appears to be on high alert.";
+                break;
+            case 35,36: gridText += "a fire department. Its electronic sign advises precautionary measures";
+                break;
+            case 37,38: gridText += "a vacant lot with cracked asphalt that belongs to a defunct strip mall. It went out of business before the rest of the the currently struggling businesses in the city.";
+                break;
+            case 39,40,41: gridText += "a bar and music venue that still advertises gigs that will surely never be played.";
+                break;
+            case 42,43: gridText += "a National Guard recruitment station. The sign in the window says\"Hometown Heros fighting COVID-19\" Under it are posted several pictures of locals aiding in the effort to slow the virus";
+                break;
+            case 44,45: gridText += "a retirement home.\" NO VISITORS ALLOWED\" ";
+                break;
+            case 46,47: gridText += "the local animal shelter.\"Pets don't spread COVID-19. Please DO NOT abandon your pet\".";
+                break;
+            case 48,49,50,51,52,53: gridText += "a street that was once bustling with people, but is now devoid of activity";
+                break;
+            case 54,55,56,57: gridText += "a restaurant that ";
+                gridTextIndexTwo = textSelector.nextInt( 3 );
+                switch (gridTextIndexTwo) {
+                    case 0: gridText +="can only deliver meals.";
+                        break;
+                    case 1: gridText += "is teetering on the brink of collapse.";
+                        break;
+                    case 2:
+                        gridText += "has been forced into bankruptcy from loss of business.";
+                        break;
+                    default:
+                        //throw error
+                        break;
+                }
+            case 58,59,60: gridText += "a local";
+                gridTextIndexTwo = textSelector.nextInt( 3 );
+                switch (gridTextIndexTwo) {
+                    case 0: gridText +=" elementary school that cannot educate children";
+                        break;
+                    case 1: gridText += " middle school that is closed to the public, halting education.";
+                        break;
+                    case 2:
+                        gridText += " high school that is locked up indefinitely.";
+                        break;
+                    default:
+                        //throw error
+                        break;
+                }
+            case 61,62,63,64: gridText += "a grocery store that is struggling to keep itself afloat in a time when having groceries delivered is practically mandatory.";
+                break;
+            case 65,66: gridText += "a church that is currently holding no services, and will not for quite a while.";
+                break;
+            case 67,68,69,70: gridText += "a shopping center with nowhere near as many patrons as it usually sees.";
+                break;
+            case 71,72: gridText += "a hospital that is overflowing with patients and will soon not be able to admit anymore.";
+                break;
+            case 73: gridText += "a car dealership that sells sports cars, which are now not is high demand.";
+                break;
+            case 74: gridText += "a car dealership that sells minivans and pickup trucks.";
+                break;
+            case 75: gridText += "a motofrcycle dealership.";
+                break;
+            case 76,77: gridText += "one of the tallest trees in the city. This was once a popular gathering spot for many events, but it now stands completely alone";
+                break;
+            case 78,79,80: gridText += "a near-bankrupt bakery, unable to save survive, even with its world-famous";
+                gridTextIndexTwo = textSelector.nextInt( 3 );
+                switch (gridTextIndexTwo) {
+                    case 0: gridText +=" bread.";
+                        break;
+                    case 1: gridText += " cakes.";
+                        break;
+                    case 2:
+                        gridText += " pies.";
+                        break;
+                    default:
+                        //throw error
+                        break;
+                }
+                break;
+            case 81,82: gridText += "a stadium used for";
+                gridTextIndexTwo = textSelector.nextInt( 3 );
+                switch (gridTextIndexTwo) {
+                    case 0: gridText +=" football. ";
+                        break;
+                    case 1: gridText += " soccer. ";
+                        break;
+                    case 2:
+                        gridText += " baseball. ";
+                        break;
+                    default:
+                        //throw error
+                        break;
+                }
+                gridTextIndexThree = textSelector.nextInt( 6 );
+                switch (gridTextIndexThree) {
+                    case 0:
+                        gridText += " It's parking lot is being set up for drive through COVID testing.";
+                        break;
+                    case 1:
+                        gridText += " It has been taken over by the national guard and converted to a field hospital.";
+                        break;
+                    case 2,3,4:
+                        gridText += " The stands are empty as is the field.";
+                        break;
+                    case 5:
+                        gridText += " Parked outside are several refrigerated trucks, ready to store bodies";
+                        break;
+                }
+                break;
 
+            case 83: gridText += "a bank";
+                gridTextIndexTwo = textSelector.nextInt( 3 );
+                switch (gridTextIndexTwo) {
+                    case 0: gridText +=" that only allows electronic deposits and withdrawals at the moment.";
+                        break;
+                    case 1: gridText += " is currently closed, preventing people from having much needed funds.";
+                        break;
+                    case 2:
+                        gridText += ".\"We're in this together\".";
+                        break;
+                    default:
+                        //throw error
+                        break;
+                }
+                break;
+            default:
+                //throw error
+                break;
+        }
+        return (gridText);
+    }
     public void dayOne(){
 
 
@@ -50,7 +255,72 @@ public class DayOne {
         //Exposure counters
         int e1 = 0, e2 = 0, e3 = 0, e4 = 0;
         boolean eventHappened = false;
-        JOptionPane.showMessageDialog(null, "Here is where the story for day one begins.");
+       // JOptionPane.showMessageDialog(null, "Here is where the story for day one begins.");
+
+        //PLACE HOLDER DECLARATIONS!!!!!!
+        int deathToll = 0;
+        int deathRate = 0;
+        int cityCasesNew = 0;
+        String cityName = "Raccoon City";
+        //
+
+        String morningText = "";
+        String preventativeMeasure = "";
+        int morningTextIndexOne, morningTextIndexTwo;
+        Random textSelector = new Random();
+        morningTextIndexOne = textSelector.nextInt( 5 );
+        switch (morningTextIndexOne){
+            case 0:
+                preventativeMeasure += "wash hands thoroughly and often for at least 20 seconds";
+                break;
+            case 1:
+                preventativeMeasure += "stay home if they exhibit any symptoms";
+                break;
+            case 2:
+                preventativeMeasure += "call ahead if they are seeking medical treatment for COVID-19";
+                break;
+            case 3:
+                preventativeMeasure += "limit close contact with individuals outside their household in indoor and outdoor spaces";
+                break;
+            case 4:
+                preventativeMeasure += "stay away from others when possible, even if they have no symptoms. People can spread the virus before they know they are sick";
+                break;
+            default:
+                //throw error
+                break;
+
+
+
+        }
+        morningTextIndexOne = textSelector.nextInt( 6 );
+        switch (morningTextIndexOne) {
+            case 0,1,2: morningText += "The morning news announces that the death toll of the virus has risen to " + deathToll + " after " + deathRate + " were lost to the virus yesterday. In " + cityName + " " + cityCasesNew + " new cases were reported. The Centers for Disease Control is advising people to " + preventativeMeasure;
+                break;
+            case 3,4: morningText +="While watching regular television there is now a constant breaking news scroll at the bottom of the screen. \n Death Toll: " + deathToll + " up by " + deathRate + "CDC advises to " + preventativeMeasure;
+                break;
+            case 5: morningText +="Regular broadcast TV is interupted";
+                morningTextIndexTwo = textSelector.nextInt( 7 );
+                switch (morningTextIndexTwo) {
+                    case 0,1: morningText +=" by a PSA adivising citizens to " + preventativeMeasure;
+                        break;
+                    case 2: morningText +="  by a news conference from the president.";
+                        break;
+                    case 3: morningText += " by an announcement by the governor.";
+                        break;
+                    case 4,5,6:
+                        morningText +=" by a comercial telling people to " + preventativeMeasure + ". It also assures us that \" We're all in this together!\" The commercial is sponsored by a multinational fast food chain";
+                        break;
+                    default:
+                        //throw error
+                        break;
+                }
+                break;
+        }
+        JOptionPane.showMessageDialog(null,morningText);
+
+
+
+
         if(eventTime.getEssentialBusiness()){
             JOptionPane.showMessageDialog(null,"Each player has received $4 thanks to the P.P.P.");
             playerOne.setMoney(playerOne.getMoney() + 4);
@@ -191,6 +461,7 @@ public class DayOne {
                                     }
 
                                     JOptionPane.showMessageDialog(null,"New location: (" + playerOne.getX() + "," + playerOne.getY() + ").");
+                                    JOptionPane.showMessageDialog(null, getGridDescription(playerOne.getX(),playerOne.getY(),seed));
                                     actionPoints1++;
 
                                 }
@@ -1388,32 +1659,12 @@ public class DayOne {
 
 
             //Vector Movement HERE!!!!!
-            String v1txt="", v2txt="", v3txt="", v4txt="", v5txt="", v6txt="";
-
-            v1txt = game.vectorOne();
-            v2txt = game.vectorTwo();
-            v3txt = game.vectorThree();
-            v4txt = game.vectorFour();
-            v5txt = game.vectorFive();
-            v6txt = game.vectorSix();
-            if(!v1txt.equals("")){
-                JOptionPane.showMessageDialog(null,v1txt);
-            }
-            if(!v2txt.equals("")){
-                JOptionPane.showMessageDialog(null, v2txt);
-            }
-            if(!v3txt.equals("")){
-                JOptionPane.showMessageDialog(null, v3txt);
-            }
-            if(!v4txt.equals("")){
-                JOptionPane.showMessageDialog(null, v4txt);
-            }
-            if(!v5txt.equals("")){
-                JOptionPane.showMessageDialog(null, v5txt);
-            }
-            if(!v6txt.equals("")){
-                JOptionPane.showMessageDialog(null, v6txt);
-            }
+            game.vectorOne();
+            game.vectorTwo();
+            game.vectorThree();
+            game.vectorFour();
+            game.vectorFive();
+            game.vectorSix();
         }
 
 
