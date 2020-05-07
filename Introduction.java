@@ -3,7 +3,8 @@
  * Sets player names and assigns characters
  */
 
-import javax.swing.JOptionPane;
+import javax.swing.*;
+
 
 public class Introduction {
 
@@ -15,8 +16,14 @@ public class Introduction {
 
 
     public void introductionText(){
-        JOptionPane.showMessageDialog(null, "Here we will have the introduction text for the game. ");
-        JOptionPane.showMessageDialog(null, "To put text on different pop-ups, \ncopy and paste this line of code and change text in the quotation marks.");
+        ImageIcon splash = new ImageIcon("SplashScreen.png");
+        JOptionPane.showMessageDialog(null,"","You Will (Probably) Be Alright", JOptionPane.INFORMATION_MESSAGE, splash);
+        JOptionPane.showMessageDialog(null, "COVID-19 has been the name on everyone's mind the past few months. \n" +
+                "Everything went wrong when people began working from home.\n" +
+                "Everyone began going stir crazy in their homes, and when they went outdoors, all public decency was lost.\n" +
+                "Finding essential supplies has been more difficult than ever before. The government has begun a mandatory two-week long quarantine.\n" +
+                "People may only leave their homes for essential reasons. There is no way of knowing where the virus has been, and where it hasn't.... yet.");
+        JOptionPane.showMessageDialog(null,"But don't worry, you will (probably) be alright.");
 
         String playerOneName = JOptionPane.showInputDialog("What is the first player's name?");
         String playerTwoName = JOptionPane.showInputDialog("What is the second player's name?");

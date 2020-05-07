@@ -6,7 +6,7 @@ public class RandomNum {
 
 
 
-    public int eventCardAmount = 13;
+    public int eventCardAmount = 7;
 
 
     public int coinFlip(){
@@ -30,6 +30,10 @@ public class RandomNum {
         return outOfTenRoll;
     }
 
+    public int outOfFive(){
+        int outOfFiveRoll = (int)(Math.random() * 5) + 1;
+        return outOfFiveRoll;
+    }
     /**
      * This method will choose a number between 1 and the amount of event cards in the game.
      * The returned number will correspond to an event card, which will go into effect.

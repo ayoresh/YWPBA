@@ -8,6 +8,7 @@ public class GameBoard {
 
     RandomNum rando = new RandomNum();
     public int numOfVectors = 0;
+    public int deathToll = 10;
 
     public int v1x = -50, v1y = -50, v2x = -50, v2y = -50, v3x = -50, v3y = -50, v4x = -50, v4y = -50, v5x = -50, v5y = -50, v6x = -50, v6y = -50, v1d = -1, v2d = -1, v3d = -1, v4d = -1, v5d = -1, v6d = -1;
     public boolean v1 = false, v2 = false, v3 = false, v4 = false, v5 = false, v6 = false;
@@ -1405,6 +1406,20 @@ public class GameBoard {
         }
         toreturn = "New vector infected: (" + v6x + "," + v6y + ")\nMove Vector Six to this location. Direction: " + v6dTXT;
         return toreturn;
+    }
+
+    public int deathRate = 5;
+    public int getDeathToll(){
+        return deathToll;
+    }
+    public void setDeathToll(int toAdd){
+        deathToll += toAdd;
+    }
+    public int getDeathRate(){
+        return  deathRate;
+    }
+    public void setDeathRate(int toAdd){
+        deathRate += toAdd;
     }
 
 

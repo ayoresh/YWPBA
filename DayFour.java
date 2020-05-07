@@ -24,7 +24,78 @@ public class DayFour {
 //Exposure counters
         int e1 = 0, e2 = 0, e3 = 0, e4 = 0;
         boolean eventHappened = false;
-        JOptionPane.showMessageDialog(null, "Here is where the story for day one begins.");
+        String preventativeMeasure = "", morningText ="";
+        int pmtxt = rando.outOfFive();
+        switch(pmtxt){
+            case 1:
+                preventativeMeasure += "wash hands thoroughly and often for at least 20 seconds";
+                break;
+            case 2:
+                preventativeMeasure += "stay home if you exhibit any symptoms";
+                break;
+            case 3:
+                preventativeMeasure += "call ahead if you are seeking medical treatment for COVID-19";
+                break;
+            case 4:
+                preventativeMeasure += "limit close contact with individuals outside our your household in public spaces";
+                break;
+            case 5:
+                preventativeMeasure += "stay away from others when possible, even if you show no symptoms.\n people can spread the virus " +
+                        "before they know they are sick";
+                break;
+            default:
+                preventativeMeasure += "only leave your home for essential purposes";
+                break;
+        }
+
+        pmtxt = rando.thirtyThree();
+        switch(pmtxt){
+            case 1:
+                game.setDeathRate(2);
+                game.setDeathToll(game.getDeathRate());
+                morningText = "The morning news announces that the death toll of the virus has risen to " + game.getDeathToll() +
+                        ",000 after " + game.getDeathRate() + ",000 were lost to the virus yesterday.\nCDC advises people to " + preventativeMeasure
+                        + ".";
+                break;
+            case 2:
+                game.setDeathRate(2);
+                game.setDeathToll(game.getDeathRate());
+                morningText = "While watching regular television there is now a constant\nbreaking news scroll displayed at the bottom\nof the screen.";
+                morningText+= "\nDeath Toll: " + game.getDeathToll() + ",000   Death Rate: " + game.getDeathRate() +
+                        "\n CDC advises to " + preventativeMeasure + ".";
+                break;
+            case 3:
+                game.setDeathRate(2);
+                game.setDeathToll(game.getDeathRate());
+                morningText = "During morning television regular broadcast TV is interrupted by\n";
+                int pmtxt2 = rando.fourSidedDie();
+                switch(pmtxt2){
+                    case 1:
+                        morningText += "a PSA advising citizens to " + preventativeMeasure + ".";
+                        break;
+                    case 2:
+                        morningText += "a news conference from the president advising the public to\n" + preventativeMeasure + ".";
+                        break;
+                    case 3:
+                        morningText += "an announcement by the governor advising the public to\n" + preventativeMeasure + ".";
+                        break;
+                    case 4:
+                        morningText += "a commercial telling people to " + preventativeMeasure + ".\nIt also assures us that\nWe Are All In This Together" +
+                                "\nThe commercial is sponsored by a multinational fast food chain.";
+                        break;
+                    default:
+                        morningText += "a celebrity telling the public to " + preventativeMeasure + ".\nThe celebrity is beginning to sell 24k gold face masks for $2k each.";
+                        break;
+                }
+                break;
+            default:
+                morningText = "A flyer came in the mail this morning advising people to\n" + preventativeMeasure + ".";
+                break;
+        }
+
+
+        JOptionPane.showMessageDialog(null, morningText);
+
         if(eventTime.getEssentialBusiness()){
             JOptionPane.showMessageDialog(null,"Each player has received $4 thanks to the P.P.P.");
             playerOne.setMoney(playerOne.getMoney() + 4);
