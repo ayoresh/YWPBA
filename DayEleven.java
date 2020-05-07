@@ -18,19 +18,21 @@ public class DayEleven{
         playerTwo = new PlayerTwo(playerTwoName, health2, supplies2, food2, symptoms2, money2, x2, y2, infected2);
         playerThree = new PlayerThree(playerThreeName, health3, supplies3, food3, symptoms3, money3, x3, y3, infected3);
         playerFour = new PlayerFour(playerFourName, health4, supplies4, food4, symptoms4, money4, x4, y4, infected4);
+    }
+    public void day11(){
 
         //Exposure counters
         int e1 = 0, e2 = 0, e3 = 0, e4 = 0;
         boolean eventHappened = false;
         JOptionPane.showMessageDialog(null, "Here is where the story for day one begins.");
-        if (eventTime.getEssentialBusiness()) {
-            JOptionPane.showMessageDialog(null, "Each player has received $4 thanks to the P.P.P.");
+        if(eventTime.getEssentialBusiness()){
+            JOptionPane.showMessageDialog(null,"Each player has received $4 thanks to the P.P.P.");
             playerOne.setMoney(playerOne.getMoney() + 4);
             playerTwo.setMoney(playerTwo.getMoney() + 4);
             playerThree.setMoney(playerThree.getMoney() + 4);
             playerFour.setMoney(playerFour.getMoney() + 4);
         }
-        for (int x = 0; x < 5; x++) {
+        for(int x = 0; x < 5; x++) {
             for (int playerCounter = 0; playerCounter < 4; playerCounter++) {
 
                 int actionPoints1 = 0, actionPoints2 = 0, actionPoints3 = 0, actionPoints4 = 0, actionPointsMax = 4;
@@ -51,6 +53,11 @@ public class DayEleven{
                                 actionText + "\nAction Points Used: " + actionPoints1));
 
 
+                        while (action != 0 && action != 1 && action != 2 && action != 3 && action != 10) {
+                            action = Integer.parseInt(JOptionPane.showInputDialog("Invalid input.\n" +
+                                    playerOne.getPlayerOneName() + ", " +
+                                    actionText + "\nAction Points Used: " + actionPoints1));
+                        }
                         //Player shops at food store
                         if ((action == 4 && playerLocale == 4) || (action == 4 && playerLocale == 5)) {
                             if (actionPoints1 + 4 <= actionPointsMax) {
@@ -407,6 +414,11 @@ public class DayEleven{
                         int action = Integer.parseInt(JOptionPane.showInputDialog(playerTwo.getPlayerTwoName() + ", " +
                                 actionText + "\nAction Points Used: " + actionPoints2));
 
+                        while (action != 0 && action != 1 && action != 2 && action != 3 && action != 10) {
+                            action = Integer.parseInt(JOptionPane.showInputDialog("Invalid input.\n" +
+                                    playerTwo.getPlayerTwoName() + ", " +
+                                    actionText + "\nAction Points Used: " + actionPoints2));
+                        }
 
                         //Player shops at food store
                         if ((action == 4 && playerLocale == 4) || (action == 4 && playerLocale == 5)) {
@@ -764,6 +776,11 @@ public class DayEleven{
                         int action = Integer.parseInt(JOptionPane.showInputDialog(playerThree.getPlayerThreeName() + ", " +
                                 actionText + "\nAction Points Used: " + actionPoints3));
 
+                        while (action != 0 && action != 1 && action != 2 && action != 3 && action != 10) {
+                            action = Integer.parseInt(JOptionPane.showInputDialog("Invalid input.\n" +
+                                    playerThree.getPlayerThreeName() + ", " +
+                                    actionText + "\nAction Points Used: " + actionPoints3));
+                        }
 
                         //Player shops at food store
                         if ((action == 4 && playerLocale == 4) || (action == 4 && playerLocale == 5)) {
@@ -1121,6 +1138,11 @@ public class DayEleven{
                         int action = Integer.parseInt(JOptionPane.showInputDialog(playerFour.getPlayerFourName() + ", " +
                                 actionText + "\nAction Points Used: " + actionPoints4));
 
+                        while (action != 0 && action != 1 && action != 2 && action != 3 && action != 10) {
+                            action = Integer.parseInt(JOptionPane.showInputDialog("Invalid input.\n" +
+                                    playerFour.getPlayerFourName() + ", " +
+                                    actionText + "\nAction Points Used: " + actionPoints4));
+                        }
                         //Player shops at food store
                         if ((action == 4 && playerLocale == 4) || (action == 4 && playerLocale == 5)) {
                             if (actionPoints4 + 4 <= actionPointsMax) {
@@ -1466,29 +1488,64 @@ public class DayEleven{
 
 
             //Vector Movement HERE!!!!!
-            game.vectorOne();
-            game.vectorTwo();
-            game.vectorThree();
-            game.vectorFour();
-            game.vectorFive();
-            game.vectorSix();
+            JOptionPane.showMessageDialog(null, "Move vectors in the direction they are traveling.\n" +
+                    "If a vector has hit a corner or quarantined space, its direction is now the opposite of what it was.");
+            int howManyVectors = Integer.parseInt(JOptionPane.showInputDialog("How many vectors are currently active on the board?\nmin: 0 max: 6"));
+            while (howManyVectors < 0 || howManyVectors > 6){
+                howManyVectors = Integer.parseInt(JOptionPane.showInputDialog("Invalid input. \nPlease enter the amount of active vectors. \nmin: 0 max: 6 "));
+            }
+            for(int z = 0; z < howManyVectors; z++){
+                int xVal = Integer.parseInt(JOptionPane.showInputDialog("What is the x-coordinate?"));
+                while(xVal < 0 || xVal > 9){
+                    xVal = Integer.parseInt(JOptionPane.showInputDialog("Value for x-coordinate must be between 0 and 9.\nPlease enter the x-coordinate."));
+                }
+                int yVal = Integer.parseInt(JOptionPane.showInputDialog("What is the y-coordinate?"));
+                while(yVal < 0 || yVal > 9){
+                    yVal = Integer.parseInt(JOptionPane.showInputDialog("Value for y-coordinate must be between 0 and 9.\nPlease enter the y-coordinate."));
+                }
+                int gameSpace = game.getGameboard(xVal, yVal);
+                if(gameSpace == 0){
+                    game.setGameboard(xVal, yVal, 1);
+                    JOptionPane.showMessageDialog(null, "(" + xVal + "," + yVal + ") is now infected.");
+                }
+                else if(gameSpace == 4){
+                    game.setGameboard(xVal, yVal, 5);
+                    JOptionPane.showMessageDialog(null, "(" + xVal + "," + yVal + ") is now an infected food shop.");
+                }
+                else if(gameSpace == 8){
+                    game.setGameboard(xVal, yVal, 9);
+                    JOptionPane.showMessageDialog(null, "(" + xVal + "," + yVal + ") is now an infected supply shop.");
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "Space does not change.");
+                }
+                int getRolled = rando.diceRoll();
+                if(getRolled == 1){
+                    JOptionPane.showMessageDialog(null,"Vector direction change!\nTurn this vector once to the right.");
+                } if(getRolled == 2){
+                    JOptionPane.showMessageDialog(null,"Vector direction change!\nTurn this vector once to the left.");
+                }
+            }
+
         }
+
 
 
         //Here we will call the daily event
 
         int cardDrawn = rando.randomCard();
 
-        while (eventHappened = false) {
+        while(eventHappened = false) {
 
             int moneyToAdd = 0;
 
             if (cardDrawn == 1) {
-                if (!eventTime.getSupplyShortage()) {
+                if (!eventTime.getSupplyShortage()){
                     eventTime.supplyShortageEvent();
                     eventHappened = true;
                 }
-            } else if (cardDrawn == 2) {
+            }
+            else if (cardDrawn == 2) {
                 if (!eventTime.getEconomicRelief()) {
                     moneyToAdd = eventTime.economicReliefEvent();
                     playerOne.setMoney(playerOne.getMoney() + moneyToAdd);
@@ -1497,64 +1554,69 @@ public class DayEleven{
                     playerFour.setMoney(playerFour.getMoney() + moneyToAdd);
                     eventHappened = true;
                 }
-            } else if (cardDrawn == 3) {
-                if (eventTime.getTimesQ() < 3) {
+            }
+            else if (cardDrawn == 3){
+                if (eventTime.getTimesQ() < 3){
                     eventTime.govQuarantine();
                     eventHappened = true;
                 }
-            } else if (cardDrawn == 4) {
-                if (!eventTime.getLooting()) {
+            }
+            else if (cardDrawn == 4){
+                if(!eventTime.getLooting()){
                     eventTime.looting();
                     eventHappened = true;
                 }
-            } else if (cardDrawn == 5) {
-                if (!eventTime.getTests()) {
+            }
+            else if(cardDrawn == 5){
+                if(!eventTime.getTests()){
                     String toAddToTestingText = "";
                     int tocheck = rando.fourSidedDie();
-                    if (tocheck == 1) {
+                    if(tocheck == 1){
                         toAddToTestingText = "drive through testing centers located in repurposed mall parking lots.";
-                    } else if (tocheck == 2) {
-                        toAddToTestingText = "select pharmacies and urgent care clinics.";
-                        ;
-                    } else if (tocheck == 3) {
+                    } else if(tocheck == 2){
+                        toAddToTestingText = "select pharmacies and urgent care clinics.";;
+                    } else if(tocheck == 3){
                         toAddToTestingText = "primary care physicians' and select specialists' offices.";
-                    } else {
+                    } else{
                         toAddToTestingText = "hospitals.";
                     }
-                    JOptionPane.showMessageDialog(null, "After being fast tracked by the FDA, a new test for COVID-19 has become available.\n" +
+                    JOptionPane.showMessageDialog(null,"After being fast tracked by the FDA, a new test for COVID-19 has become available.\n" +
                             "Now the wait for results is hours, not days. Starting tomorrow, they will\nbe available to the general public at " + toAddToTestingText);
-                    if (playerOne.getInfected()) {
+                    if(playerOne.getInfected()){
                         JOptionPane.showMessageDialog(null, playerOne.getPlayerOneName() + " is infected.");
-                    } else if (!playerOne.getInfected()) {
+                    } else if (!playerOne.getInfected()){
                         JOptionPane.showMessageDialog(null, playerOne.getPlayerOneName() + " is not infected.");
                     }
-                    if (playerTwo.getInfected()) {
-                        JOptionPane.showMessageDialog(null, playerTwo.getPlayerTwoName() + " is infected.");
-                    } else if (!playerTwo.getInfected()) {
+                    if(playerTwo.getInfected()){
+                        JOptionPane.showMessageDialog(null,playerTwo.getPlayerTwoName() + " is infected.");
+                    } else if(!playerTwo.getInfected()){
                         JOptionPane.showMessageDialog(null, playerTwo.getPlayerTwoName() + " is not infected.");
                     }
-                    if (playerThree.getInfected()) {
+                    if(playerThree.getInfected()){
                         JOptionPane.showMessageDialog(null, playerThree.getPlayerThreeName() + " is infected.");
-                    } else if (!playerThree.getInfected()) {
+                    }else if(!playerThree.getInfected()){
                         JOptionPane.showMessageDialog(null, playerThree.getPlayerThreeName() + " is not infected.");
                     }
-                    if (playerFour.getInfected()) {
+                    if(playerFour.getInfected()){
                         JOptionPane.showMessageDialog(null, playerFour.getPlayerFourName() + " is infected.");
-                    } else if (!playerFour.getInfected()) {
+                    } else if (!playerFour.getInfected()){
                         JOptionPane.showMessageDialog(null, playerFour.getPlayerFourName() + " is not infected.");
                     }
                 }
-            } else if (cardDrawn == 6) {
-                if (!eventTime.getEssentialBusiness()) {
+            }
+            else if(cardDrawn == 6){
+                if(!eventTime.getEssentialBusiness()){
                     eventTime.essentialClosings();
                     eventHappened = true;
                 }
-            } else if (cardDrawn == 7) {
-                if (eventTime.getTimesSD() < 3) {
+            }
+            else if(cardDrawn == 7){
+                if(eventTime.getTimesSD() < 3){
                     eventTime.socialDistancing();
                     eventHappened = true;
                 }
-            } else {
+            }
+            else{
                 //Nothing? Hospital event?
             }
         }
@@ -1564,63 +1626,63 @@ public class DayEleven{
         int e1c = e1, e2c = e2, e3c = e3, e4c = e4;
 
         e1 -= playerOne.getSupplies();
-        if (e1 < 0) {
+        if (e1 < 0){
             e1 = 0;
         }
         playerOne.setSupplies(playerOne.getSupplies() - e1c);
-        if (playerOne.getSupplies() < 0) {
+        if(playerOne.getSupplies() < 0){
             playerOne.setSupplies(0);
         }
         e2 -= playerTwo.getSupplies();
-        if (e2 < 0) {
-            e2 = 0;
+        if (e2 < 0){
+            e2 =  0;
         }
         playerTwo.setSupplies(playerTwo.getSupplies() - e2c);
-        if (playerTwo.getSupplies() < 0) {
+        if (playerTwo.getSupplies() < 0){
             playerTwo.setSupplies(0);
         }
         e3 -= playerThree.getSupplies();
-        if (e3 < 0) {
+        if(e3 < 0){
             e3 = 0;
         }
         playerThree.setSupplies(playerThree.getSupplies() - e3c);
-        if (playerThree.getSupplies() < 0) {
+        if (playerThree.getSupplies() < 0){
             playerThree.setSupplies(0);
         }
         e4 -= playerFour.getSupplies();
-        if (e4 < 0) {
+        if (e4 < 0){
             e4 = 0;
         }
         playerFour.setSupplies(playerFour.getSupplies() - e4c);
-        if (playerFour.getSupplies() < 0) {
+        if (playerFour.getSupplies() < 0){
             playerFour.setSupplies(0);
         }
         int chance = 0;
 
-        while (e1 > 0 && !playerOne.getInfected()) {
+        while (e1 > 0 && !playerOne.getInfected()){
             chance = rando.thirtyThree();
-            if (chance == 1) {
+            if (chance == 1){
                 playerOne.setInfected(true);
             }
             e1--;
         }
-        while (e2 > 0 && !playerTwo.getInfected()) {
+        while(e2 > 0 && !playerTwo.getInfected()){
             chance = rando.thirtyThree();
-            if (chance == 1) {
+            if (chance == 1){
                 playerTwo.setInfected(true);
             }
             e2--;
         }
-        while (e3 > 0 && !playerThree.getInfected()) {
+        while(e3 > 0 && !playerThree.getInfected()){
             chance = rando.thirtyThree();
-            if (chance == 1) {
+            if(chance == 1){
                 playerThree.setInfected(true);
             }
             e3--;
         }
-        while (e4 > 0 && !playerFour.getInfected()) {
+        while(e4 > 0 && !playerFour.getInfected()){
             chance = rando.thirtyThree();
-            if (chance == 1) {
+            if(chance == 1){
                 playerFour.setInfected(true);
             }
             e4--;
@@ -1628,151 +1690,167 @@ public class DayEleven{
 
         //Gain/lose symptoms?
         int rolled = 0;
-        if (playerOne.getInfected()) {
+        if(playerOne.getInfected()){
             rolled = rando.diceRoll();
-            if (rolled == 1 || rolled == 2 || rolled == 3) {
+            if (rolled == 1 || rolled == 2 || rolled == 3){
                 playerOne.setSymptoms(playerOne.getSymptoms() + 1);
-            } else if (rolled == 4) {
-                playerOne.setSymptoms(playerOne.getSymptoms() - 1);
             }
-        } else if (!playerOne.getInfected()) {
-            rolled = rando.diceRoll();
-            if (rolled == 1) {
-                playerOne.setSymptoms(playerOne.getSymptoms() + 1);
-            } else if (rolled == 2) {
+            else if(rolled == 4){
                 playerOne.setSymptoms(playerOne.getSymptoms() - 1);
             }
         }
-        if (playerTwo.getInfected()) {
+        else if (!playerOne.getInfected()){
             rolled = rando.diceRoll();
-            if (rolled == 1 || rolled == 2 || rolled == 3) {
-                playerTwo.setSymptoms(playerTwo.getSymptoms() + 1);
-            } else if (rolled == 4) {
-                playerTwo.setSymptoms(playerTwo.getSymptoms() - 1);
+            if (rolled == 1){
+                playerOne.setSymptoms(playerOne.getSymptoms() + 1);
             }
-        } else if (!playerTwo.getInfected()) {
+            else if (rolled == 2){
+                playerOne.setSymptoms(playerOne.getSymptoms() - 1);
+            }
+        }
+        if (playerTwo.getInfected()){
             rolled = rando.diceRoll();
-            if (rolled == 1) {
+            if (rolled == 1 || rolled == 2 || rolled == 3){
                 playerTwo.setSymptoms(playerTwo.getSymptoms() + 1);
-            } else if (rolled == 2) {
+            }
+            else if (rolled == 4){
                 playerTwo.setSymptoms(playerTwo.getSymptoms() - 1);
             }
         }
-        if (playerThree.getInfected()) {
+        else if(!playerTwo.getInfected()){
             rolled = rando.diceRoll();
-            if (rolled == 1 || rolled == 2 || rolled == 3) {
-                playerThree.setSymptoms(playerThree.getSymptoms() + 1);
-            } else if (rolled == 4) {
-                playerThree.setSymptoms(playerThree.getSymptoms() - 1);
+            if (rolled == 1){
+                playerTwo.setSymptoms(playerTwo.getSymptoms() + 1);
             }
-        } else if (!playerThree.getInfected()) {
+            else if (rolled == 2){
+                playerTwo.setSymptoms(playerTwo.getSymptoms() - 1);
+            }
+        }
+        if (playerThree.getInfected()){
             rolled = rando.diceRoll();
-            if (rolled == 1) {
+            if(rolled == 1 || rolled == 2 || rolled == 3){
                 playerThree.setSymptoms(playerThree.getSymptoms() + 1);
-            } else if (rolled == 2) {
+            }
+            else if(rolled == 4){
                 playerThree.setSymptoms(playerThree.getSymptoms() - 1);
             }
         }
-        if (playerFour.getInfected()) {
+        else if(!playerThree.getInfected()){
             rolled = rando.diceRoll();
-            if (rolled == 1 || rolled == 2 || rolled == 3) {
+            if(rolled == 1){
+                playerThree.setSymptoms(playerThree.getSymptoms() + 1);
+            } else if (rolled == 2){
+                playerThree.setSymptoms(playerThree.getSymptoms() - 1);
+            }
+        }
+        if (playerFour.getInfected()){
+            rolled = rando.diceRoll();
+            if(rolled == 1 || rolled == 2 || rolled == 3){
                 playerFour.setSymptoms(playerFour.getSymptoms() + 1);
-            } else if (rolled == 4) {
+            }
+            else if(rolled == 4){
                 playerFour.setSymptoms(playerFour.getSymptoms() - 1);
             }
-        } else if (!playerFour.getInfected()) {
+        }
+        else if(!playerFour.getInfected()){
             rolled = rando.diceRoll();
-            if (rolled == 1) {
+            if(rolled == 1){
                 playerFour.setSymptoms(playerFour.getSymptoms() + 1);
-            } else if (rolled == 2) {
+            } else if (rolled == 2){
                 playerFour.setSymptoms(playerFour.getSymptoms() - 1);
             }
         }
 
-        if (playerOne.getSymptoms() > 3) {
+        if(playerOne.getSymptoms() > 3){
             playerOne.setSymptoms(3);
         }
-        if (playerTwo.getSymptoms() > 3) {
+        if(playerTwo.getSymptoms() > 3){
             playerTwo.setSymptoms(3);
         }
-        if (playerThree.getSymptoms() > 3) {
+        if(playerThree.getSymptoms() > 3){
             playerThree.setSymptoms(3);
         }
-        if (playerFour.getSymptoms() > 3) {
+        if(playerFour.getSymptoms() > 3){
             playerFour.setSymptoms(3);
         }
 
         //Health loss
 
-        int hL1 = 0, hL1x = 0, hL2 = 0, hL2x = 0, hL3 = 0, hL3x = 0, hL4 = 0, hL4x = 0;
+        int hL1 = 0, hL1x = 0,  hL2 = 0, hL2x = 0, hL3 = 0, hL3x = 0, hL4 = 0, hL4x = 0;
 
-        if (playerOne.getFood() > 2) {
+        if(playerOne.getFood() > 2){
             hL1x = 0;
             playerOne.setFood(playerOne.getFood() - 2);
-        } else if (playerOne.getFood() == 1) {
+        }
+        else if (playerOne.getFood() == 1){
             hL1x = 1;
             playerOne.setFood(0);
-        } else {
+        }
+        else{
             hL1x = 2;
         }
 
         hL1 = (hL1x + playerOne.getSymptoms());
         playerOne.setHealth(playerOne.getHealth() - hL1);
-        if (playerOne.getHealth() < 0) {
+        if (playerOne.getHealth() < 0){
             playerOne.setHealth(0);
             playerOne.setX(-50);
             playerOne.setY(-50);
             //player one death text
         }
 
-        if (playerTwo.getFood() > 2) {
+        if(playerTwo.getFood() > 2){
             hL2x = 0;
             playerTwo.setFood(playerTwo.getFood() - 2);
-        } else if (playerTwo.getFood() == 1) {
+        } else if(playerTwo.getFood() == 1){
             hL2x = 1;
             playerTwo.setFood(0);
-        } else {
+        } else{
             hL2x = 2;
         }
         hL2 = (hL2x + playerTwo.getSymptoms());
         playerTwo.setHealth(playerTwo.getHealth() - hL2);
-        if (playerTwo.getHealth() < 0) {
+        if(playerTwo.getHealth() < 0){
             playerTwo.setHealth(0);
             playerTwo.setX(-50);
             playerTwo.setY(-50);
             //Player two death text
         }
 
-        if (playerThree.getFood() > 2) {
+        if (playerThree.getFood() > 2){
             hL3x = 0;
             playerThree.setFood(playerThree.getFood() - 2);
-        } else if (playerThree.getFood() == 1) {
+        }
+        else if(playerThree.getFood() == 1){
             hL3x = 1;
             playerThree.setFood(0);
-        } else {
+        }
+        else{
             hL3x = 2;
         }
         hL3 = hL3x + playerThree.getSymptoms();
         playerThree.setHealth(playerThree.getHealth() - hL3);
-        if (playerThree.getHealth() < 0) {
+        if(playerThree.getHealth() < 0){
             playerThree.setHealth(0);
             playerThree.setX(-50);
             playerThree.setY(-50);
             //player three death text
         }
 
-        if (playerFour.getFood() > 2) {
+        if(playerFour.getFood() > 2){
             hL4x = 0;
             playerFour.setFood(playerFour.getFood() - 2);
-        } else if (playerFour.getFood() == 1) {
+        }
+        else if(playerFour.getFood() == 1){
             hL4x = 1;
             playerFour.setFood(0);
-        } else {
+        }
+        else{
             hL4x = 2;
         }
         hL4 = hL4x + playerFour.getSymptoms();
         playerFour.setHealth(playerFour.getHealth() - hL4);
-        if (playerFour.getHealth() < 0) {
+        if(playerFour.getHealth() < 0){
             playerFour.setHealth(0);
             playerFour.setX(-50);
             playerFour.setY(-50);
@@ -1780,20 +1858,21 @@ public class DayEleven{
         }
 
         String alivePlayers = "";
-        if (playerOne.getHealth() > 0) {
+        if(playerOne.getHealth() > 0){
             alivePlayers += playerOne.getPlayerOneName() + "\n";
         }
-        if (playerTwo.getHealth() > 0) {
+        if (playerTwo.getHealth() > 0){
             alivePlayers += playerTwo.getPlayerTwoName() + "\n";
         }
-        if (playerThree.getHealth() > 0) {
+        if(playerThree.getHealth() > 0){
             alivePlayers += playerThree.getPlayerThreeName() + "\n";
         }
-        if (playerFour.getHealth() > 0) {
+        if (playerFour.getHealth() > 0){
             alivePlayers += playerFour.getPlayerFourName();
         }
 
         JOptionPane.showMessageDialog(null, "Remaining Players: " + alivePlayers);
+
 
 
         DayTwelve daytwelve = new DayTwelve(playerOne.getPlayerOneName(), playerOne.getHealth(), playerOne.getSupplies(), playerOne.getFood(),
@@ -1804,6 +1883,7 @@ public class DayEleven{
                 playerThree.getSymptoms(), playerThree.getMoney(), playerThree.getX(), playerThree.getY(), playerThree.getInfected(),
                 playerFour.getPlayerFourName(), playerFour.getHealth(), playerFour.getSupplies(), playerFour.getFood(),
                 playerFour.getSymptoms(), playerFour.getMoney(), playerFour.getX(), playerFour.getY(), playerFour.getInfected());
+        daytwelve.day12();
 
 
     }

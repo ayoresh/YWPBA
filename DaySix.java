@@ -15,12 +15,13 @@ public class DaySix {
     DaySix(String playerOneName, int health1, int supplies1, int food1, int symptoms1, int money1, int x1, int y1, boolean infected1,
            String playerTwoName, int health2, int supplies2, int food2, int symptoms2, int money2, int x2, int y2, boolean infected2,
            String playerThreeName, int health3, int supplies3, int food3, int symptoms3, int money3, int x3, int y3, boolean infected3,
-           String playerFourName, int health4, int supplies4, int food4, int symptoms4, int money4, int x4, int y4, boolean infected4){
+           String playerFourName, int health4, int supplies4, int food4, int symptoms4, int money4, int x4, int y4, boolean infected4) {
         playerOne = new PlayerOne(playerOneName, health1, supplies1, food1, symptoms1, money1, x1, y1, infected1);
-        playerTwo = new PlayerTwo(playerTwoName, health2, supplies2,food2,symptoms2,money2, x2, y2, infected2);
+        playerTwo = new PlayerTwo(playerTwoName, health2, supplies2, food2, symptoms2, money2, x2, y2, infected2);
         playerThree = new PlayerThree(playerThreeName, health3, supplies3, food3, symptoms3, money3, x3, y3, infected3);
         playerFour = new PlayerFour(playerFourName, health4, supplies4, food4, symptoms4, money4, x4, y4, infected4);
-
+    }
+    public void day6(){
 
 //Exposure counters
         int e1 = 0, e2 = 0, e3 = 0, e4 = 0;
@@ -36,7 +37,7 @@ public class DaySix {
         for(int x = 0; x < 5; x++) {
             for (int playerCounter = 0; playerCounter < 4; playerCounter++) {
 
-                int  actionPoints1 = 0, actionPoints2 = 0, actionPoints3 = 0, actionPoints4 = 0, actionPointsMax = 4;
+                int actionPoints1 = 0, actionPoints2 = 0, actionPoints3 = 0, actionPoints4 = 0, actionPointsMax = 4;
 
                 if (playerCounter == 0 && playerOne.getHealth() != 0) {
                     int playerLocale = game.getGameboard(playerOne.getX(), playerOne.getY());
@@ -54,6 +55,11 @@ public class DaySix {
                                 actionText + "\nAction Points Used: " + actionPoints1));
 
 
+                        while (action != 0 && action != 1 && action != 2 && action != 3 && action != 10) {
+                            action = Integer.parseInt(JOptionPane.showInputDialog("Invalid input.\n" +
+                                    playerOne.getPlayerOneName() + ", " +
+                                    actionText + "\nAction Points Used: " + actionPoints1));
+                        }
                         //Player shops at food store
                         if ((action == 4 && playerLocale == 4) || (action == 4 && playerLocale == 5)) {
                             if (actionPoints1 + 4 <= actionPointsMax) {
@@ -103,7 +109,7 @@ public class DaySix {
 
                         //Player works
                         else if (action == 0) {
-                            if(!eventTime.getEssentialBusiness()){
+                            if (!eventTime.getEssentialBusiness()) {
                                 if (actionPoints1 + 4 <= actionPointsMax) {
                                     int moneyEarned = 4;
                                     playerOne.setMoney(playerOne.getMoney() + moneyEarned);
@@ -115,47 +121,46 @@ public class DaySix {
                                     JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
                                             "Please choose another action.");
                                 }
-                            }
-                            else{
+                            } else {
                                 JOptionPane.showMessageDialog(null, "Working is not available due to the closure of essential businesses.");
                             }
                         }
 
                         //Player Movement
-                        else if (action == 3){
+                        else if (action == 3) {
                             boolean movePossible = true;
                             int movement = Integer.parseInt(JOptionPane.showInputDialog("Which direction would you like to move? Enter:" +
                                     "\n1: Move Right\n2: Move Left\n3: Move Up\n 4: Move down"));
-                            while(movement < 1 || movement > 4){
-                                JOptionPane.showMessageDialog(null,"Invalid entry. Please enter a number between 1 and 4.");
+                            while (movement < 1 || movement > 4) {
+                                JOptionPane.showMessageDialog(null, "Invalid entry. Please enter a number between 1 and 4.");
                                 movement = Integer.parseInt(JOptionPane.showInputDialog("Which direction would you like to move? Enter:" +
                                         "\n1: Move Right\n2: Move Left\n3: Move Up\n 4: Move down"));
                             }
-                            if(playerOne.getY() == 9 && movement == 1){
-                                JOptionPane.showMessageDialog(null,"You may not travel right, as you are on the edge of the board.");
+                            if (playerOne.getY() == 9 && movement == 1) {
+                                JOptionPane.showMessageDialog(null, "You may not travel right, as you are on the edge of the board.");
                                 movePossible = false;
                             }
-                            if(playerOne.getY() == 0 && movement == 2){
-                                JOptionPane.showMessageDialog(null,"You may not travel left, as you are on the edge of the board.");
+                            if (playerOne.getY() == 0 && movement == 2) {
+                                JOptionPane.showMessageDialog(null, "You may not travel left, as you are on the edge of the board.");
                                 movePossible = false;
                             }
-                            if(playerOne.getX() == 0 && movement == 3){
-                                JOptionPane.showMessageDialog(null,"You may not travel up, as you are on the edge of the board.");
+                            if (playerOne.getX() == 0 && movement == 3) {
+                                JOptionPane.showMessageDialog(null, "You may not travel up, as you are on the edge of the board.");
                                 movePossible = false;
                             }
-                            if(playerOne.getX() == 9 && movement == 4){
-                                JOptionPane.showMessageDialog(null,"You may not travel down, as you are on the edge of the board.");
+                            if (playerOne.getX() == 9 && movement == 4) {
+                                JOptionPane.showMessageDialog(null, "You may not travel down, as you are on the edge of the board.");
                                 movePossible = false;
                             }
 
-                            if(movePossible){
-                                if(movement == 1){
+                            if (movePossible) {
+                                if (movement == 1) {
                                     playerOne.setY(playerOne.getY() + 1);
-                                } else if(movement == 2){
+                                } else if (movement == 2) {
                                     playerOne.setY(playerOne.getY() - 1);
-                                } else if(movement == 3){
+                                } else if (movement == 3) {
                                     playerOne.setX(playerOne.getX() - 1);
-                                } else if(movement == 4){
+                                } else if (movement == 4) {
                                     playerOne.setX(playerOne.getX() + 1);
                                 }
 
@@ -165,11 +170,10 @@ public class DaySix {
                                     e1++;
                                 }
 
-                                JOptionPane.showMessageDialog(null,"New location: (" + playerOne.getX() + "," + playerOne.getY() + ").");
+                                JOptionPane.showMessageDialog(null, "New location: (" + playerOne.getX() + "," + playerOne.getY() + ").");
                                 actionPoints1++;
 
                             }
-
 
 
                         }
@@ -195,17 +199,17 @@ public class DaySix {
                                 }
                                 if (whichPlayer == 2) {
                                     playerTwo.setFood(playerTwo.getFood() + amountSend);
-                                    if(amountSend > 0){
+                                    if (amountSend > 0) {
                                         e2++;
                                     }
                                 } else if (whichPlayer == 3) {
                                     playerThree.setFood(playerThree.getFood() + amountSend);
-                                    if(amountSend > 0){
+                                    if (amountSend > 0) {
                                         e3++;
                                     }
                                 } else if (whichPlayer == 4) {
                                     playerFour.setFood(playerFour.getFood() + amountSend);
-                                    if(amountSend > 0){
+                                    if (amountSend > 0) {
                                         e4++;
                                     }
                                 }
@@ -220,24 +224,24 @@ public class DaySix {
                                     whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Which player would you like to send supplies to?" +
                                             "Enter:+\n2: " + playerTwo.getPlayerTwoName() + "\n3: " + playerThree.getPlayerThreeName() + "\n4: " + playerFour.getPlayerFourName()));
                                 }
-                                if(whichPlayer == 2 && (playerTwo.getHealth() == 0)){
+                                if (whichPlayer == 2 && (playerTwo.getHealth() == 0)) {
                                     whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("You cannot send supplies to a dead player. Please enter a 3 to send supplies to " + playerThree.getPlayerThreeName() +
                                             " or enter a 4 to send supplies to " + playerFour.getPlayerFourName() + "."));
-                                    while (whichPlayer != 3 && whichPlayer != 4){
+                                    while (whichPlayer != 3 && whichPlayer != 4) {
                                         whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a 3 or a 4."));
                                     }
                                 }
-                                if(whichPlayer == 3 && (playerThree.getHealth() == 0)){
+                                if (whichPlayer == 3 && (playerThree.getHealth() == 0)) {
                                     whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("You cannot send supplies to a dead player. Please enter a 2 to send supplies to " +
                                             playerTwo.getPlayerTwoName() + " or a 4 to send supplies to " + playerFour.getPlayerFourName() + "."));
-                                    while(whichPlayer != 2 && whichPlayer != 4){
+                                    while (whichPlayer != 2 && whichPlayer != 4) {
                                         whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a 2 or a 4."));
                                     }
                                 }
-                                if(whichPlayer == 4 && (playerFour.getHealth() == 0)){
+                                if (whichPlayer == 4 && (playerFour.getHealth() == 0)) {
                                     whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("You cannot send supplies to a dead player. Please enter a 2 to send supplies to " + playerTwo.getPlayerTwoName() +
                                             " or a 3 to send supplies to " + playerThree.getPlayerThreeName() + "."));
-                                    while(whichPlayer != 2 && whichPlayer != 3){
+                                    while (whichPlayer != 2 && whichPlayer != 3) {
                                         whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a 2 or a 3."));
                                     }
                                 }
@@ -248,29 +252,28 @@ public class DaySix {
                                 }
                                 if (whichPlayer == 2) {
                                     playerTwo.setSupplies(playerTwo.getSupplies() + amountSend);
-                                    if(amountSend > 0){
+                                    if (amountSend > 0) {
                                         e2++;
                                     }
                                 } else if (whichPlayer == 3) {
                                     playerThree.setSupplies(playerThree.getSupplies() + amountSend);
-                                    if(amountSend > 0){
+                                    if (amountSend > 0) {
                                         e3++;
                                     }
                                 } else if (whichPlayer == 4) {
                                     playerFour.setSupplies(playerFour.getSupplies() + amountSend);
-                                    if(amountSend > 0){
+                                    if (amountSend > 0) {
                                         e4++;
                                     }
                                 }
                                 playerOne.setSupplies(playerOne.getSupplies() - amountSend);
 
                             }
-                            if (amountSend == 0){
+                            if (amountSend == 0) {
                                 actionPoints1--;
                             }
                             actionPoints1++;
-                        }
-                        else if(action == 10){
+                        } else if (action == 10) {
                             JOptionPane.showMessageDialog(null, "Turn ended.");
                             actionPoints1 = 4;
                         }
@@ -279,59 +282,72 @@ public class DaySix {
                             boolean together = false;
                             int pl1 = game.getGameboard(playerOne.getX(), playerOne.getY()), pl2 = game.getGameboard(playerTwo.getX(), playerTwo.getY()),
                                     pl3 = game.getGameboard(playerThree.getX(), playerThree.getY()), pl4 = game.getGameboard(playerFour.getX(), playerFour.getY());
-                            if(pl1 == pl2 || pl2 == pl3 || pl3 == pl4 || pl1 == pl4 || pl2 == pl4 || pl1 == pl3){
+                            if (pl1 == pl2 || pl2 == pl3 || pl3 == pl4 || pl1 == pl4 || pl2 == pl4 || pl1 == pl3) {
                                 together = true;
                             }
-                            if(actionPoints1 <= 2 && together){
+                            if (actionPoints1 <= 2 && together) {
                                 int currentPlace = game.getGameboard(playerOne.getX(), playerOne.getY());
-                                if (currentPlace != 13 && currentPlace != 4 && currentPlace != 5 && currentPlace != 8 && currentPlace !=9) {
+                                if (currentPlace != 13 && currentPlace != 4 && currentPlace != 5 && currentPlace != 8 && currentPlace != 9) {
                                     game.quarantineArea(playerOne.getX(), playerOne.getY());
                                     JOptionPane.showMessageDialog(null, "Space (" + playerOne.getX() + "," + playerOne.getY() + ") is now quarantined and cannot become infected.");
                                     actionPoints1 += 2;
-                                    if((pl1 == pl2) && (pl2 == pl3) && (pl3 == pl4)){
-                                        e1++; e2++; e3++; e4++;
+                                    if ((pl1 == pl2) && (pl2 == pl3) && (pl3 == pl4)) {
+                                        e1++;
+                                        e2++;
+                                        e3++;
+                                        e4++;
+                                    } else if ((pl1 == pl2) && (pl2 == pl3)) {
+                                        e1++;
+                                        e2++;
+                                        e3++;
+                                    } else if ((pl1 == pl3) && (pl3 == pl4)) {
+                                        e1++;
+                                        e3++;
+                                        e4++;
+                                    } else if (pl1 == pl2 && pl2 == pl4) {
+                                        e1++;
+                                        e2++;
+                                        e4++;
+                                    } else if (pl2 == pl3 && pl3 == pl4) {
+                                        e2++;
+                                        e3++;
+                                        e4++;
+                                    } else if (pl1 == pl2) {
+                                        e1++;
+                                        e2++;
+                                    } else if (pl2 == pl3) {
+                                        e2++;
+                                        e3++;
+                                    } else if (pl3 == pl4) {
+                                        e3++;
+                                        e4++;
+                                    } else if (pl1 == pl4) {
+                                        e1++;
+                                        e4++;
+                                    } else if (pl2 == pl4) {
+                                        e2++;
+                                        e4++;
+                                    } else if (pl1 == pl3) {
+                                        e1++;
+                                        e3++;
                                     }
-                                    else if((pl1==pl2) && (pl2==pl3)){
-                                        e1++; e2++; e3++;
-                                    } else if((pl1 == pl3) && (pl3 == pl4)){
-                                        e1++; e3++; e4++;
-                                    } else if(pl1 == pl2 && pl2 == pl4){
-                                        e1++; e2++; e4++;
-                                    } else if(pl2 == pl3 && pl3 == pl4){
-                                        e2++; e3++; e4++;
-                                    } else if(pl1 == pl2){
-                                        e1++; e2++;
-                                    } else if(pl2 == pl3){
-                                        e2++; e3++;
-                                    } else if(pl3 == pl4){
-                                        e3++; e4++;
-                                    } else if(pl1 == pl4){
-                                        e1++; e4++;
-                                    } else if(pl2 == pl4){
-                                        e2++; e4++;
-                                    } else if(pl1 == pl3){
-                                        e1++; e3++;
-                                    }
-                                }
-                                else{
-                                    JOptionPane.showMessageDialog(null,"This space is already quarantined, or may be unable to be quarantined.");
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "This space is already quarantined, or may be unable to be quarantined.");
                                 }
                             }
-                            if(actionPoints1 + 4 <= actionPointsMax) {
+                            if (actionPoints1 + 4 <= actionPointsMax) {
                                 int currentPlace = game.getGameboard(playerOne.getX(), playerOne.getY());
-                                if (currentPlace != 13 && currentPlace != 4 && currentPlace != 5 && currentPlace != 8 && currentPlace !=9) {
+                                if (currentPlace != 13 && currentPlace != 4 && currentPlace != 5 && currentPlace != 8 && currentPlace != 9) {
                                     game.quarantineArea(playerOne.getX(), playerOne.getY());
                                     JOptionPane.showMessageDialog(null, "Space (" + playerOne.getX() + "," + playerOne.getY() + ") is now quarantined and cannot become infected.");
                                     actionPoints1 += 4;
                                     actionPoints1 += 4;
                                     e1++;
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "This space is already quarantined, or may be unable to be quarantined.");
                                 }
-                                else{
-                                    JOptionPane.showMessageDialog(null,"This space is already quarantined, or may be unable to be quarantined.");
-                                }
-                            }
-                            else{
-                                JOptionPane.showMessageDialog(null,"You do not have enough points to complete this action. " +
+                            } else {
+                                JOptionPane.showMessageDialog(null, "You do not have enough points to complete this action. " +
                                         "Please choose another action.");
                             }
                         }
@@ -344,29 +360,45 @@ public class DaySix {
                     //Players land on same location?
                     int pl1 = game.getGameboard(playerOne.getX(), playerOne.getY()), pl2 = game.getGameboard(playerTwo.getX(), playerTwo.getY()),
                             pl3 = game.getGameboard(playerThree.getX(), playerThree.getY()), pl4 = game.getGameboard(playerFour.getX(), playerFour.getY());
-                    if((pl1 == pl2) && (pl2 == pl3) && (pl3 == pl4)){
-                        e1++; e2++; e3++; e4++;
-                    }
-                    else if((pl1==pl2) && (pl2==pl3)){
-                        e1++; e2++; e3++;
-                    } else if((pl1 == pl3) && (pl3 == pl4)){
-                        e1++; e3++; e4++;
-                    } else if(pl1 == pl2 && pl2 == pl4){
-                        e1++; e2++; e4++;
-                    } else if(pl2 == pl3 && pl3 == pl4){
-                        e2++; e3++; e4++;
-                    } else if(pl1 == pl2){
-                        e1++; e2++;
-                    } else if(pl2 == pl3){
-                        e2++; e3++;
-                    } else if(pl3 == pl4){
-                        e3++; e4++;
-                    } else if(pl1 == pl4){
-                        e1++; e4++;
-                    } else if(pl2 == pl4){
-                        e2++; e4++;
-                    } else if(pl1 == pl3){
-                        e1++; e3++;
+                    if ((pl1 == pl2) && (pl2 == pl3) && (pl3 == pl4)) {
+                        e1++;
+                        e2++;
+                        e3++;
+                        e4++;
+                    } else if ((pl1 == pl2) && (pl2 == pl3)) {
+                        e1++;
+                        e2++;
+                        e3++;
+                    } else if ((pl1 == pl3) && (pl3 == pl4)) {
+                        e1++;
+                        e3++;
+                        e4++;
+                    } else if (pl1 == pl2 && pl2 == pl4) {
+                        e1++;
+                        e2++;
+                        e4++;
+                    } else if (pl2 == pl3 && pl3 == pl4) {
+                        e2++;
+                        e3++;
+                        e4++;
+                    } else if (pl1 == pl2) {
+                        e1++;
+                        e2++;
+                    } else if (pl2 == pl3) {
+                        e2++;
+                        e3++;
+                    } else if (pl3 == pl4) {
+                        e3++;
+                        e4++;
+                    } else if (pl1 == pl4) {
+                        e1++;
+                        e4++;
+                    } else if (pl2 == pl4) {
+                        e2++;
+                        e4++;
+                    } else if (pl1 == pl3) {
+                        e1++;
+                        e3++;
                     }
                 }
                 if (playerCounter == 1 && playerTwo.getHealth() != 0) {
@@ -384,6 +416,11 @@ public class DaySix {
                         int action = Integer.parseInt(JOptionPane.showInputDialog(playerTwo.getPlayerTwoName() + ", " +
                                 actionText + "\nAction Points Used: " + actionPoints2));
 
+                        while (action != 0 && action != 1 && action != 2 && action != 3 && action != 10) {
+                            action = Integer.parseInt(JOptionPane.showInputDialog("Invalid input.\n" +
+                                    playerTwo.getPlayerTwoName() + ", " +
+                                    actionText + "\nAction Points Used: " + actionPoints2));
+                        }
 
                         //Player shops at food store
                         if ((action == 4 && playerLocale == 4) || (action == 4 && playerLocale == 5)) {
@@ -434,7 +471,7 @@ public class DaySix {
 
                         //Player works
                         else if (action == 0) {
-                            if(!eventTime.getEssentialBusiness()){
+                            if (!eventTime.getEssentialBusiness()) {
                                 if (actionPoints2 + 4 <= actionPointsMax) {
                                     int moneyEarned = 4;
                                     playerTwo.setMoney(playerTwo.getMoney() + moneyEarned);
@@ -446,46 +483,45 @@ public class DaySix {
                                     JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
                                             "Please choose another action.");
                                 }
-                            }
-                            else{
+                            } else {
                                 JOptionPane.showMessageDialog(null, "Working is not available due to the closure of essential businesses.");
                             }
                         }
                         //Player Movement
-                        else if (action == 3){
+                        else if (action == 3) {
                             boolean movePossible = true;
                             int movement = Integer.parseInt(JOptionPane.showInputDialog("Which direction would you like to move? Enter:" +
                                     "\n1: Move Right\n2: Move Left\n3: Move Up\n 4: Move down"));
-                            while(movement < 1 || movement > 4){
-                                JOptionPane.showMessageDialog(null,"Invalid entry. Please enter a number between 1 and 4.");
+                            while (movement < 1 || movement > 4) {
+                                JOptionPane.showMessageDialog(null, "Invalid entry. Please enter a number between 1 and 4.");
                                 movement = Integer.parseInt(JOptionPane.showInputDialog("Which direction would you like to move? Enter:" +
                                         "\n1: Move Right\n2: Move Left\n3: Move Up\n 4: Move down"));
                             }
-                            if(playerTwo.getY() == 9 && movement == 1){
-                                JOptionPane.showMessageDialog(null,"You may not travel right, as you are on the edge of the board.");
+                            if (playerTwo.getY() == 9 && movement == 1) {
+                                JOptionPane.showMessageDialog(null, "You may not travel right, as you are on the edge of the board.");
                                 movePossible = false;
                             }
-                            if(playerTwo.getY() == 0 && movement == 2){
-                                JOptionPane.showMessageDialog(null,"You may not travel left, as you are on the edge of the board.");
+                            if (playerTwo.getY() == 0 && movement == 2) {
+                                JOptionPane.showMessageDialog(null, "You may not travel left, as you are on the edge of the board.");
                                 movePossible = false;
                             }
-                            if(playerTwo.getX() == 0 && movement == 3){
-                                JOptionPane.showMessageDialog(null,"You may not travel up, as you are on the edge of the board.");
+                            if (playerTwo.getX() == 0 && movement == 3) {
+                                JOptionPane.showMessageDialog(null, "You may not travel up, as you are on the edge of the board.");
                                 movePossible = false;
                             }
-                            if(playerTwo.getX() == 9 && movement == 4){
-                                JOptionPane.showMessageDialog(null,"You may not travel down, as you are on the edge of the board.");
+                            if (playerTwo.getX() == 9 && movement == 4) {
+                                JOptionPane.showMessageDialog(null, "You may not travel down, as you are on the edge of the board.");
                                 movePossible = false;
                             }
 
-                            if(movePossible){
-                                if(movement == 1){
+                            if (movePossible) {
+                                if (movement == 1) {
                                     playerTwo.setY(playerTwo.getY() + 1);
-                                } else if(movement == 2){
+                                } else if (movement == 2) {
                                     playerTwo.setY(playerTwo.getY() - 1);
-                                } else if(movement == 3){
+                                } else if (movement == 3) {
                                     playerTwo.setX(playerTwo.getX() - 1);
-                                } else if(movement == 4){
+                                } else if (movement == 4) {
                                     playerTwo.setX(playerTwo.getX() + 1);
                                 }
 
@@ -495,7 +531,7 @@ public class DaySix {
                                     e2++;
                                 }
 
-                                JOptionPane.showMessageDialog(null,"New location: (" + playerTwo.getX() + "," + playerTwo.getY() + ").");
+                                JOptionPane.showMessageDialog(null, "New location: (" + playerTwo.getX() + "," + playerTwo.getY() + ").");
                                 actionPoints2++;
 
                             }
@@ -523,17 +559,17 @@ public class DaySix {
                                 }
                                 if (whichPlayer == 2) {
                                     playerOne.setFood(playerOne.getFood() + amountSend);
-                                    if(amountSend > 0){
+                                    if (amountSend > 0) {
                                         e1++;
                                     }
                                 } else if (whichPlayer == 3) {
                                     playerThree.setFood(playerThree.getFood() + amountSend);
-                                    if (amountSend > 0){
+                                    if (amountSend > 0) {
                                         e3++;
                                     }
                                 } else if (whichPlayer == 4) {
                                     playerFour.setFood(playerFour.getFood() + amountSend);
-                                    if (amountSend > 0){
+                                    if (amountSend > 0) {
                                         e4++;
                                     }
                                 }
@@ -550,24 +586,24 @@ public class DaySix {
                                     whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Which player would you like to send supplies to?" +
                                             "Enter:+\n2: " + playerOne.getPlayerOneName() + "\n3: " + playerThree.getPlayerThreeName() + "\n4: " + playerFour.getPlayerFourName()));
                                 }
-                                if(whichPlayer == 2 && (playerOne.getHealth() == 0)){
+                                if (whichPlayer == 2 && (playerOne.getHealth() == 0)) {
                                     whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("You cannot send supplies to a dead player. Please enter a 3 to send supplies to " + playerThree.getPlayerThreeName() +
                                             " or enter a 4 to send supplies to " + playerFour.getPlayerFourName() + "."));
-                                    while (whichPlayer != 3 && whichPlayer != 4){
+                                    while (whichPlayer != 3 && whichPlayer != 4) {
                                         whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a 3 or a 4."));
                                     }
                                 }
-                                if(whichPlayer == 3 && (playerThree.getHealth() == 0)){
+                                if (whichPlayer == 3 && (playerThree.getHealth() == 0)) {
                                     whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("You cannot send supplies to a dead player. Please enter a 2 to send supplies to " +
                                             playerOne.getPlayerOneName() + " or a 4 to send supplies to " + playerFour.getPlayerFourName() + "."));
-                                    while(whichPlayer != 2 && whichPlayer != 4){
+                                    while (whichPlayer != 2 && whichPlayer != 4) {
                                         whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a 2 or a 4."));
                                     }
                                 }
-                                if(whichPlayer == 4 && (playerFour.getHealth() == 0)){
+                                if (whichPlayer == 4 && (playerFour.getHealth() == 0)) {
                                     whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("You cannot send supplies to a dead player. Please enter a 2 to send supplies to " + playerOne.getPlayerOneName() +
                                             " or a 3 to send supplies to " + playerThree.getPlayerThreeName() + "."));
-                                    while(whichPlayer != 2 && whichPlayer != 3){
+                                    while (whichPlayer != 2 && whichPlayer != 3) {
                                         whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a 2 or a 3."));
                                     }
                                 }
@@ -578,28 +614,27 @@ public class DaySix {
                                 }
                                 if (whichPlayer == 2) {
                                     playerOne.setSupplies(playerTwo.getSupplies() + amountSend);
-                                    if (amountSend > 0){
+                                    if (amountSend > 0) {
                                         e1++;
                                     }
                                 } else if (whichPlayer == 3) {
                                     playerThree.setSupplies(playerThree.getSupplies() + amountSend);
-                                    if(amountSend > 0){
+                                    if (amountSend > 0) {
                                         e3++;
                                     }
                                 } else if (whichPlayer == 4) {
                                     playerFour.setSupplies(playerFour.getSupplies() + amountSend);
-                                    if(amountSend > 0){
+                                    if (amountSend > 0) {
                                         e4++;
                                     }
                                 }
                                 playerTwo.setSupplies(playerTwo.getSupplies() - amountSend);
                             }
-                            if(amountSend == 0){
+                            if (amountSend == 0) {
                                 actionPoints2--;
                             }
                             actionPoints2++;
-                        }
-                        else if(action == 10){
+                        } else if (action == 10) {
                             JOptionPane.showMessageDialog(null, "Turn ended.");
                             actionPoints2 = 4;
                         }
@@ -608,58 +643,71 @@ public class DaySix {
                             boolean together = false;
                             int pl1 = game.getGameboard(playerOne.getX(), playerOne.getY()), pl2 = game.getGameboard(playerTwo.getX(), playerTwo.getY()),
                                     pl3 = game.getGameboard(playerThree.getX(), playerThree.getY()), pl4 = game.getGameboard(playerFour.getX(), playerFour.getY());
-                            if(pl1 == pl2 || pl2 == pl3 || pl3 == pl4 || pl1 == pl4 || pl2 == pl4 || pl1 == pl3){
+                            if (pl1 == pl2 || pl2 == pl3 || pl3 == pl4 || pl1 == pl4 || pl2 == pl4 || pl1 == pl3) {
                                 together = true;
                             }
-                            if(actionPoints2 <= 2 && together){
+                            if (actionPoints2 <= 2 && together) {
                                 int currentPlace = game.getGameboard(playerTwo.getX(), playerTwo.getY());
-                                if (currentPlace != 13 && currentPlace != 4 && currentPlace != 5 && currentPlace != 8 && currentPlace !=9) {
+                                if (currentPlace != 13 && currentPlace != 4 && currentPlace != 5 && currentPlace != 8 && currentPlace != 9) {
                                     game.quarantineArea(playerTwo.getX(), playerTwo.getY());
                                     JOptionPane.showMessageDialog(null, "Space (" + playerTwo.getX() + "," + playerTwo.getY() + ") is now quarantined and cannot become infected.");
                                     actionPoints2 += 2;
-                                    if((pl1 == pl2) && (pl2 == pl3) && (pl3 == pl4)){
-                                        e1++; e2++; e3++; e4++;
+                                    if ((pl1 == pl2) && (pl2 == pl3) && (pl3 == pl4)) {
+                                        e1++;
+                                        e2++;
+                                        e3++;
+                                        e4++;
+                                    } else if ((pl1 == pl2) && (pl2 == pl3)) {
+                                        e1++;
+                                        e2++;
+                                        e3++;
+                                    } else if ((pl1 == pl3) && (pl3 == pl4)) {
+                                        e1++;
+                                        e3++;
+                                        e4++;
+                                    } else if (pl1 == pl2 && pl2 == pl4) {
+                                        e1++;
+                                        e2++;
+                                        e4++;
+                                    } else if (pl2 == pl3 && pl3 == pl4) {
+                                        e2++;
+                                        e3++;
+                                        e4++;
+                                    } else if (pl1 == pl2) {
+                                        e1++;
+                                        e2++;
+                                    } else if (pl2 == pl3) {
+                                        e2++;
+                                        e3++;
+                                    } else if (pl3 == pl4) {
+                                        e3++;
+                                        e4++;
+                                    } else if (pl1 == pl4) {
+                                        e1++;
+                                        e4++;
+                                    } else if (pl2 == pl4) {
+                                        e2++;
+                                        e4++;
+                                    } else if (pl1 == pl3) {
+                                        e1++;
+                                        e3++;
                                     }
-                                    else if((pl1==pl2) && (pl2==pl3)){
-                                        e1++; e2++; e3++;
-                                    } else if((pl1 == pl3) && (pl3 == pl4)){
-                                        e1++; e3++; e4++;
-                                    } else if(pl1 == pl2 && pl2 == pl4){
-                                        e1++; e2++; e4++;
-                                    } else if(pl2 == pl3 && pl3 == pl4){
-                                        e2++; e3++; e4++;
-                                    } else if(pl1 == pl2){
-                                        e1++; e2++;
-                                    } else if(pl2 == pl3){
-                                        e2++; e3++;
-                                    } else if(pl3 == pl4){
-                                        e3++; e4++;
-                                    } else if(pl1 == pl4){
-                                        e1++; e4++;
-                                    } else if(pl2 == pl4){
-                                        e2++; e4++;
-                                    } else if(pl1 == pl3){
-                                        e1++; e3++;
-                                    }
-                                }
-                                else{
-                                    JOptionPane.showMessageDialog(null,"This space is already quarantined, or may be unable to be quarantined.");
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "This space is already quarantined, or may be unable to be quarantined.");
                                 }
                             }
-                            if(actionPoints2 + 4 <= actionPointsMax) {
+                            if (actionPoints2 + 4 <= actionPointsMax) {
                                 int currentPlace = game.getGameboard(playerTwo.getX(), playerTwo.getY());
                                 if (currentPlace != 13 && currentPlace != 8 && currentPlace != 9 && currentPlace != 4 && currentPlace != 5) {
                                     game.quarantineArea(playerTwo.getX(), playerTwo.getY());
                                     JOptionPane.showMessageDialog(null, "Space (" + playerTwo.getX() + "," + playerTwo.getY() + ") is now quarantined and cannot become infected.");
                                     actionPoints2 += 4;
                                     e2++;
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "This space is already quarantined, or may be unable to be quarantined.");
                                 }
-                                else{
-                                    JOptionPane.showMessageDialog(null,"This space is already quarantined, or may be unable to be quarantined.");
-                                }
-                            }
-                            else{
-                                JOptionPane.showMessageDialog(null,"You do not have enough points to complete this action. " +
+                            } else {
+                                JOptionPane.showMessageDialog(null, "You do not have enough points to complete this action. " +
                                         "Please choose another action.");
                             }
                         }
@@ -673,29 +721,45 @@ public class DaySix {
                     //Players land on same location?
                     int pl1 = game.getGameboard(playerOne.getX(), playerOne.getY()), pl2 = game.getGameboard(playerTwo.getX(), playerTwo.getY()),
                             pl3 = game.getGameboard(playerThree.getX(), playerThree.getY()), pl4 = game.getGameboard(playerFour.getX(), playerFour.getY());
-                    if((pl1 == pl2) && (pl2 == pl3) && (pl3 == pl4)){
-                        e1++; e2++; e3++; e4++;
-                    }
-                    else if((pl1==pl2) && (pl2==pl3)){
-                        e1++; e2++; e3++;
-                    } else if((pl1 == pl3) && (pl3 == pl4)){
-                        e1++; e3++; e4++;
-                    } else if(pl1 == pl2 && pl2 == pl4){
-                        e1++; e2++; e4++;
-                    } else if(pl2 == pl3 && pl3 == pl4){
-                        e2++; e3++; e4++;
-                    } else if(pl1 == pl2){
-                        e1++; e2++;
-                    } else if(pl2 == pl3){
-                        e2++; e3++;
-                    } else if(pl3 == pl4){
-                        e3++; e4++;
-                    } else if(pl1 == pl4){
-                        e1++; e4++;
-                    } else if(pl2 == pl4){
-                        e2++; e4++;
-                    } else if(pl1 == pl3){
-                        e1++; e3++;
+                    if ((pl1 == pl2) && (pl2 == pl3) && (pl3 == pl4)) {
+                        e1++;
+                        e2++;
+                        e3++;
+                        e4++;
+                    } else if ((pl1 == pl2) && (pl2 == pl3)) {
+                        e1++;
+                        e2++;
+                        e3++;
+                    } else if ((pl1 == pl3) && (pl3 == pl4)) {
+                        e1++;
+                        e3++;
+                        e4++;
+                    } else if (pl1 == pl2 && pl2 == pl4) {
+                        e1++;
+                        e2++;
+                        e4++;
+                    } else if (pl2 == pl3 && pl3 == pl4) {
+                        e2++;
+                        e3++;
+                        e4++;
+                    } else if (pl1 == pl2) {
+                        e1++;
+                        e2++;
+                    } else if (pl2 == pl3) {
+                        e2++;
+                        e3++;
+                    } else if (pl3 == pl4) {
+                        e3++;
+                        e4++;
+                    } else if (pl1 == pl4) {
+                        e1++;
+                        e4++;
+                    } else if (pl2 == pl4) {
+                        e2++;
+                        e4++;
+                    } else if (pl1 == pl3) {
+                        e1++;
+                        e3++;
                     }
                 }
 
@@ -714,6 +778,11 @@ public class DaySix {
                         int action = Integer.parseInt(JOptionPane.showInputDialog(playerThree.getPlayerThreeName() + ", " +
                                 actionText + "\nAction Points Used: " + actionPoints3));
 
+                        while (action != 0 && action != 1 && action != 2 && action != 3 && action != 10) {
+                            action = Integer.parseInt(JOptionPane.showInputDialog("Invalid input.\n" +
+                                    playerThree.getPlayerThreeName() + ", " +
+                                    actionText + "\nAction Points Used: " + actionPoints3));
+                        }
 
                         //Player shops at food store
                         if ((action == 4 && playerLocale == 4) || (action == 4 && playerLocale == 5)) {
@@ -764,7 +833,7 @@ public class DaySix {
 
                         //Player works
                         else if (action == 0) {
-                            if(!eventTime.getEssentialBusiness()){
+                            if (!eventTime.getEssentialBusiness()) {
                                 if (actionPoints3 + 4 <= actionPointsMax) {
                                     int moneyEarned = 4;
                                     playerThree.setMoney(playerThree.getMoney() + moneyEarned);
@@ -776,47 +845,46 @@ public class DaySix {
                                     JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
                                             "Please choose another action.");
                                 }
-                            }
-                            else{
+                            } else {
                                 JOptionPane.showMessageDialog(null, "Working is not available due to the closure of essential businesses.");
                             }
                         }
 
                         //Player Movement
-                        else if (action == 3){
+                        else if (action == 3) {
                             boolean movePossible = true;
                             int movement = Integer.parseInt(JOptionPane.showInputDialog("Which direction would you like to move? Enter:" +
                                     "\n1: Move Right\n2: Move Left\n3: Move Up\n 4: Move down"));
-                            while(movement < 1 || movement > 4){
-                                JOptionPane.showMessageDialog(null,"Invalid entry. Please enter a number between 1 and 4.");
+                            while (movement < 1 || movement > 4) {
+                                JOptionPane.showMessageDialog(null, "Invalid entry. Please enter a number between 1 and 4.");
                                 movement = Integer.parseInt(JOptionPane.showInputDialog("Which direction would you like to move? Enter:" +
                                         "\n1: Move Right\n2: Move Left\n3: Move Up\n 4: Move down"));
                             }
-                            if(playerThree.getY() == 9 && movement == 1){
-                                JOptionPane.showMessageDialog(null,"You may not travel right, as you are on the edge of the board.");
+                            if (playerThree.getY() == 9 && movement == 1) {
+                                JOptionPane.showMessageDialog(null, "You may not travel right, as you are on the edge of the board.");
                                 movePossible = false;
                             }
-                            if(playerThree.getY() == 0 && movement == 2){
-                                JOptionPane.showMessageDialog(null,"You may not travel left, as you are on the edge of the board.");
+                            if (playerThree.getY() == 0 && movement == 2) {
+                                JOptionPane.showMessageDialog(null, "You may not travel left, as you are on the edge of the board.");
                                 movePossible = false;
                             }
-                            if(playerThree.getX() == 0 && movement == 3){
-                                JOptionPane.showMessageDialog(null,"You may not travel up, as you are on the edge of the board.");
+                            if (playerThree.getX() == 0 && movement == 3) {
+                                JOptionPane.showMessageDialog(null, "You may not travel up, as you are on the edge of the board.");
                                 movePossible = false;
                             }
-                            if(playerThree.getX() == 9 && movement == 4){
-                                JOptionPane.showMessageDialog(null,"You may not travel down, as you are on the edge of the board.");
+                            if (playerThree.getX() == 9 && movement == 4) {
+                                JOptionPane.showMessageDialog(null, "You may not travel down, as you are on the edge of the board.");
                                 movePossible = false;
                             }
 
-                            if(movePossible){
-                                if(movement == 1){
+                            if (movePossible) {
+                                if (movement == 1) {
                                     playerThree.setY(playerThree.getY() + 1);
-                                } else if(movement == 2){
+                                } else if (movement == 2) {
                                     playerThree.setY(playerThree.getY() - 1);
-                                } else if(movement == 3){
+                                } else if (movement == 3) {
                                     playerThree.setX(playerThree.getX() - 1);
-                                } else if(movement == 4){
+                                } else if (movement == 4) {
                                     playerThree.setX(playerThree.getX() + 1);
                                 }
 
@@ -826,7 +894,7 @@ public class DaySix {
                                     e3++;
                                 }
 
-                                JOptionPane.showMessageDialog(null,"New location: (" + playerThree.getX() + "," + playerThree.getY() + ").");
+                                JOptionPane.showMessageDialog(null, "New location: (" + playerThree.getX() + "," + playerThree.getY() + ").");
                                 actionPoints3++;
 
                             }
@@ -854,17 +922,17 @@ public class DaySix {
                                 }
                                 if (whichPlayer == 2) {
                                     playerOne.setFood(playerOne.getFood() + amountSend);
-                                    if(amountSend > 0){
+                                    if (amountSend > 0) {
                                         e1++;
                                     }
                                 } else if (whichPlayer == 3) {
                                     playerTwo.setFood(playerTwo.getFood() + amountSend);
-                                    if(amountSend > 0){
+                                    if (amountSend > 0) {
                                         e2++;
                                     }
                                 } else if (whichPlayer == 4) {
                                     playerFour.setFood(playerFour.getFood() + amountSend);
-                                    if(amountSend > 0){
+                                    if (amountSend > 0) {
                                         e4++;
                                     }
                                 }
@@ -881,24 +949,24 @@ public class DaySix {
                                     whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Which player would you like to send supplies to?" +
                                             "Enter:+\n2: " + playerOne.getPlayerOneName() + "\n3: " + playerTwo.getPlayerTwoName() + "\n4: " + playerFour.getPlayerFourName()));
                                 }
-                                if(whichPlayer == 2 && (playerOne.getHealth() == 0)){
+                                if (whichPlayer == 2 && (playerOne.getHealth() == 0)) {
                                     whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("You cannot send supplies to a dead player. Please enter a 3 to send supplies to " + playerTwo.getPlayerTwoName() +
                                             " or enter a 4 to send supplies to " + playerFour.getPlayerFourName() + "."));
-                                    while (whichPlayer != 3 && whichPlayer != 4){
+                                    while (whichPlayer != 3 && whichPlayer != 4) {
                                         whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a 3 or a 4."));
                                     }
                                 }
-                                if(whichPlayer == 3 && (playerTwo.getHealth() == 0)){
+                                if (whichPlayer == 3 && (playerTwo.getHealth() == 0)) {
                                     whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("You cannot send supplies to a dead player. Please enter a 2 to send supplies to " +
                                             playerOne.getPlayerOneName() + " or a 4 to send supplies to " + playerFour.getPlayerFourName() + "."));
-                                    while(whichPlayer != 2 && whichPlayer != 4){
+                                    while (whichPlayer != 2 && whichPlayer != 4) {
                                         whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a 2 or a 4."));
                                     }
                                 }
-                                if(whichPlayer == 4 && (playerFour.getHealth() == 0)){
+                                if (whichPlayer == 4 && (playerFour.getHealth() == 0)) {
                                     whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("You cannot send supplies to a dead player. Please enter a 2 to send supplies to " + playerOne.getPlayerOneName() +
                                             " or a 3 to send supplies to " + playerTwo.getPlayerTwoName() + "."));
-                                    while(whichPlayer != 2 && whichPlayer != 3){
+                                    while (whichPlayer != 2 && whichPlayer != 3) {
                                         whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a 2 or a 3."));
                                     }
                                 }
@@ -909,28 +977,27 @@ public class DaySix {
                                 }
                                 if (whichPlayer == 2) {
                                     playerOne.setSupplies(playerOne.getSupplies() + amountSend);
-                                    if(amountSend > 0){
+                                    if (amountSend > 0) {
                                         e1++;
                                     }
                                 } else if (whichPlayer == 3) {
                                     playerTwo.setSupplies(playerTwo.getSupplies() + amountSend);
-                                    if(amountSend > 0){
+                                    if (amountSend > 0) {
                                         e2++;
                                     }
                                 } else if (whichPlayer == 4) {
                                     playerFour.setSupplies(playerFour.getSupplies() + amountSend);
-                                    if(amountSend > 0){
+                                    if (amountSend > 0) {
                                         e4++;
                                     }
                                 }
                                 playerThree.setSupplies(playerThree.getSupplies() - amountSend);
                             }
-                            if(amountSend == 0){
+                            if (amountSend == 0) {
                                 actionPoints3--;
                             }
                             actionPoints3++;
-                        }
-                        else if(action == 10){
+                        } else if (action == 10) {
                             JOptionPane.showMessageDialog(null, "Turn ended.");
                             actionPoints3 = 4;
                         }
@@ -939,58 +1006,71 @@ public class DaySix {
                             boolean together = false;
                             int pl1 = game.getGameboard(playerOne.getX(), playerOne.getY()), pl2 = game.getGameboard(playerTwo.getX(), playerTwo.getY()),
                                     pl3 = game.getGameboard(playerThree.getX(), playerThree.getY()), pl4 = game.getGameboard(playerFour.getX(), playerFour.getY());
-                            if(pl1 == pl2 || pl2 == pl3 || pl3 == pl4 || pl1 == pl4 || pl2 == pl4 || pl1 == pl3){
+                            if (pl1 == pl2 || pl2 == pl3 || pl3 == pl4 || pl1 == pl4 || pl2 == pl4 || pl1 == pl3) {
                                 together = true;
                             }
-                            if(actionPoints3 <= 2 && together){
+                            if (actionPoints3 <= 2 && together) {
                                 int currentPlace = game.getGameboard(playerThree.getX(), playerThree.getY());
-                                if (currentPlace != 13 && currentPlace != 4 && currentPlace != 5 && currentPlace != 8 && currentPlace !=9) {
+                                if (currentPlace != 13 && currentPlace != 4 && currentPlace != 5 && currentPlace != 8 && currentPlace != 9) {
                                     game.quarantineArea(playerThree.getX(), playerThree.getY());
                                     JOptionPane.showMessageDialog(null, "Space (" + playerThree.getX() + "," + playerThree.getY() + ") is now quarantined and cannot become infected.");
                                     actionPoints3 += 2;
-                                    if((pl1 == pl2) && (pl2 == pl3) && (pl3 == pl4)){
-                                        e1++; e2++; e3++; e4++;
+                                    if ((pl1 == pl2) && (pl2 == pl3) && (pl3 == pl4)) {
+                                        e1++;
+                                        e2++;
+                                        e3++;
+                                        e4++;
+                                    } else if ((pl1 == pl2) && (pl2 == pl3)) {
+                                        e1++;
+                                        e2++;
+                                        e3++;
+                                    } else if ((pl1 == pl3) && (pl3 == pl4)) {
+                                        e1++;
+                                        e3++;
+                                        e4++;
+                                    } else if (pl1 == pl2 && pl2 == pl4) {
+                                        e1++;
+                                        e2++;
+                                        e4++;
+                                    } else if (pl2 == pl3 && pl3 == pl4) {
+                                        e2++;
+                                        e3++;
+                                        e4++;
+                                    } else if (pl1 == pl2) {
+                                        e1++;
+                                        e2++;
+                                    } else if (pl2 == pl3) {
+                                        e2++;
+                                        e3++;
+                                    } else if (pl3 == pl4) {
+                                        e3++;
+                                        e4++;
+                                    } else if (pl1 == pl4) {
+                                        e1++;
+                                        e4++;
+                                    } else if (pl2 == pl4) {
+                                        e2++;
+                                        e4++;
+                                    } else if (pl1 == pl3) {
+                                        e1++;
+                                        e3++;
                                     }
-                                    else if((pl1==pl2) && (pl2==pl3)){
-                                        e1++; e2++; e3++;
-                                    } else if((pl1 == pl3) && (pl3 == pl4)){
-                                        e1++; e3++; e4++;
-                                    } else if(pl1 == pl2 && pl2 == pl4){
-                                        e1++; e2++; e4++;
-                                    } else if(pl2 == pl3 && pl3 == pl4){
-                                        e2++; e3++; e4++;
-                                    } else if(pl1 == pl2){
-                                        e1++; e2++;
-                                    } else if(pl2 == pl3){
-                                        e2++; e3++;
-                                    } else if(pl3 == pl4){
-                                        e3++; e4++;
-                                    } else if(pl1 == pl4){
-                                        e1++; e4++;
-                                    } else if(pl2 == pl4){
-                                        e2++; e4++;
-                                    } else if(pl1 == pl3){
-                                        e1++; e3++;
-                                    }
-                                }
-                                else{
-                                    JOptionPane.showMessageDialog(null,"This space is already quarantined, or may be unable to be quarantined.");
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "This space is already quarantined, or may be unable to be quarantined.");
                                 }
                             }
-                            if(actionPoints3 + 4 <= actionPointsMax) {
+                            if (actionPoints3 + 4 <= actionPointsMax) {
                                 int currentPlace = game.getGameboard(playerThree.getX(), playerThree.getY());
-                                if (currentPlace != 13 && currentPlace != 4 && currentPlace != 5 && currentPlace != 8 && currentPlace !=9) {
+                                if (currentPlace != 13 && currentPlace != 4 && currentPlace != 5 && currentPlace != 8 && currentPlace != 9) {
                                     game.quarantineArea(playerThree.getX(), playerThree.getY());
                                     JOptionPane.showMessageDialog(null, "Space (" + playerThree.getX() + "," + playerThree.getY() + ") is now quarantined and cannot become infected.");
                                     actionPoints3 += 4;
                                     e3++;
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "This space is already quarantined, or may be unable to be quarantined.");
                                 }
-                                else{
-                                    JOptionPane.showMessageDialog(null,"This space is already quarantined, or may be unable to be quarantined.");
-                                }
-                            }
-                            else{
-                                JOptionPane.showMessageDialog(null,"You do not have enough points to complete this action. " +
+                            } else {
+                                JOptionPane.showMessageDialog(null, "You do not have enough points to complete this action. " +
                                         "Please choose another action.");
                             }
                         }
@@ -1003,29 +1083,45 @@ public class DaySix {
                     //Players land on same location?
                     int pl1 = game.getGameboard(playerOne.getX(), playerOne.getY()), pl2 = game.getGameboard(playerTwo.getX(), playerTwo.getY()),
                             pl3 = game.getGameboard(playerThree.getX(), playerThree.getY()), pl4 = game.getGameboard(playerFour.getX(), playerFour.getY());
-                    if((pl1 == pl2) && (pl2 == pl3) && (pl3 == pl4)){
-                        e1++; e2++; e3++; e4++;
-                    }
-                    else if((pl1==pl2) && (pl2==pl3)){
-                        e1++; e2++; e3++;
-                    } else if((pl1 == pl3) && (pl3 == pl4)){
-                        e1++; e3++; e4++;
-                    } else if(pl1 == pl2 && pl2 == pl4){
-                        e1++; e2++; e4++;
-                    } else if(pl2 == pl3 && pl3 == pl4){
-                        e2++; e3++; e4++;
-                    } else if(pl1 == pl2){
-                        e1++; e2++;
-                    } else if(pl2 == pl3){
-                        e2++; e3++;
-                    } else if(pl3 == pl4){
-                        e3++; e4++;
-                    } else if(pl1 == pl4){
-                        e1++; e4++;
-                    } else if(pl2 == pl4){
-                        e2++; e4++;
-                    } else if(pl1 == pl3){
-                        e1++; e3++;
+                    if ((pl1 == pl2) && (pl2 == pl3) && (pl3 == pl4)) {
+                        e1++;
+                        e2++;
+                        e3++;
+                        e4++;
+                    } else if ((pl1 == pl2) && (pl2 == pl3)) {
+                        e1++;
+                        e2++;
+                        e3++;
+                    } else if ((pl1 == pl3) && (pl3 == pl4)) {
+                        e1++;
+                        e3++;
+                        e4++;
+                    } else if (pl1 == pl2 && pl2 == pl4) {
+                        e1++;
+                        e2++;
+                        e4++;
+                    } else if (pl2 == pl3 && pl3 == pl4) {
+                        e2++;
+                        e3++;
+                        e4++;
+                    } else if (pl1 == pl2) {
+                        e1++;
+                        e2++;
+                    } else if (pl2 == pl3) {
+                        e2++;
+                        e3++;
+                    } else if (pl3 == pl4) {
+                        e3++;
+                        e4++;
+                    } else if (pl1 == pl4) {
+                        e1++;
+                        e4++;
+                    } else if (pl2 == pl4) {
+                        e2++;
+                        e4++;
+                    } else if (pl1 == pl3) {
+                        e1++;
+                        e3++;
                     }
                 }
 
@@ -1044,6 +1140,11 @@ public class DaySix {
                         int action = Integer.parseInt(JOptionPane.showInputDialog(playerFour.getPlayerFourName() + ", " +
                                 actionText + "\nAction Points Used: " + actionPoints4));
 
+                        while (action != 0 && action != 1 && action != 2 && action != 3 && action != 10) {
+                            action = Integer.parseInt(JOptionPane.showInputDialog("Invalid input.\n" +
+                                    playerFour.getPlayerFourName() + ", " +
+                                    actionText + "\nAction Points Used: " + actionPoints4));
+                        }
                         //Player shops at food store
                         if ((action == 4 && playerLocale == 4) || (action == 4 && playerLocale == 5)) {
                             if (actionPoints4 + 4 <= actionPointsMax) {
@@ -1093,7 +1194,7 @@ public class DaySix {
                         //Player works
 
                         else if (action == 0) {
-                            if(!eventTime.getEssentialBusiness()){
+                            if (!eventTime.getEssentialBusiness()) {
                                 if (actionPoints4 + 4 <= actionPointsMax) {
                                     int moneyEarned = 4;
                                     playerFour.setMoney(playerFour.getMoney() + moneyEarned);
@@ -1105,47 +1206,46 @@ public class DaySix {
                                     JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
                                             "Please choose another action.");
                                 }
-                            }
-                            else{
+                            } else {
                                 JOptionPane.showMessageDialog(null, "Working is not available due to the closure of essential businesses.");
                             }
                         }
 
                         //Player Movement
-                        else if (action == 3){
+                        else if (action == 3) {
                             boolean movePossible = true;
                             int movement = Integer.parseInt(JOptionPane.showInputDialog("Which direction would you like to move? Enter:" +
                                     "\n1: Move Right\n2: Move Left\n3: Move Up\n 4: Move down"));
-                            while(movement < 1 || movement > 4){
-                                JOptionPane.showMessageDialog(null,"Invalid entry. Please enter a number between 1 and 4.");
+                            while (movement < 1 || movement > 4) {
+                                JOptionPane.showMessageDialog(null, "Invalid entry. Please enter a number between 1 and 4.");
                                 movement = Integer.parseInt(JOptionPane.showInputDialog("Which direction would you like to move? Enter:" +
                                         "\n1: Move Right\n2: Move Left\n3: Move Up\n 4: Move down"));
                             }
-                            if(playerFour.getY() == 9 && movement == 1){
-                                JOptionPane.showMessageDialog(null,"You may not travel right, as you are on the edge of the board.");
+                            if (playerFour.getY() == 9 && movement == 1) {
+                                JOptionPane.showMessageDialog(null, "You may not travel right, as you are on the edge of the board.");
                                 movePossible = false;
                             }
-                            if(playerFour.getY() == 0 && movement == 2){
-                                JOptionPane.showMessageDialog(null,"You may not travel left, as you are on the edge of the board.");
+                            if (playerFour.getY() == 0 && movement == 2) {
+                                JOptionPane.showMessageDialog(null, "You may not travel left, as you are on the edge of the board.");
                                 movePossible = false;
                             }
-                            if(playerFour.getX() == 0 && movement == 3){
-                                JOptionPane.showMessageDialog(null,"You may not travel up, as you are on the edge of the board.");
+                            if (playerFour.getX() == 0 && movement == 3) {
+                                JOptionPane.showMessageDialog(null, "You may not travel up, as you are on the edge of the board.");
                                 movePossible = false;
                             }
-                            if(playerFour.getX() == 9 && movement == 4){
-                                JOptionPane.showMessageDialog(null,"You may not travel down, as you are on the edge of the board.");
+                            if (playerFour.getX() == 9 && movement == 4) {
+                                JOptionPane.showMessageDialog(null, "You may not travel down, as you are on the edge of the board.");
                                 movePossible = false;
                             }
 
-                            if(movePossible){
-                                if(movement == 1){
+                            if (movePossible) {
+                                if (movement == 1) {
                                     playerFour.setY(playerFour.getY() + 1);
-                                } else if(movement == 2){
+                                } else if (movement == 2) {
                                     playerFour.setY(playerFour.getY() - 1);
-                                } else if(movement == 3){
+                                } else if (movement == 3) {
                                     playerFour.setX(playerFour.getX() - 1);
-                                } else if(movement == 4){
+                                } else if (movement == 4) {
                                     playerFour.setX(playerFour.getX() + 1);
                                 }
 
@@ -1155,11 +1255,10 @@ public class DaySix {
                                     e4++;
                                 }
 
-                                JOptionPane.showMessageDialog(null,"New location: (" + playerFour.getX() + "," + playerFour.getY() + ").");
+                                JOptionPane.showMessageDialog(null, "New location: (" + playerFour.getX() + "," + playerFour.getY() + ").");
                                 actionPoints4++;
 
                             }
-
 
 
                         }
@@ -1185,17 +1284,17 @@ public class DaySix {
                                 }
                                 if (whichPlayer == 2) {
                                     playerOne.setFood(playerOne.getFood() + amountSend);
-                                    if(amountSend > 0){
+                                    if (amountSend > 0) {
                                         e1++;
                                     }
                                 } else if (whichPlayer == 3) {
                                     playerTwo.setFood(playerTwo.getFood() + amountSend);
-                                    if(amountSend > 0){
+                                    if (amountSend > 0) {
                                         e2++;
                                     }
                                 } else if (whichPlayer == 4) {
                                     playerThree.setFood(playerThree.getFood() + amountSend);
-                                    if(amountSend > 0){
+                                    if (amountSend > 0) {
                                         e3++;
                                     }
                                 }
@@ -1211,24 +1310,24 @@ public class DaySix {
                                     whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Which player would you like to send supplies to?" +
                                             "Enter:+\n2: " + playerOne.getPlayerOneName() + "\n3: " + playerTwo.getPlayerTwoName() + "\n4: " + playerThree.getPlayerThreeName()));
                                 }
-                                if(whichPlayer == 2 && (playerOne.getHealth() == 0)){
+                                if (whichPlayer == 2 && (playerOne.getHealth() == 0)) {
                                     whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("You cannot send supplies to a dead player. Please enter a 3 to send supplies to " + playerTwo.getPlayerTwoName() +
                                             " or enter a 4 to send supplies to " + playerThree.getPlayerThreeName() + "."));
-                                    while (whichPlayer != 3 && whichPlayer != 4){
+                                    while (whichPlayer != 3 && whichPlayer != 4) {
                                         whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a 3 or a 4."));
                                     }
                                 }
-                                if(whichPlayer == 3 && (playerTwo.getHealth() == 0)){
+                                if (whichPlayer == 3 && (playerTwo.getHealth() == 0)) {
                                     whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("You cannot send supplies to a dead player. Please enter a 2 to send supplies to " +
                                             playerOne.getPlayerOneName() + " or a 4 to send supplies to " + playerThree.getPlayerThreeName() + "."));
-                                    while(whichPlayer != 2 && whichPlayer != 4){
+                                    while (whichPlayer != 2 && whichPlayer != 4) {
                                         whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a 2 or a 4."));
                                     }
                                 }
-                                if(whichPlayer == 4 && (playerThree.getHealth() == 0)){
+                                if (whichPlayer == 4 && (playerThree.getHealth() == 0)) {
                                     whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("You cannot send supplies to a dead player. Please enter a 2 to send supplies to " + playerOne.getPlayerOneName() +
                                             " or a 3 to send supplies to " + playerTwo.getPlayerTwoName() + "."));
-                                    while(whichPlayer != 2 && whichPlayer != 3){
+                                    while (whichPlayer != 2 && whichPlayer != 3) {
                                         whichPlayer = Integer.parseInt(JOptionPane.showInputDialog("Invalid entry. Please enter a 2 or a 3."));
                                     }
                                 }
@@ -1239,29 +1338,28 @@ public class DaySix {
                                 }
                                 if (whichPlayer == 2) {
                                     playerOne.setSupplies(playerTwo.getSupplies() + amountSend);
-                                    if(amountSend > 0){
+                                    if (amountSend > 0) {
                                         e1++;
                                     }
                                 } else if (whichPlayer == 3) {
                                     playerTwo.setSupplies(playerTwo.getSupplies() + amountSend);
-                                    if(amountSend > 0){
+                                    if (amountSend > 0) {
                                         e2++;
                                     }
                                 } else if (whichPlayer == 4) {
                                     playerThree.setSupplies(playerThree.getSupplies() + amountSend);
-                                    if(amountSend > 0){
+                                    if (amountSend > 0) {
                                         e3++;
                                     }
                                 }
                                 playerFour.setSupplies(playerFour.getSupplies() - amountSend);
 
                             }
-                            if(amountSend == 0){
+                            if (amountSend == 0) {
                                 actionPoints4--;
                             }
                             actionPoints4++;
-                        }
-                        else if(action == 10){
+                        } else if (action == 10) {
                             JOptionPane.showMessageDialog(null, "Turn ended.");
                             actionPoints4 = 4;
                         }
@@ -1270,58 +1368,71 @@ public class DaySix {
                             boolean together = false;
                             int pl1 = game.getGameboard(playerOne.getX(), playerOne.getY()), pl2 = game.getGameboard(playerTwo.getX(), playerTwo.getY()),
                                     pl3 = game.getGameboard(playerThree.getX(), playerThree.getY()), pl4 = game.getGameboard(playerFour.getX(), playerFour.getY());
-                            if(pl1 == pl2 || pl2 == pl3 || pl3 == pl4 || pl1 == pl4 || pl2 == pl4 || pl1 == pl3){
+                            if (pl1 == pl2 || pl2 == pl3 || pl3 == pl4 || pl1 == pl4 || pl2 == pl4 || pl1 == pl3) {
                                 together = true;
                             }
-                            if(actionPoints4 <= 2 && together){
+                            if (actionPoints4 <= 2 && together) {
                                 int currentPlace = game.getGameboard(playerFour.getX(), playerFour.getY());
-                                if (currentPlace != 13 && currentPlace != 4 && currentPlace != 5 && currentPlace != 8 && currentPlace !=9) {
+                                if (currentPlace != 13 && currentPlace != 4 && currentPlace != 5 && currentPlace != 8 && currentPlace != 9) {
                                     game.quarantineArea(playerFour.getX(), playerFour.getY());
                                     JOptionPane.showMessageDialog(null, "Space (" + playerFour.getX() + "," + playerFour.getY() + ") is now quarantined and cannot become infected.");
                                     actionPoints4 += 2;
-                                    if((pl1 == pl2) && (pl2 == pl3) && (pl3 == pl4)){
-                                        e1++; e2++; e3++; e4++;
+                                    if ((pl1 == pl2) && (pl2 == pl3) && (pl3 == pl4)) {
+                                        e1++;
+                                        e2++;
+                                        e3++;
+                                        e4++;
+                                    } else if ((pl1 == pl2) && (pl2 == pl3)) {
+                                        e1++;
+                                        e2++;
+                                        e3++;
+                                    } else if ((pl1 == pl3) && (pl3 == pl4)) {
+                                        e1++;
+                                        e3++;
+                                        e4++;
+                                    } else if (pl1 == pl2 && pl2 == pl4) {
+                                        e1++;
+                                        e2++;
+                                        e4++;
+                                    } else if (pl2 == pl3 && pl3 == pl4) {
+                                        e2++;
+                                        e3++;
+                                        e4++;
+                                    } else if (pl1 == pl2) {
+                                        e1++;
+                                        e2++;
+                                    } else if (pl2 == pl3) {
+                                        e2++;
+                                        e3++;
+                                    } else if (pl3 == pl4) {
+                                        e3++;
+                                        e4++;
+                                    } else if (pl1 == pl4) {
+                                        e1++;
+                                        e4++;
+                                    } else if (pl2 == pl4) {
+                                        e2++;
+                                        e4++;
+                                    } else if (pl1 == pl3) {
+                                        e1++;
+                                        e3++;
                                     }
-                                    else if((pl1==pl2) && (pl2==pl3)){
-                                        e1++; e2++; e3++;
-                                    } else if((pl1 == pl3) && (pl3 == pl4)){
-                                        e1++; e3++; e4++;
-                                    } else if(pl1 == pl2 && pl2 == pl4){
-                                        e1++; e2++; e4++;
-                                    } else if(pl2 == pl3 && pl3 == pl4){
-                                        e2++; e3++; e4++;
-                                    } else if(pl1 == pl2){
-                                        e1++; e2++;
-                                    } else if(pl2 == pl3){
-                                        e2++; e3++;
-                                    } else if(pl3 == pl4){
-                                        e3++; e4++;
-                                    } else if(pl1 == pl4){
-                                        e1++; e4++;
-                                    } else if(pl2 == pl4){
-                                        e2++; e4++;
-                                    } else if(pl1 == pl3){
-                                        e1++; e3++;
-                                    }
-                                }
-                                else{
-                                    JOptionPane.showMessageDialog(null,"This space is already quarantined, or may be unable to be quarantined.");
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "This space is already quarantined, or may be unable to be quarantined.");
                                 }
                             }
-                            if(actionPoints3 + 4 <= actionPointsMax) {
+                            if (actionPoints3 + 4 <= actionPointsMax) {
                                 int currentPlace = game.getGameboard(playerFour.getX(), playerFour.getY());
-                                if (currentPlace != 13 && currentPlace != 4 && currentPlace != 5 && currentPlace != 8 && currentPlace !=9) {
+                                if (currentPlace != 13 && currentPlace != 4 && currentPlace != 5 && currentPlace != 8 && currentPlace != 9) {
                                     game.quarantineArea(playerFour.getX(), playerFour.getY());
                                     JOptionPane.showMessageDialog(null, "Space (" + playerFour.getX() + "," + playerFour.getY() + ") is now quarantined and cannot become infected.");
                                     actionPoints4 += 4;
                                     e4++;
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "This space is already quarantined, or may be unable to be quarantined.");
                                 }
-                                else{
-                                    JOptionPane.showMessageDialog(null,"This space is already quarantined, or may be unable to be quarantined.");
-                                }
-                            }
-                            else{
-                                JOptionPane.showMessageDialog(null,"You do not have enough points to complete this action. " +
+                            } else {
+                                JOptionPane.showMessageDialog(null, "You do not have enough points to complete this action. " +
                                         "Please choose another action.");
                             }
                         }
@@ -1335,41 +1446,91 @@ public class DaySix {
                 //Players land on same location?
                 int pl1 = game.getGameboard(playerOne.getX(), playerOne.getY()), pl2 = game.getGameboard(playerTwo.getX(), playerTwo.getY()),
                         pl3 = game.getGameboard(playerThree.getX(), playerThree.getY()), pl4 = game.getGameboard(playerFour.getX(), playerFour.getY());
-                if((pl1 == pl2) && (pl2 == pl3) && (pl3 == pl4)){
-                    e1++; e2++; e3++; e4++;
-                }
-                else if((pl1==pl2) && (pl2==pl3)){
-                    e1++; e2++; e3++;
-                } else if((pl1 == pl3) && (pl3 == pl4)){
-                    e1++; e3++; e4++;
-                } else if(pl1 == pl2 && pl2 == pl4){
-                    e1++; e2++; e4++;
-                } else if(pl2 == pl3 && pl3 == pl4){
-                    e2++; e3++; e4++;
-                } else if(pl1 == pl2){
-                    e1++; e2++;
-                } else if(pl2 == pl3){
-                    e2++; e3++;
-                } else if(pl3 == pl4){
-                    e3++; e4++;
-                } else if(pl1 == pl4){
-                    e1++; e4++;
-                } else if(pl2 == pl4){
-                    e2++; e4++;
-                } else if(pl1 == pl3){
-                    e1++; e3++;
+                if ((pl1 == pl2) && (pl2 == pl3) && (pl3 == pl4)) {
+                    e1++;
+                    e2++;
+                    e3++;
+                    e4++;
+                } else if ((pl1 == pl2) && (pl2 == pl3)) {
+                    e1++;
+                    e2++;
+                    e3++;
+                } else if ((pl1 == pl3) && (pl3 == pl4)) {
+                    e1++;
+                    e3++;
+                    e4++;
+                } else if (pl1 == pl2 && pl2 == pl4) {
+                    e1++;
+                    e2++;
+                    e4++;
+                } else if (pl2 == pl3 && pl3 == pl4) {
+                    e2++;
+                    e3++;
+                    e4++;
+                } else if (pl1 == pl2) {
+                    e1++;
+                    e2++;
+                } else if (pl2 == pl3) {
+                    e2++;
+                    e3++;
+                } else if (pl3 == pl4) {
+                    e3++;
+                    e4++;
+                } else if (pl1 == pl4) {
+                    e1++;
+                    e4++;
+                } else if (pl2 == pl4) {
+                    e2++;
+                    e4++;
+                } else if (pl1 == pl3) {
+                    e1++;
+                    e3++;
                 }
             }
 
 
             //Vector Movement HERE!!!!!
-            game.vectorOne();
-            game.vectorTwo();
-            game.vectorThree();
-            game.vectorFour();
-            game.vectorFive();
-            game.vectorSix();
+            JOptionPane.showMessageDialog(null, "Move vectors in the direction they are traveling.\n" +
+                    "If a vector has hit a corner or quarantined space, its direction is now the opposite of what it was.");
+            int howManyVectors = Integer.parseInt(JOptionPane.showInputDialog("How many vectors are currently active on the board?\nmin: 0 max: 6"));
+            while (howManyVectors < 0 || howManyVectors > 6){
+                howManyVectors = Integer.parseInt(JOptionPane.showInputDialog("Invalid input. \nPlease enter the amount of active vectors. \nmin: 0 max: 6 "));
+            }
+            for(int z = 0; z < howManyVectors; z++){
+                int xVal = Integer.parseInt(JOptionPane.showInputDialog("What is the x-coordinate?"));
+                while(xVal < 0 || xVal > 9){
+                    xVal = Integer.parseInt(JOptionPane.showInputDialog("Value for x-coordinate must be between 0 and 9.\nPlease enter the x-coordinate."));
+                }
+                int yVal = Integer.parseInt(JOptionPane.showInputDialog("What is the y-coordinate?"));
+                while(yVal < 0 || yVal > 9){
+                    yVal = Integer.parseInt(JOptionPane.showInputDialog("Value for y-coordinate must be between 0 and 9.\nPlease enter the y-coordinate."));
+                }
+                int gameSpace = game.getGameboard(xVal, yVal);
+                if(gameSpace == 0){
+                    game.setGameboard(xVal, yVal, 1);
+                    JOptionPane.showMessageDialog(null, "(" + xVal + "," + yVal + ") is now infected.");
+                }
+                else if(gameSpace == 4){
+                    game.setGameboard(xVal, yVal, 5);
+                    JOptionPane.showMessageDialog(null, "(" + xVal + "," + yVal + ") is now an infected food shop.");
+                }
+                else if(gameSpace == 8){
+                    game.setGameboard(xVal, yVal, 9);
+                    JOptionPane.showMessageDialog(null, "(" + xVal + "," + yVal + ") is now an infected supply shop.");
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "Space does not change.");
+                }
+                int getRolled = rando.diceRoll();
+                if(getRolled == 1){
+                    JOptionPane.showMessageDialog(null,"Vector direction change!\nTurn this vector once to the right.");
+                } if(getRolled == 2){
+                    JOptionPane.showMessageDialog(null,"Vector direction change!\nTurn this vector once to the left.");
+                }
+            }
+
         }
+
 
 
         //Here we will call the daily event
@@ -1715,6 +1876,7 @@ public class DaySix {
         JOptionPane.showMessageDialog(null, "Remaining Players: " + alivePlayers);
 
 
+
         DaySeven dayseven = new DaySeven(playerOne.getPlayerOneName(), playerOne.getHealth(), playerOne.getSupplies(), playerOne.getFood(),
                 playerOne.getSymptoms(), playerOne.getMoney(), playerOne.getX(), playerOne.getY(), playerOne.getInfected(),
                 playerTwo.getPlayerTwoName(), playerTwo.getHealth(), playerTwo.getSupplies(), playerTwo.getFood(),
@@ -1723,6 +1885,7 @@ public class DaySix {
                 playerThree.getSymptoms(), playerThree.getMoney(), playerThree.getX(), playerThree.getY(), playerThree.getInfected(),
                 playerFour.getPlayerFourName(), playerFour.getHealth(), playerFour.getSupplies(), playerFour.getFood(),
                 playerFour.getSymptoms(), playerFour.getMoney(), playerFour.getX(), playerFour.getY(), playerFour.getInfected());
+        dayseven.day7();
 
     }
     }
