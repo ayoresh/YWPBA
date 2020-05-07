@@ -69,6 +69,54 @@ public class GameBoard {
         JOptionPane.showMessageDialog(null, quarantinedSpots);
     }
 
+    public void setV1x(int v1x) {
+        this.v1x = v1x;
+    }
+
+    public void setV1y(int v1y) {
+        this.v1y = v1y;
+    }
+
+    public void setV2x(int v2x) {
+        this.v2x = v2x;
+    }
+
+    public void setV2y(int v2y) {
+        this.v2y = v2y;
+    }
+
+    public void setV3x(int v3x) {
+        this.v3x = v3x;
+    }
+
+    public void setV3y(int v3y) {
+        this.v3y = v3y;
+    }
+
+    public void setV4x(int v4x) {
+        this.v4x = v4x;
+    }
+
+    public void setV4y(int v4y) {
+        this.v4y = v4y;
+    }
+
+    public void setV5x(int v5x) {
+        this.v5x = v5x;
+    }
+
+    public void setV5y(int v5y) {
+        this.v5y = v5y;
+    }
+
+    public void setV6x(int v6x) {
+        this.v6x = v6x;
+    }
+
+    public void setV6y(int v6y) {
+        this.v6y = v6y;
+    }
+
     public void initialInfectionAndSetStores(){
         RandomNum randonum = new RandomNum();
         int foodStoreCounter = 0, supplyStoreCounter = 0, initialInfectionsCounter = 0, initialVectors = 0;
@@ -119,6 +167,8 @@ public class GameBoard {
 
                 if(gameboard[x][y] == 0){
                     addVector(x, y);
+                    setV1x(x);
+                    setV1y(y);
                     initialVectors++;
                 }
             } while(initialVectors < 1);
@@ -130,6 +180,8 @@ public class GameBoard {
 
             if(gameboard[x][y] == 0){
                 addVector(x, y);
+                setV2x(x);
+                setV2y(y);
                 initialVectors++;
             }
         } while(initialVectors < 1);
@@ -322,8 +374,32 @@ public class GameBoard {
         return num;
     }
 
+    public int getV1x() {
+        return v1x;
+    }
+
+    public int getV2x() {
+        return v2x;
+    }
+
+    public int getV3x() {
+        return v3x;
+    }
+
+    public int getV4x() {
+        return v4x;
+    }
+
+    public int getV5x() {
+        return v5x;
+    }
+
+    public int getV6x() {
+        return v6x;
+    }
+
     public String vectorOne(){
-        if(v1x > -1 && v1y > -1 && v1d != -1){
+        if(v1x > -50 && v1y > -50 && v1d != -1){
             boolean dChange = false;
             if(v1y == 9 && v1d == 1){
                 v1d = 3;
@@ -493,7 +569,7 @@ public class GameBoard {
         return toreturn;
     }
     public String vectorTwo(){
-        if(v2x > -1 && v2y > -1 && v2d != -1){
+        if(v2x != -50 && v2y != -50 && v2d != -1){
             boolean dChange = false;
             if(v2y == 9 && v2d == 1){
                 v2d = 3;
