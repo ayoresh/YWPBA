@@ -15,13 +15,27 @@ public class DaySix {
     DaySix(String playerOneName, int health1, int supplies1, int food1, int symptoms1, int money1, int x1, int y1, boolean infected1,
            String playerTwoName, int health2, int supplies2, int food2, int symptoms2, int money2, int x2, int y2, boolean infected2,
            String playerThreeName, int health3, int supplies3, int food3, int symptoms3, int money3, int x3, int y3, boolean infected3,
-           String playerFourName, int health4, int supplies4, int food4, int symptoms4, int money4, int x4, int y4, boolean infected4) {
+           String playerFourName, int health4, int supplies4, int food4, int symptoms4, int money4, int x4, int y4, boolean infected4, int[][] gameboard) {
         playerOne = new PlayerOne(playerOneName, health1, supplies1, food1, symptoms1, money1, x1, y1, infected1);
         playerTwo = new PlayerTwo(playerTwoName, health2, supplies2, food2, symptoms2, money2, x2, y2, infected2);
         playerThree = new PlayerThree(playerThreeName, health3, supplies3, food3, symptoms3, money3, x3, y3, infected3);
         playerFour = new PlayerFour(playerFourName, health4, supplies4, food4, symptoms4, money4, x4, y4, infected4);
+        game = new GameBoard(gameboard);
     }
     public void day6(){
+        //Players sent back to home base
+        playerOne.setX(2);
+        playerOne.setY(2);
+        JOptionPane.showMessageDialog(null, playerOne.getPlayerOneName() + ", you've returned to your home base, (2,2).");
+        playerTwo.setX(2);
+        playerTwo.setY(7);
+        JOptionPane.showMessageDialog(null, playerTwo.getPlayerTwoName() + ", you've returned to your home base, (2,7).");
+        playerThree.setX(7);
+        playerThree.setY(2);
+        JOptionPane.showMessageDialog(null, playerThree.getPlayerThreeName() + ", you've returned to your home base, (7,2).");
+        playerFour.setX(7);
+        playerFour.setY(7);
+        JOptionPane.showMessageDialog(null, playerFour.getPlayerFourName() + ", you've returned to your home base, (7,7).");
 
 //Exposure counters
         int e1 = 0, e2 = 0, e3 = 0, e4 = 0;
@@ -105,7 +119,46 @@ public class DaySix {
             playerThree.setMoney(playerThree.getMoney() + 4);
             playerFour.setMoney(playerFour.getMoney() + 4);
         }
-        for(int x = 0; x < 5; x++) {
+        //New vector spawning
+        int infectedspacecount = Integer.parseInt(JOptionPane.showInputDialog("Please enter the amount of infected spaces currently in play. "));
+        int vectorCount = Integer.parseInt(JOptionPane.showInputDialog("Please enter the amount of vectors currently in play."));
+        JOptionPane.showMessageDialog(null,"Please ignore any vectors the game assigns once 6 vectors have been created.");
+        if(vectorCount < 6){
+            for(int i = 0; i < game.gameboard.length; i++){
+                for(int j = 0; j < game.gameboard[i].length; j++){
+                    if(game.getGameboard(i,j) == 1){
+                        int vChance = rando.fourSidedDie();
+                        int dChance = rando.fourSidedDie();
+                        String dir;
+                        if(dChance == 1){
+                            dir = "right";
+                        }
+                        else if(dChance == 2){
+                            dir = "left";
+                        }
+                        else if(dChance == 3){
+                            dir = "up";
+                        } else{
+                            dir = "down";
+                        }
+                        if (vChance == 1){
+                            JOptionPane.showMessageDialog(null,"The space (" + i + "," + j + ") has now become a vector travelling " + dir + ".");
+                            vectorCount++;
+                        }
+                    }
+                    if(vectorCount >= 6){
+                        break;
+                    }
+                }
+                if(vectorCount >= 6){
+                    break;
+                }
+                if(vectorCount >= 6){
+                    break;
+                }
+            }
+        }
+        for(int x = 0; x < 8; x++) {
             for (int playerCounter = 0; playerCounter < 4; playerCounter++) {
 
                 int actionPoints1 = 0, actionPoints2 = 0, actionPoints3 = 0, actionPoints4 = 0, actionPointsMax = 4;
@@ -126,7 +179,7 @@ public class DaySix {
                                 actionText + "\nAction Points Used: " + actionPoints1));
 
 
-                        while (action != 0 && action != 1 && action != 2 && action != 3 && action != 10) {
+                        while (action != 0 && action != 1 && action != 2 && action != 3 && action != 10 && action != 4) {
                             action = Integer.parseInt(JOptionPane.showInputDialog("Invalid input.\n" +
                                     playerOne.getPlayerOneName() + ", " +
                                     actionText + "\nAction Points Used: " + actionPoints1));
@@ -135,15 +188,15 @@ public class DaySix {
                         if ((action == 4 && playerLocale == 4) || (action == 4 && playerLocale == 5)) {
                             if (actionPoints1 + 4 <= actionPointsMax) {
                                 int itemsBought = actionobj.foodShopping();
-                                int itemsBoughtChecker = playerOne.getMoney() - (itemsBought * 2);
+                                int itemsBoughtChecker = playerOne.getMoney() - (itemsBought);
                                 while (itemsBoughtChecker < 0) {
                                     JOptionPane.showMessageDialog(null, "You have attempted to buy more food than you can afford." +
                                             " Please buy an amount of food that you can afford.");
                                     itemsBought = actionobj.foodShopping();
-                                    itemsBoughtChecker = playerOne.getMoney() - (itemsBought * 2);
+                                    itemsBoughtChecker = playerOne.getMoney() - (itemsBought);
                                 }
                                 playerOne.setFood(playerOne.getFood() + itemsBought);
-                                playerOne.setMoney(playerOne.getMoney() - (itemsBought * 2));
+                                playerOne.setMoney(playerOne.getMoney() - (itemsBought));
                                 actionPoints1 += 4;
                             } else {
                                 JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
@@ -155,15 +208,15 @@ public class DaySix {
                         else if ((action == 4 && playerLocale == 8) || (action == 4 && playerLocale == 9)) {
                             if (actionPoints1 + 4 <= actionPointsMax) {
                                 int itemsBought = actionobj.supplyShopping();
-                                int itemsBoughtChecker = playerOne.getMoney() - (itemsBought * 2);
+                                int itemsBoughtChecker = playerOne.getMoney() - (itemsBought);
                                 while (itemsBoughtChecker < 0) {
                                     JOptionPane.showMessageDialog(null, "You have attempted to buy more supplies than you can afford. " +
                                             "Please buy an amount of supplies you can afford.");
                                     itemsBought = actionobj.supplyShopping();
-                                    itemsBoughtChecker = playerOne.getMoney() - (itemsBought * 2);
+                                    itemsBoughtChecker = playerOne.getMoney() - (itemsBought);
                                 }
                                 playerOne.setSupplies(playerOne.getSupplies() + itemsBought);
-                                playerOne.setMoney(playerOne.getMoney() - (2 * itemsBought));
+                                playerOne.setMoney(playerOne.getMoney() - (itemsBought));
                                 actionPoints1 += 4;
                             } else {
                                 JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
@@ -487,7 +540,7 @@ public class DaySix {
                         int action = Integer.parseInt(JOptionPane.showInputDialog(playerTwo.getPlayerTwoName() + ", " +
                                 actionText + "\nAction Points Used: " + actionPoints2));
 
-                        while (action != 0 && action != 1 && action != 2 && action != 3 && action != 10) {
+                        while (action != 0 && action != 1 && action != 2 && action != 3 && action != 10 && action != 4) {
                             action = Integer.parseInt(JOptionPane.showInputDialog("Invalid input.\n" +
                                     playerTwo.getPlayerTwoName() + ", " +
                                     actionText + "\nAction Points Used: " + actionPoints2));
@@ -497,15 +550,15 @@ public class DaySix {
                         if ((action == 4 && playerLocale == 4) || (action == 4 && playerLocale == 5)) {
                             if (actionPoints2 + 4 <= actionPointsMax) {
                                 int itemsBought = actionobj.foodShopping();
-                                int itemsBoughtChecker = playerTwo.getMoney() - (itemsBought * 2);
+                                int itemsBoughtChecker = playerTwo.getMoney() - (itemsBought);
                                 while (itemsBoughtChecker < 0) {
                                     JOptionPane.showMessageDialog(null, "You have attempted to buy more food than you can afford." +
                                             " Please buy an amount of food that you can afford.");
                                     itemsBought = actionobj.foodShopping();
-                                    itemsBoughtChecker = playerTwo.getMoney() - (itemsBought * 2);
+                                    itemsBoughtChecker = playerTwo.getMoney() - (itemsBought);
                                 }
                                 playerTwo.setFood(playerTwo.getFood() + itemsBought);
-                                playerTwo.setMoney(playerTwo.getMoney() - (itemsBought * 2));
+                                playerTwo.setMoney(playerTwo.getMoney() - (itemsBought));
                                 actionPoints2 += 4;
                             } else {
                                 JOptionPane.showMessageDialog(null, "You do not have enough action points to complete this action. " +
@@ -515,17 +568,17 @@ public class DaySix {
 
                         //Player shops at supply store
                         else if ((action == 4 && playerLocale == 8) || (action == 4 && playerLocale == 9)) {
-                            if (actionPoints2 + 4 < actionPointsMax) {
+                            if (actionPoints2 + 4 <= actionPointsMax) {
                                 int itemsBought = actionobj.supplyShopping();
-                                int itemsBoughtChecker = playerTwo.getMoney() - (itemsBought * 2);
+                                int itemsBoughtChecker = playerTwo.getMoney() - (itemsBought);
                                 while (itemsBoughtChecker < 0) {
                                     JOptionPane.showMessageDialog(null, "You have attempted to buy more supplies than you can afford. " +
                                             "Please buy an amount of supplies you can afford.");
                                     itemsBought = actionobj.supplyShopping();
-                                    itemsBoughtChecker = playerTwo.getMoney() - (itemsBought * 2);
+                                    itemsBoughtChecker = playerTwo.getMoney() - (itemsBought);
                                 }
                                 playerTwo.setSupplies(playerTwo.getSupplies() + itemsBought);
-                                playerTwo.setMoney(playerTwo.getMoney() - (2 * itemsBought));
+                                playerTwo.setMoney(playerTwo.getMoney() - (itemsBought));
                                 actionPoints2 += 4;
                             } else {
                                 JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
@@ -849,7 +902,7 @@ public class DaySix {
                         int action = Integer.parseInt(JOptionPane.showInputDialog(playerThree.getPlayerThreeName() + ", " +
                                 actionText + "\nAction Points Used: " + actionPoints3));
 
-                        while (action != 0 && action != 1 && action != 2 && action != 3 && action != 10) {
+                        while (action != 0 && action != 1 && action != 2 && action != 3 && action != 10 && action != 4) {
                             action = Integer.parseInt(JOptionPane.showInputDialog("Invalid input.\n" +
                                     playerThree.getPlayerThreeName() + ", " +
                                     actionText + "\nAction Points Used: " + actionPoints3));
@@ -859,15 +912,15 @@ public class DaySix {
                         if ((action == 4 && playerLocale == 4) || (action == 4 && playerLocale == 5)) {
                             if (actionPoints3 + 4 <= actionPointsMax) {
                                 int itemsBought = actionobj.foodShopping();
-                                int itemsBoughtChecker = playerThree.getMoney() - (itemsBought * 2);
+                                int itemsBoughtChecker = playerThree.getMoney() - (itemsBought);
                                 while (itemsBoughtChecker < 0) {
                                     JOptionPane.showMessageDialog(null, "You have attempted to buy more food than you can afford." +
                                             " Please buy an amount of food that you can afford.");
                                     itemsBought = actionobj.foodShopping();
-                                    itemsBoughtChecker = playerThree.getMoney() - (itemsBought * 2);
+                                    itemsBoughtChecker = playerThree.getMoney() - (itemsBought);
                                 }
                                 playerThree.setFood(playerThree.getFood() + itemsBought);
-                                playerThree.setMoney(playerThree.getMoney() - (itemsBought * 2));
+                                playerThree.setMoney(playerThree.getMoney() - (itemsBought));
                                 actionPoints3 += 4;
                             } else {
                                 JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
@@ -879,15 +932,15 @@ public class DaySix {
                         else if ((action == 4 && playerLocale == 8) || (action == 4 && playerLocale == 9)) {
                             if (actionPoints3 + 4 <= actionPointsMax) {
                                 int itemsBought = actionobj.supplyShopping();
-                                int itemsBoughtChecker = playerThree.getMoney() - (itemsBought * 2);
+                                int itemsBoughtChecker = playerThree.getMoney() - (itemsBought);
                                 while (itemsBoughtChecker < 0) {
                                     JOptionPane.showMessageDialog(null, "You have attempted to buy more supplies than you can afford. " +
                                             "Please buy an amount of supplies you can afford.");
                                     itemsBought = actionobj.supplyShopping();
-                                    itemsBoughtChecker = playerThree.getMoney() - (itemsBought * 2);
+                                    itemsBoughtChecker = playerThree.getMoney() - (itemsBought);
                                 }
                                 playerThree.setSupplies(playerThree.getSupplies() + itemsBought);
-                                playerThree.setMoney(playerThree.getMoney() - (2 * itemsBought));
+                                playerThree.setMoney(playerThree.getMoney() - (itemsBought));
                                 actionPoints3 += 4;
                             } else {
                                 JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
@@ -1211,7 +1264,7 @@ public class DaySix {
                         int action = Integer.parseInt(JOptionPane.showInputDialog(playerFour.getPlayerFourName() + ", " +
                                 actionText + "\nAction Points Used: " + actionPoints4));
 
-                        while (action != 0 && action != 1 && action != 2 && action != 3 && action != 10) {
+                        while (action != 0 && action != 1 && action != 2 && action != 3 && action != 10 && action != 4) {
                             action = Integer.parseInt(JOptionPane.showInputDialog("Invalid input.\n" +
                                     playerFour.getPlayerFourName() + ", " +
                                     actionText + "\nAction Points Used: " + actionPoints4));
@@ -1225,10 +1278,10 @@ public class DaySix {
                                     JOptionPane.showMessageDialog(null, "You have attempted to buy more food than you can afford." +
                                             " Please buy an amount of food that you can afford.");
                                     itemsBought = actionobj.foodShopping();
-                                    itemsBoughtChecker = playerFour.getMoney() - (itemsBought * 2);
+                                    itemsBoughtChecker = playerFour.getMoney() - (itemsBought);
                                 }
                                 playerFour.setFood(playerFour.getFood() + itemsBought);
-                                playerFour.setMoney(playerFour.getMoney() - (itemsBought * 2));
+                                playerFour.setMoney(playerFour.getMoney() - (itemsBought));
                                 actionPoints4 += 4;
                             } else {
                                 JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
@@ -1240,15 +1293,15 @@ public class DaySix {
                         else if ((action == 4 && playerLocale == 8) || (action == 4 && playerLocale == 9)) {
                             if (actionPoints4 + 4 <= actionPointsMax) {
                                 int itemsBought = actionobj.supplyShopping();
-                                int itemsBoughtChecker = playerFour.getMoney() - (itemsBought * 2);
+                                int itemsBoughtChecker = playerFour.getMoney() - (itemsBought);
                                 while (itemsBoughtChecker < 0) {
                                     JOptionPane.showMessageDialog(null, "You have attempted to buy more supplies than you can afford. " +
                                             "Please buy an amount of supplies you can afford.");
                                     itemsBought = actionobj.supplyShopping();
-                                    itemsBoughtChecker = playerFour.getMoney() - (itemsBought * 2);
+                                    itemsBoughtChecker = playerFour.getMoney() - (itemsBought);
                                 }
                                 playerFour.setSupplies(playerFour.getSupplies() + itemsBought);
-                                playerFour.setMoney(playerFour.getMoney() - (2 * itemsBought));
+                                playerFour.setMoney(playerFour.getMoney() - (itemsBought));
                                 actionPoints4 += 4;
                             } else {
                                 JOptionPane.showMessageDialog(null, "You do not have enough action points to do complete this action. " +
@@ -1600,8 +1653,9 @@ public class DaySix {
                 }
             }
 
+            int toDisplay = x + 1;
+            JOptionPane.showMessageDialog(null, toDisplay + " turn(s) used.");
         }
-
 
 
         //Here we will call the daily event
@@ -1955,7 +2009,7 @@ public class DaySix {
                 playerThree.getPlayerThreeName(), playerThree.getHealth(), playerThree.getSupplies(), playerThree.getFood(),
                 playerThree.getSymptoms(), playerThree.getMoney(), playerThree.getX(), playerThree.getY(), playerThree.getInfected(),
                 playerFour.getPlayerFourName(), playerFour.getHealth(), playerFour.getSupplies(), playerFour.getFood(),
-                playerFour.getSymptoms(), playerFour.getMoney(), playerFour.getX(), playerFour.getY(), playerFour.getInfected());
+                playerFour.getSymptoms(), playerFour.getMoney(), playerFour.getX(), playerFour.getY(), playerFour.getInfected(),game.getGameboardArray());
         dayseven.day7();
 
     }

@@ -68,7 +68,7 @@ public class Introduction {
 
         JOptionPane.showMessageDialog(null, playerOne.getPlayerOneName() + " and " + playerTwo.getPlayerTwoName() + "" +
                 " are emotionally connected. If either perish during this game, neither will win.");
-        JOptionPane.showMessageDialog(null, playerThree.getPlayerThreeName() + " and  " + playerFour.getPlayerFourName() + "" +
+        JOptionPane.showMessageDialog(null, playerThree.getPlayerThreeName() + " and " + playerFour.getPlayerFourName() + "" +
                 " are emotionally connected. If either perish during this game, neither will win.");
         int initialEvent = rando.fourSidedDie();
         int initialEvent2 = rando.fourSidedDie();
@@ -78,9 +78,9 @@ public class Introduction {
         } else if (initialEvent == 2){
             initialeventtext = " the first confirmed case was announced";
         } else if (initialEvent == 3){
-            initialeventtext = "third initial event";
+            initialeventtext = "the stock market took a nose dive";
         } else if (initialEvent == 4){
-            initialeventtext = "fourth initial event";
+            initialeventtext = "the conspiracy theorists started arming themselves and protesting at the state capital";
         }
         if (initialEvent2 == 1){
             initialeventtext2 = "They could not find their vector of infection";

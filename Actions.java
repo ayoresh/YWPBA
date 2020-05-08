@@ -14,7 +14,7 @@ public class Actions {
         }
 
 
-        JOptionPane.showMessageDialog(null, "You have arrived at a supply shop. Here you may spend $2 to gain 1 supply.\nMaximum available for purchase: " + maxItems);
+        JOptionPane.showMessageDialog(null, "You have arrived at a supply shop. Here you may spend $1 to gain 1 supply.\nMaximum available for purchase: " + maxItems);
 
         itemsBought = Integer.parseInt(JOptionPane.showInputDialog("How many supplies would you like to purchase?"));
         while (itemsBought < 0 || itemsBought > maxItems){
@@ -24,7 +24,7 @@ public class Actions {
 
         if (itemsBought > 0){
             JOptionPane.showMessageDialog(null, "You bought " + itemsBought + " supplies." +
-                    "\nYou paid $" + itemsBought * 2 + " to the shopkeeper.");
+                    "\nYou paid $" + itemsBought  + " to the shopkeeper.");
 
             return itemsBought;}
         else{
@@ -44,7 +44,7 @@ public class Actions {
         }
 
 
-        JOptionPane.showMessageDialog(null, "You have arrived at a food shop. Here you may spend $2 to gain 1 piece of food.\nMaximum available for purchase: " + maxItems);
+        JOptionPane.showMessageDialog(null, "You have arrived at a food shop. Here you may spend $1 to gain 1 piece of food.\nMaximum available for purchase: " + maxItems);
 
         itemsBought = Integer.parseInt(JOptionPane.showInputDialog("How many pieces of food would you like to purchase?"));
         while (itemsBought < 0 || itemsBought > maxItems){
@@ -54,7 +54,7 @@ public class Actions {
 
         if (itemsBought > 0){
         JOptionPane.showMessageDialog(null, "You bought " + itemsBought + " pieces of food." +
-                "\nYou paid $" + itemsBought * 2 + " to the shopkeeper.");
+                "\nYou paid $" + itemsBought + " to the shopkeeper.");
 
         return itemsBought;}
         else{
